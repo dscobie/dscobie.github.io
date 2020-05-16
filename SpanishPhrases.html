@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <link rel="stylesheet" 
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+      
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v1.9.8/dist/alpine.js"></script>
+        <style>
+          body {
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+          }
+          .phraseBox {
+            padding: 25px;
+            min-height: 200px;
+            border-radius: 8px; 
+            border: 1px solid #ddd; 
+            background: #eee;
+            font-size: 2em;
+          }
+          button {
+            background: #99f;
+            border-radius: 5px;
+            font-size: 1em;
+            
+          }
+          
+          }
+        </style>
+    </head>
+<body>
+  <div x-data="phrases()">
+    test: <span x-html="currPhrase" ></span>:<span x-html="phrases.length"></span>
+    <div class="d-flex flex-column align-items-center">
+        <div class="phraseBox col-10 align-self-center"> 
+            <div x-html="phrases[currPhrase].english"></div>
+        </div>
+        <div class="phraseBox col-10 align-self-center" x-show="isOpen">
+            <div x-html="phrases[currPhrase].spanish"></div>
+        </div>
+    </div>
+      
+    <nav class="navbar fixed-bottom navbar-dark bg-dark flex-row-reverse">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary" @click="nextPhrase()">Next</button>
+        <button type="button" class="btn btn-secondary" x-show="isOpen"x-on:click="isOpen = !isOpen">Hide Answer</button>
+        <button type="button" class="btn btn-secondary" x-show="!isOpen" x-on:click="isOpen = !isOpen">Show Answer</button>
+      </div>
+    </nav>
+      
+  
+  </div>
+
+  </div>
+  
+<script type="text/javascript">
+      function phrases() {
+        return {
+              isOpen: false,
+              currPhrase: 0,
+              phrases: [
+{english:'it had never been so easy', spanish:'nunca había sido tan fácil'},
+{english:'it had never been so difficult', spanish:'nunca había sido tan difícil'},
+{english:'she had been unhappy for a long time', spanish:'había sido infeliz por mucho tiempo'},
+{english:'I had been working there for a long time', spanish:'había estado trabajando allí por mucho tiempo'},
+{english:'we had only been here a short while when they told us what happened', spanish:'solo habíamos aqui poco tiempo cuando nos dijeron lo que pasó'},
+{english:'they had been driving for three hours when the car ran out of petrol', spanish:'habían estado manejando por tres horas cuando el carro se quedó sin gasolina'},
+{english:'I had already done it before', spanish:'ya lo había hecho antes'},
+{english:'had you already done it before?', spanish:'ya lo habías hecho antes?'},
+{english:'I knew that we had done everything possible to help her', spanish:'sabia que habíamos hecho todo lo posible para ayudarle'},
+{english:'up until now, they had always done the right thing', spanish:'hasta ahora, siempre habían hecho lo correcto'},
+{english:'I had never seen her behave like this before', spanish:'nunca la había visto comportarse asi antes'},
+{english:'I was thinking that you hadn\'t seen the film yet', spanish:'pensaba que todavía no habías visto la pelicula'},
+{english:'he had finally seen his mistake', spanish:'finalmente había visto su error'},
+{english:'we had seen them only once before at the party', spanish:'los habíamos visto solo una vez antes en la fiesta'},
+{english:'neither of us had ever seen that woman before', spanish:'ninguno de nosotros habíamos visto esa mujer antes'},
+{english:'in that moment I knew they had seen enough', spanish:'en ese momento supe que habían visto suficiente '},
+{english:'I had already told him what he should do many times before', spanish:'ya le había dicho lo que deberia hacer muchas veces antes'},
+{english:'I had already said it to him once before', spanish:'ya se lo había dicho antes una vez'},
+{english:'I had alrady said it to him once before and he ingored me', spanish:'ya se lo había dicho antes una vez y me ignoró'},
+{english:'he did it even though you had already told him it was a mistake', spanish:'lo hizo aunque ya le habías dicho que era un error '},
+{english:'she had never told me this before', spanish:'nunca me había dicho esto antes'},
+{english:'her mother had told her (it to her) many times', spanish:'su madre se lo había dicho muchas veces'},
+{english:'we had already told my parents what happened', spanish:'ya les habíamos dicho a mis padres lo que pasó'},
+{english:'until that moment they hadn\'t said a single word to me', spanish:'hasta ese momento no me habían dicho ni una palabra'},
+{english:'I told him that I had already given it to you', spanish:'le dije que ya te lo había dado'},
+{english:'I thought you still hadn\'t given it to them', spanish:'pensaba que todavía no se lo habías dado '},
+{english:'she had never given me a present like that', spanish:'nunca me había dado un regalo asi'},
+{english:'I was sure we had given them the tickets', spanish:'estaba seguro que los habíamos dado los boletos.'},
+{english:'they had never given him an opportunity', spanish:'nunca le habían dado una oportunidad'},
+{english:'they arrived at 9 oclock but I had already left', spanish:'llegaron a las 9 pero ya me había ido'},
+{english:'I was still at the house, I hadn\'t left, when she called to tell me the news', spanish:'todavia estaba en la casa, no me había ido, cuando llamo para decirme la noticia'},
+{english:'it had already left when you arrived', spanish:'ya se había ido cuando llegaste'}
+        ],
+      nextPhrase() {
+        this.currPhrase = (this.currPhrase+1) % this.phrases.length; 
+        this.currPhrase = this.randomIntFromInterval(0,this.phrases.length-1);
+        this.isOpen = false;
+      },
+      randomIntFromInterval(min, max) { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
+    }  
+}
+</script>
+    
+</body>
+</html>

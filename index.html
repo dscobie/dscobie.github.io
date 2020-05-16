@@ -1,0 +1,656 @@
+
+<html>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dave scobie was here</title>
+<link href="iconmoonstyle.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v1.9.8/dist/alpine.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<style>
+
+html, body {
+  background-color: #ffeead;
+  background-color: #666;
+  margin: 5px;
+  margin: 0;
+  padding: 0;
+  color: #eee;
+  font-size: 16pt;
+}
+.landscape {
+  display: none;
+  background: #333;
+  color: #fff;
+  width: 100%
+  border: 1 px solid #000;
+  border-radius: 8px;
+  text-align: center;
+  padding: 20px;
+}
+.fancybox-caption__body {
+  font-size: 1.3em;
+}
+.refresh:hover {
+  cursor: hand;
+  color: #cc9;
+}
+.container > div > a { border-radius: inherit; }
+
+.container > div > a > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+.container > div {
+  border-radius: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container > div:nth-child(1n) { background-color: #333; }
+.container > div:nth-child(3n) { background-color: #666; }
+.container > div:nth-child(2n) { background-color: #999; }
+.container > div:nth-child(4n) { background-color: #aaa; }
+
+.c1 { grid-area: c1; }
+.c2 { grid-area: c2; }
+.c3 { grid-area: c3; }
+.c4 { grid-area: c4; }
+.c5 { grid-area: c5; }
+.c6 { grid-area: c6; }
+.c7 { grid-area: c7; }
+.c8 { grid-area: c8; }
+.c9 { grid-area: c9; }
+.c10 { grid-area: c10; }
+
+.container .logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #333 !important;
+  color: #eee;
+  font-size: 1.0em;
+}
+.container .logo .tag {
+  width: 100%;
+  height: 100%;
+  padding-left: 20%;
+  padding-top: 10%;
+  text-align: left;
+  vertical-align: top !important;
+}
+.container .logo .refresh {
+  width: 80%;
+  padding-right: 20%;
+  padding-bottom: 10%;
+  text-align: right;
+  vertical-align: text-bottom !important;
+}
+
+.container1 {
+    width: 99%;
+    height: 99%;
+    background-color: #eee;
+    border-radius: 8px;
+    padding: 3px;
+    margin: 0;
+    display: grid;
+    grid-gap: 3px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 20% 20% 20% 20% 19%;
+    grid-template-areas: 
+        "c1 c1"
+        "c3 c4"
+        "c2 c2"
+        "c5 c6"
+        "c7 c8"
+}
+.container2 {
+    width: 99%;
+    height: 99%;
+    background-color: #eee;
+    border-radius: 8px;
+    padding: 3px;
+    display: grid;
+    grid-gap: 3px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 25% 25% 25% 24%;
+    grid-template-areas: 
+      "c1 c1 c2 c2"
+      "c1 c1 c2 c2"
+      "c5 c6 c8 c8"
+      "c3 c4 c7 c9"
+  }
+  .container3 {
+    width: 99%;
+    height: 99%;
+    background-color: #eee;
+    border-radius: 8px;
+    padding: 3px;
+    display: grid;
+    grid-gap: 3px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 25% 25% 25% 24%;
+    grid-template-areas: 
+      "c1 c1 c2 c2"
+      "c1 c1 c2 c2"
+      "c5 c6 c8 c8"
+      "c3 c7 c7 c4"
+  }
+  .container4 {
+    width: 99%;
+    height: 99%;
+    background-color: #eee;
+    border-radius: 8px;
+    padding: 3px;
+    display: grid;
+    grid-gap: 3px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 25% 25% 25% 24%;
+    grid-template-areas: 
+      "c1 c2 c3"
+      "c4 c4 c4"
+      "c5 c5 c5"
+      "c6 c7 c8"
+  }
+  .container5 {
+    width: 99%;
+    height: 99%;
+    background-color: #eee;
+    border-radius: 8px;
+    padding: 3px;
+    display: grid;
+    grid-gap: 3px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 25% 25% 25% 24%;
+    grid-template-areas: 
+      "c1 c1 c1 c1"
+      "c1 c1 c1 c1"
+      "c2 c2 c3 c4"
+      "c2 c2 c5 c6"
+  }
+
+@media only screen and (max-height: 400px) and (orientation: landscape) {
+  .container1, .container2, .container3, .container4, .container5 {
+    height: auto;
+    display: none;
+  }
+  .landscape {
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 500px) {
+  .container1 {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 25% 25% 25% 24%;
+      grid-template-areas: 
+          "c1 c1 c1"
+          "c3 c4 c5"
+          "c2 c2 c2"
+          "c6 c7 c8"
+  }
+  .container .logo {
+    font-size: 1.2em;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .container1 {
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 25% 25% 24% 24%;
+    grid-template-areas: 
+      "c1 c1 c1 c1 c1 c1 c3 c3 c4 c4 c5 c5"
+      "c1 c1 c1 c1 c1 c1 c3 c3 c4 c4 c5 c5"
+      "c2 c2 c2 c2 c2 c2 c6 c6 c7 c7 c8 c8"
+      "c2 c2 c2 c2 c2 c2 c6 c6 c7 c7 c8 c8"
+  }
+
+  .container2 {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 33% 33% 33%;
+    grid-template-areas: 
+      "c1 c1 c8 c2 c2"
+      "c1 c1 c9 c2 c2"
+      "c3 c4 c5 c6 c7"
+  }
+  .container3 {
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 25% 25% 24% 24%;
+    grid-template-areas: 
+      "c1 c1 c1 c1 c1 c1 c2 c2 c3 c3 c4 c4"
+      "c1 c1 c1 c1 c1 c1 c2 c2 c3 c3 c4 c4"
+      "c5 c5 c5 c6 c6 c6 c7 c7 c7 c8 c8 c8"
+      "c5 c5 c5 c6 c6 c6 c7 c7 c7 c8 c8 c8"
+  }
+  .container4 {
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 25% 25% 24% 24%;
+    grid-template-areas: 
+      "c1 c1 c1 c2 c2 c2 c3 c3 c3 c4 c4 c4"
+      "c1 c1 c1 c2 c2 c2 c3 c3 c3 c4 c4 c4"
+      "c5 c5 c5 c5 c6 c6 c7 c7 c7 c8 c8 c8"
+      "c5 c5 c5 c5 c6 c6 c7 c7 c7 c8 c8 c8"
+  }
+  .container5 {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 33% 33% 33%;
+    grid-template-areas: 
+      "c1 c2 c3 c3 c4"
+      "c5 c5 c6 c6 c6"
+      "c5 c5 c6 c6 c6"
+  }
+  .container .logo {
+    font-size: 1.0em;
+  }
+  .fancybox-caption__body {
+  font-size: 1.7em;
+}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div x-data="images()" x-html="buildContainer()" x-ref="website">
+</div>
+
+<div class="landscape">
+  <p>Please give me some more room.</p>
+  <p>Turn your device to portrait mode.</p>
+</div>
+
+  <script type="text/javascript">
+    function images() {
+      return {
+            isOpen: false,
+            currPhrase: 0,
+            logoText: "<div class=\"tag\">scobie<br/>was<br/>here</div><div class=\"refresh\" @click=\"$refs.website.innerHTML=buildContainer()\"><span class=\"icon-redo\"></span></div>",
+            containers: [
+                  {
+                      "name": "container1",
+                      "CSSname": "container1",
+                      "displayCount": 8,
+                      "logoSpot": 3
+                  },
+                  {
+                      "name": "container2",
+                      "CSSname": "container2",
+                      "displayCount": 9,
+                      "logoSpot": 4
+                  },
+                  {
+                      "name": "container3",
+                      "CSSname": "container3",
+                      "displayCount": 8,
+                      "logoSpot": 4
+                    },
+                  {
+                      "name": "container4",
+                      "CSSname": "container4",
+                      "displayCount": 8,
+                      "logoSpot": 5
+                  },
+                  {
+                      "name": "container5",
+                      "CSSname": "container5",
+                      "displayCount": 6,
+                      "logoSpot": 3
+                  }
+            ],
+            imageList: [
+                  {
+                      "url": "images/bagan.jpg",
+                      "country": "Myanmar",
+                      "location": "Bagan",
+                      "date": "January 2017",
+                      "caption": "In the temples of Bagan."
+                  },
+                  {
+                      "url": "images/guanajuato170.jpeg",
+                      "country": "Mexico",
+                      "location": "Guanajuato",
+                      "date": "November 2017",
+                      "caption": "The beautiful streets of Guanajuato Mexico."
+                  },
+                  {
+                      "url": "images/clarksdale005.jpeg",
+                      "country": "USA",
+                      "location": "Clarksdale, MS",
+                      "date": "October 2017",
+                      "caption": "Tail Dragger performing at Red's Lounge."
+                  },
+                  {
+                      "url": "images/6months020.jpg",
+                      "country": "Myanmar",
+                      "location": "Inle Lake",
+                      "date": "February 2017",
+                      "caption": "Cruising around the lake in Myanmar."
+                  },
+                  {
+                      "url": "images/motor10.jpg",
+                      "country": "Vietnam",
+                      "location": "Xuan Giang",
+                      "date": "January 2017",
+                      "caption": "Northern vietname motorbike trip."
+                  },
+                  {
+                      "url": "images/lakesabrina.jpg",
+                      "country": "USA",
+                      "location": "California Eastern Sierra",
+                      "date": "May 2020",
+                      "caption": "Lake Sabrina still mostly frozen."
+                  },
+                  {
+                      "url": "images/puertoescondido0200.jpeg",
+                      "country": "Mexico",
+                      "location": "Puerto Escondido",
+                      "date": "March 2018",
+                      "caption": "Don't lose your head!"
+                  },
+                  {
+                      "url": "images/player170.jpeg",
+                      "country": "Myanmar",
+                      "location": "Inle Lake",
+                      "date": "February 2017",
+                      "caption": "Austin gets the shot!"
+                  },
+                  {
+                      "url": "images/angahuan0480.jpeg",
+                      "country": "Mexico",
+                      "location": "Angahuan",
+                      "date": "January 2018",
+                      "caption": "Town close to the volcano we climbed."
+                  },
+                  {
+                      "url": "images/luangprabang.jpg",
+                      "country": "Laos",
+                      "location": "Luang Prabang",
+                      "date": "March 2017",
+                      "caption": "Met some locals in the alleyway."
+                  },
+                  {
+                      "url": "images/6months070.jpg",
+                      "country": "Laos",
+                      "location": "Paksong",
+                      "date": "March 2017",
+                      "caption": "Hanging with the local kids."
+                  },
+                  {
+                      "url": "images/yangon020.jpg",
+                      "country": "Myanmar",
+                      "location": "Yangon",
+                      "date": "February 2017",
+                      "caption": "Night market. Good eats."
+                  },
+                  {
+                      "url": "images/hanoi010.jpg",
+                      "country": "Vietnam",
+                      "location": "Hanoi",
+                      "date": "December 2016",
+                      "caption": "Ho Ho Ho in Hanoi."
+                  },
+                  {
+                      "url": "images/siemreap030.jpg",
+                      "country": "Cambodia",
+                      "location": "Siem Reap",
+                      "date": "December 2016",
+                      "caption": "Wandering the temples."
+                  },
+                  {
+                      "url": "images/siemreap040.jpg",
+                      "country": "Cambodia",
+                      "location": "Siem Reap",
+                      "date": "December 2016",
+                      "caption": "Up Up Up."
+                  },
+                  {
+                      "url": "images/mammoth010.jpg",
+                      "country": "USA",
+                      "location": "Mammoth Lakes",
+                      "date": "April 2020",
+                      "caption": "Exercise after the snow."
+                  },
+                  {
+                      "url": "images/bolavenplateau010.jpg",
+                      "country": "Laos",
+                      "location": "Bolaven Plateau",
+                      "date": "March 2017",
+                      "caption": "Pig under the table at (not for) lunch."
+                  },
+                  {
+                      "url": "images/yangon010.jpg",
+                      "country": "Myanmar",
+                      "location": "Yangon",
+                      "date": "February 2017",
+                      "caption": "Train around the Yangon area."
+                  },
+                  {
+                      "url": "images/bolavenplateau020.jpg",
+                      "country": "Laos",
+                      "location": "Bolaven Plateau",
+                      "date": "March 2017",
+                      "caption": "Breakfast club."
+                  },
+                  {
+                      "url": "images/motor11.jpg",
+                      "country": "Vietnam",
+                      "location": "Ha Giang",
+                      "date": "January 2017",
+                      "caption": "Motorbike ride around nothern Vietnam."
+                  },
+                  {
+                      "url": "images/player120.jpeg",
+                      "country": "Myanmar",
+                      "location": "Bagan",
+                      "date": "January 2017",
+                      "caption": "Dawn balloon launch in Bagan."
+                  },
+                  {
+                      "url": "images/motor17.jpg",
+                      "country": "Vietnam",
+                      "location": "Ha Giang",
+                      "date": "January 2017",
+                      "caption": "Never get out of the boat.  God damned right."
+                  },
+                  {
+                      "url": "images/motor20.jpg",
+                      "country": "Vietnam",
+                      "location": "Ha Giang",
+                      "date": "January 2017",
+                      "caption": "Our fearless leader Bon shows us how to stay dry."
+                  },
+                  
+                  {
+                      "url": "images/bolavenplateau030.jpg",
+                      "country": "Laos",
+                      "location": "4000 Islands",
+                      "date": "March 2017",
+                      "caption": "Beautiful Laos scenerey after our motorbike trip."
+                  },
+                  {
+                      "url": "images/neworleans110.jpeg",
+                      "country": "USA",
+                      "location": "New Orleans",
+                      "date": "October 2018",
+                      "caption": "Wandering the New Orleans cemetery."
+                  },
+                  {
+                      "url": "images/kep010.jpg",
+                      "country": "Cambodia",
+                      "location": "Kep",
+                      "date": "December 2016",
+                      "caption": "Hard decisions out there."
+                  },
+                  {
+                      "url": "images/motor22.jpg",
+                      "country": "Vietnam",
+                      "location": "Ha Giang",
+                      "date": "January 2017",
+                      "caption": "No, really, don't lose your head."
+                  },
+                  
+                  {
+                      "url": "images/allsaintsday110.jpeg",
+                      "country": "Guatemala",
+                      "location": "Antigua",
+                      "date": "November 2018",
+                      "caption": "All Saints Day in Antigua."
+                  },
+                  {
+                      "url": "images/siemreap010.jpeg",
+                      "country": "Cambodia",
+                      "location": "Siem Reap",
+                      "date": "December 2016",
+                      "caption": "Gotta get your Instagram pic."
+                  },
+                  {
+                      "url": "images/kep020.jpg",
+                      "country": "Cambodia",
+                      "location": "Kep",
+                      "date": "December 2016",
+                      "caption": "A Yankee fan?  You're killing me kid."
+                  },
+                  {
+                      "url": "images/motor25.jpg",
+                      "country": "Vietnam",
+                      "location": "Ha Giang",
+                      "date": "January 2017",
+                      "caption": "It only took Cuong a few days to tell me how he really felt about me."
+                  },
+                  
+                  {
+                      "url": "images/siemreap020.jpeg",
+                      "country": "Cambodia",
+                      "location": "Siem Reap",
+                      "date": "December 2016",
+                      "caption": "Debbie trying to take Vuthy Man's job."
+                  },
+                  {
+                      "url": "images/bachatrek08.jpg",
+                      "country": "Vietnam",
+                      "location": "Bac Ha",
+                      "date": "December 2016",
+                      "caption": "Had lunch with the local kids while trekking thru the village."
+                  },
+                  {
+                      "url": "images/halong210.jpeg",
+                      "country": "Vietnam",
+                      "location": "Ha Long Bay",
+                      "date": "April 2017",
+                      "caption": "Homer and Debbie trying to fit in."
+                  },
+                  {
+                      "url": "images/kep030.jpg",
+                      "country": "Cambodia",
+                      "location": "Kep",
+                      "date": "December 2016",
+                      "caption": "Remains of an exited empire."
+                  },
+                  {
+                      "url": "images/sapa04.jpg",
+                      "country": "Vietnam",
+                      "location": "SaPa",
+                      "date": "December 2016",
+                      "caption": "Cozy homestay in the villages around SaPa."
+                  },
+                  {
+                      "url": "images/SMDE180.jpeg",
+                      "country": "Mexico",
+                      "location": "San Miguel De Allende",
+                      "date": "November 2017",
+                      "caption": "Late night taco trip."
+                  },
+                  {
+                      "url": "images/christmas100.jpeg",
+                      "country": "Mexico",
+                      "location": "Guanajuato",
+                      "date": "December 2017",
+                      "caption": "Celebrations underway in Guanajuato."
+                  },
+                  {
+                      "url": "images/monopass130.jpeg",
+                      "country": "USA",
+                      "location": "Eastern Sierras",
+                      "date": "September 2017",
+                      "caption": "Unexpected snow on backpack trip in the mountains."
+                  },
+                  {
+                      "url": "images/angahuan0440.jpeg",
+                      "country": "Mexico",
+                      "location": "Angahuan",
+                      "date": "January 2018",
+                      "caption": "Lunch is served outside the volcano."
+                  },
+                  {
+                      "url": "images/montealban0220.jpeg",
+                      "country": "Mexico",
+                      "location": "Monte Alban",
+                      "date": "March 2018",
+                      "caption": "Monte Alban ruins outside Oaxaca."
+                  },
+                  {
+                      "url": "images/christmas170.jpeg",
+                      "country": "Mexico",
+                      "location": "Guanajuato",
+                      "date": "December 2017",
+                      "caption": "Shrink wrapped baby Jesus for everyone!"
+                  },
+
+                 {
+                      "url": "images/huetombs190.jpeg",
+                      "country": "Vietnam",
+                      "location": "Hue",
+                      "date": "April 2017",
+                      "caption": "Homer Tom visits us in Vietnam."
+                  } 
+                  ],
+    buildImages(imageCount, logoSpot, containerName) {
+      var result = "";
+      var currItem = this.randomIntFromInterval(0,this.imageList.length-1);
+      var shownItems = [];
+
+      result = "<div class=\"" + containerName + " container\">";
+      for (i = 0; i<imageCount; i++) {
+          if (i == logoSpot) {
+              result += "<div class=\"c" + (i+1) + " logo\">" + this.logoText + "</div>";
+          } else {
+             while (shownItems.includes(currItem)) {
+               currItem = this.randomIntFromInterval(0,this.imageList.length-1);
+           }
+           shownItems.push(currItem);
+           result += "<div class=\"c" + (i+1) + "\"><a data-fancybox=\"gallery\" data-caption=\"" + this.imageList[currItem].caption + "<br/>" + this.imageList[currItem].location + ", " + this.imageList[currItem].country + ", " + this.imageList[currItem].date + "\" href=\"" + this.imageList[currItem].url + "\"><img src=\"" + this.imageList[currItem].url + "\"></a></div>";
+           // result += "<div class=\"c" + (i+1) + "\"><a href=\"\"><img src=\"" + this.imageList[currItem].url + "\"></a></div>";
+          }
+      }
+      result += "</div>";
+      return result;
+    },
+    buildContainer() {
+      var currItem = this.randomIntFromInterval(0,this.containers.length-1);
+      // currItem = 0;
+      var currContainer = this.containers[currItem];
+
+      return(this.buildImages(currContainer.displayCount, currContainer.logoSpot, currContainer.CSSname));
+    },
+    randomIntFromInterval(min, max) { // min and max included 
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+  }  
+}
+</script>
+
+
+</body>
+</html>
