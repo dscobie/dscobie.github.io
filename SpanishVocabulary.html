@@ -1,0 +1,137 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" 
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+      
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v1.9.8/dist/alpine.js"></script>
+        <style>
+          body {
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+          }
+          .phraseBox {
+            padding: 25px;
+            min-height: 200px;
+            border-radius: 8px; 
+            border: 1px solid #ddd; 
+            background: #eee;
+          }
+          button {
+            background: #99f;
+            border-radius: 5px;
+            font-size: 1em;
+            
+          }
+          .entryWord {
+              font-size: 1.8em;
+              color: #333;
+              font-weight: bold;
+          }
+          .entryPhrase {
+              font-size: 1.6em;
+              color: #999;
+          }
+        </style>
+    </head>
+<body>
+  <div x-data="phrases()">
+    <!-- test: <span x-html="currPhrase" ></span>:<span x-html="phrases.length"></span> -->
+    <div class="d-flex flex-column align-items-center">
+        <div class="phraseBox col-10 align-self-center"> 
+            <div class="entryWord" x-html="phrases[currPhrase].english"></div>
+            <div class="entryPhrase" x-html="phrases[currPhrase].englishPhrase"></div>
+        </div>
+        <div class="phraseBox col-10 align-self-center" x-show="isOpen">
+            <div class="entryWord" x-html="phrases[currPhrase].spanish"></div>
+            <div class="entryPhrase" x-html="phrases[currPhrase].spanishPhrase"></div>
+        </div>
+    </div>
+      
+    <nav class="navbar fixed-bottom navbar-dark bg-dark flex-row-reverse">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary" @click="nextPhrase()">Next</button>
+        <button type="button" class="btn btn-secondary" x-show="isOpen"x-on:click="isOpen = !isOpen">Hide Answer</button>
+        <button type="button" class="btn btn-secondary" x-show="!isOpen" x-on:click="isOpen = !isOpen">Show Answer</button>
+      </div>
+    </nav>
+      
+  
+  </div>
+
+  </div>
+  
+<script type="text/javascript">
+      function phrases() {
+        return {
+              isOpen: false,
+              currPhrase: 0,
+              phrases: [
+              {english:"part", spanish:"parte (f)",englishPhrase:"I don't know where this part goes", spanishPhrase:"no sé a dónde va esta parte",module:"module 01"},
+{english:"shape", spanish:"forma (f)",englishPhrase:"what shape is this?", spanishPhrase:"qué forma es esto?",module:"module 01"},
+{english:"towards", spanish:"hacia",englishPhrase:"we walked towards the exit", spanishPhrase:"caminamos hacia la salida",module:"module 01"},
+{english:"case", spanish:"caso (m)",englishPhrase:"in this case, it's obvious", spanishPhrase:"en este caso, es obvio",module:"module 01"},
+{english:"point, dot", spanish:"punto (m)",englishPhrase:"what is the point?", spanishPhrase:"cuál es el punto?",module:"module 01"},
+{english:"any", spanish:"cualquier",englishPhrase:"any day is fine for me", spanishPhrase:"cualquier dia está bien para mi",module:"module 01"},
+{english:"anyone", spanish:"cualquiera",englishPhrase:"I'm sure anyone could do it", spanishPhrase:"estoy seguro de que cualquiera podría hacerlo",module:"module 01"},
+{english:"end", spanish:"final (m)",englishPhrase:"at the end of the street", spanishPhrase:"al final de la calle",module:"module 01"},
+{english:"story", spanish:"historia (f)",englishPhrase:"the end of the story", spanishPhrase:"el final de la historia",module:"module 01"},
+{english:"against", spanish:"contra",englishPhrase:"it's against the law", spanishPhrase:"es contra la ley",module:"module 01"},
+{english:"middle", spanish:"medio (m)",englishPhrase:"it's in the middle of the street", spanishPhrase:"está en el medio de la calle",module:"module 01"},
+{english:"half", spanish:"mitad (f)",englishPhrase:"I only want half of that", spanishPhrase:"sólo quiero la mitad de eso",module:"module 01"},
+{english:"thousand", spanish:"mil",englishPhrase:"two thousand people", spanishPhrase:"dos mil personas",module:"module 01"},
+{english:"human", spanish:"humano (m)",englishPhrase:"we are all human", spanishPhrase:"todos somos humanos",module:"module 01"},
+{english:"to get, acquire, obtain", spanish:"conseguir",englishPhrase:"where can I get a book about the history of Spain?", spanishPhrase:"dónde puedo conseguir un libro sobre la historia de España?",module:"module 01"},
+{english:"piece", spanish:"pieza (f)",englishPhrase:"how many pieces do you need?", spanishPhrase:"cuántas piezas necesitas?",module:"module 01"},
+{english:"several", spanish:"varios, varias",englishPhrase:"there are several ways to do it", spanishPhrase:"hay varias maneras de hacerlo",module:"module 01"},
+{english:"to take out", spanish:"sacar",englishPhrase:"can you take out the rubbish for me?", spanishPhrase:"me puedes sacar la basura?",module:"module 01"},
+{english:"relationship", spanish:"relación (f)",englishPhrase:"how is your relationship with your father?", spanishPhrase:"cómo es tu realción con tu papá?",module:"module 01"},
+{english:"body", spanish:"cuerpo (m)",englishPhrase:"the human body", spanishPhrase:"el cuerpo humano",module:"module 01"},
+{english:"seller, salesperson", spanish:"vendedor, vendedora",englishPhrase:"the salesperson was very nice (m)", spanishPhrase:"el vendedor era muy amable",module:"module 01"},
+{english:"to renovate", spanish:"renovar",englishPhrase:"we are going to renovate the house next year", spanishPhrase:"vamos a renovar la casa el próximo año",module:"module 01"},
+{english:"prohibited", spanish:"prohibido/a",englishPhrase:"it's prohibited to smoke here", spanishPhrase:"está prohibido fumar aquí",module:"module 01"},
+{english:"approximately", spanish:"aproximadamente",englishPhrase:"there are approximately 12 people in the group", spanishPhrase:"hay aproximadamente doce personas en el grupo",module:"module 01"},
+{english:"exclusive", spanish:"exclusivo/a",englishPhrase:"it's a very exclusive university", spanishPhrase:"es una universidad muy exclusiva",module:"module 01"},
+{english:"debate", spanish:"debate (m)",englishPhrase:"I didn't enjoy the debate last night", spanishPhrase:"no disfruté el debate anoche",module:"module 01"},
+{english:"treaty", spanish:"tratado (m)",englishPhrase:"it's a treaty between Mexico and the United States", spanishPhrase:"es un tratado entre México y Los Estados Unidos",module:"module 01"},
+{english:"to slacken, loosen", spanish:"aflojar",englishPhrase:"I need to loosen my belt", spanishPhrase:"necesito aflojar mi cinturón",module:"module 01"},
+{english:"to board", spanish:"abordar",englishPhrase:"it's time to board the plane", spanishPhrase:"es hora de abordar el avión",module:"module 01"},
+{english:"to punish", spanish:"castigar",englishPhrase:"they're going to punish you", spanishPhrase:"van a castigarte",module:"module 01"},
+{english:"rejection", spanish:"rechazo (m)",englishPhrase:"the rejection was very hard to accept", spanishPhrase:"el rechaze fue muy dificil de aceptar",module:"module 01"},
+{english:"to rate, grade", spanish:"calificar",englishPhrase:"we can't rate the service until we see it", spanishPhrase:"no podemos calificar el servicio hasta que lo usemos",module:"module 01"},
+{english:"double", spanish:"doble (m)",englishPhrase:"I paid double", spanishPhrase:"pagé el doble",module:"module 01"},
+{english:"to wrap", spanish:"envolver",englishPhrase:"I don't have time to wrap the present", spanishPhrase:"no tengo tiempo para envolver el regalo",module:"module 01"},
+{english:"humble", spanish:"humilde",englishPhrase:"I like him because he's a humble person", spanishPhrase:"me cae bien porque es una persona humilde",module:"module 01"},
+{english:"variety", spanish:"variedad (f)",englishPhrase:"they sell a variety of fresh fruit", spanishPhrase:"venden una variedad de fruta fresca",module:"module 01"},
+{english:"specific", spanish:"especifico/a",englishPhrase:"you have to be more specific when you talk with me", spanishPhrase:"tienes que ser más especifico cuando hables conmigo",module:"module 01"},
+{english:"workshop", spanish:"taller (m)",englishPhrase:"a mechanics workshop", spanishPhrase:"un taller mecánico",module:"module 01"},
+{english:"slave", spanish:"esclavo/a",englishPhrase:"we work as if we were slaves for this company", spanishPhrase:"trabajamos como si fuéramos esclavos de esta empresa",module:"module 01"},
+{english:"unfair", spanish:"injusto/a",englishPhrase:"it's very unfair to ask me that", spanishPhrase:"es muy injusto perdirme eso",module:"module 01"},
+{english:"episode", spanish:"episodio (m)",englishPhrase:"how many episodes are in the series?", spanishPhrase:"cuántos episodios hay en la serie?",module:"module 01"},
+{english:"impact", spanish:"impacto",englishPhrase:"it had a big impact on me", spanishPhrase:"tuvo un gran impacto en mi",module:"module 01"},
+{english:"to squeeze, tighten", spanish:"apretar",englishPhrase:"it's important to completely tighten all the screws", spanishPhrase:"es importante apretar completamente todos los tornillos",module:"module 01"},
+{english:"tear, teardrop", spanish:"lágrima (f)",englishPhrase:"she had tears in her eyes when she left", spanishPhrase:"tenía lágrimas en los ojos cuando se fue",module:"module 01"},
+{english:"angle", spanish:"ángulo (m)",englishPhrase:"it's impossible to see from this angle", spanishPhrase:"es imposible ver desde este ángulo",module:"module 01"},
+{english:"to handle", spanish:"manejar",englishPhrase:"they handled this situation very badly", spanishPhrase:"manejaron esta situación muy mal",module:"module 01"},
+{english:"handling", spanish:"manejo (m)",englishPhrase:"the handling of this crisis was very bad", spanishPhrase:"el manejo de esta crisis estuvo muy mal",module:"module 01"},
+{english:"currently", spanish:"actualmente",englishPhrase:"I was born in Argentina but I currently live in Spain", spanishPhrase:"nací en Argentina pero actualmente vivo en España",module:"module 01"},
+{english:"current", spanish:"actual",englishPhrase:"the current situation is very serious", spanishPhrase:"la situación actual es muy grave",module:"module 01"},
+{english:"full", spanish:"lleno/a",englishPhrase:"the tank is full", spanishPhrase:"el tanque está lleno",module:"module 01"},
+       ],
+      nextPhrase() {
+        this.currPhrase = (this.currPhrase+1) % this.phrases.length; 
+        this.currPhrase = this.randomIntFromInterval(0,this.phrases.length-1);
+        this.isOpen = false;
+      },
+      randomIntFromInterval(min, max) { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
+    }  
+}
+</script>
+    
+</body>
+</html>
