@@ -31,7 +31,6 @@
             align-items: center;
             justify-content: center;
             padding-top: 0;
-            border: 1px solid #f00;
             border-radius: 8px; 
             border: 1px solid #aaa; 
             background: #eee;
@@ -75,11 +74,22 @@
 }
 .c2 {
   grid-row-start: 2;
-  grid-column: 3 / span 8;
+  grid-column: 1 / span 13;
 }
 .c3 {
   grid-row-start: 3;
-  grid-column: 3 / span 8;
+  grid-column: 1 / span 13;
+}
+
+@media only screen and (min-width: 800px) {
+  .c2 {
+    grid-row-start: 2;
+    grid-column: 3 / span 8;
+  }
+  .c3 {
+    grid-row-start: 3;
+    grid-column: 3 / span 8;
+  }
 }
 .footer {
   display: flex;
