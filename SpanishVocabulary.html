@@ -1,12 +1,18 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <title>Spanish Vocabulary Flashcards</title>
         <link rel="stylesheet" 
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
               integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
               crossorigin="anonymous">
       
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v1.9.8/dist/alpine.js"></script>
+        
+        <script>
+          var SWIPE_THRESHOLD = 50
+        </script>
+        <script src="./Tocca.js"></script>
         <style>
           body {
             margin: 0;
@@ -77,13 +83,13 @@
         <div class="header navbar-dark bg-dark"> 
           <span x-html="currShuffle+1" ></span> / <span x-html="phrases.length"></span>
         </div>
-        <div class="c2 phraseBox"> 
+        <div class="c2 phraseBox" @swipeleft="nextPhrase()" @swiperight="prevPhrase()"> 
             <div class="entryWord" x-html="phrases[currPhrase].english"></div>
             <div class="entryPhrase" x-html="phrases[currPhrase].englishPhrase"></div>
         </div>
-        <div class="c3 phraseBox">
+        <div class="c3 phraseBox" @click="isOpen = !isOpen"  @swipeleft="nextPhrase()" @swiperight="prevPhrase()">
             <div class="entryWord" x-show="!isOpen">&nbsp;</div>
-            <div class="entryPhrase" x-show="!isOpen">&nbsp;</div>
+            <div class="entryPhrase" x-show="!isOpen">Click to show answer</div>
             <div class="entryWord" x-html="phrases[currPhrase].spanish" x-show="isOpen"></div>
             <div class="entryPhrase" x-html="phrases[currPhrase].spanishPhrase"  x-show="isOpen"></div>
         </div>
@@ -91,7 +97,7 @@
         <div class="btn-group" role="group" aria-label="Basic example">
           <button type="button" class="btn btn-secondary" @click="prevPhrase()">Prev</button>
           <button type="button" class="btn btn-secondary" @click="nextPhrase()">Next</button>
-          <button type="button" class="btn btn-secondary" x-show="isOpen"x-on:click="isOpen = !isOpen">Hide Answer</button>
+          <button type="button" class="btn btn-secondary" x-show="isOpen" x-on:click="isOpen = !isOpen">Hide Answer</button>
           <button type="button" class="btn btn-secondary" x-show="!isOpen" x-on:click="isOpen = !isOpen">Show Answer</button>
         </div>
       </nav>
@@ -111,7 +117,7 @@
               currShuffle: 0,
               shuffleArray: [],
               phrases: [
-              {english:"part", spanish:"parte (f)",englishPhrase:"I don't know where this part goes", spanishPhrase:"no sé a dónde va esta parte",module:"module 01"},
+{english:"part", spanish:"parte (f)",englishPhrase:"I don't know where this part goes", spanishPhrase:"no sé a dónde va esta parte",module:"module 01"},
 {english:"shape", spanish:"forma (f)",englishPhrase:"what shape is this?", spanishPhrase:"qué forma es esto?",module:"module 01"},
 {english:"towards", spanish:"hacia",englishPhrase:"we walked towards the exit", spanishPhrase:"caminamos hacia la salida",module:"module 01"},
 {english:"case", spanish:"caso (m)",englishPhrase:"in this case, it's obvious", spanishPhrase:"en este caso, es obvio",module:"module 01"},
@@ -129,7 +135,7 @@
 {english:"piece", spanish:"pieza (f)",englishPhrase:"how many pieces do you need?", spanishPhrase:"cuántas piezas necesitas?",module:"module 01"},
 {english:"several", spanish:"varios, varias",englishPhrase:"there are several ways to do it", spanishPhrase:"hay varias maneras de hacerlo",module:"module 01"},
 {english:"to take out", spanish:"sacar",englishPhrase:"can you take out the rubbish for me?", spanishPhrase:"me puedes sacar la basura?",module:"module 01"},
-{english:"relationship", spanish:"relación (f)",englishPhrase:"how is your relationship with your father?", spanishPhrase:"cómo es tu realción con tu papá?",module:"module 01"},
+{english:"relationship", spanish:"relación (f)",englishPhrase:"how is your relationship with your father?", spanishPhrase:"cómo es tu relación con tu papá?",module:"module 01"},
 {english:"body", spanish:"cuerpo (m)",englishPhrase:"the human body", spanishPhrase:"el cuerpo humano",module:"module 01"},
 {english:"seller, salesperson", spanish:"vendedor, vendedora",englishPhrase:"the salesperson was very nice (m)", spanishPhrase:"el vendedor era muy amable",module:"module 01"},
 {english:"to renovate", spanish:"renovar",englishPhrase:"we are going to renovate the house next year", spanishPhrase:"vamos a renovar la casa el próximo año",module:"module 01"},
@@ -161,6 +167,56 @@
 {english:"currently", spanish:"actualmente",englishPhrase:"I was born in Argentina but I currently live in Spain", spanishPhrase:"nací en Argentina pero actualmente vivo en España",module:"module 01"},
 {english:"current", spanish:"actual",englishPhrase:"the current situation is very serious", spanishPhrase:"la situación actual es muy grave",module:"module 01"},
 {english:"full", spanish:"lleno/a",englishPhrase:"the tank is full", spanishPhrase:"el tanque está lleno",module:"module 01"},
+{english:"sharp", spanish:"filoso/a",englishPhrase:"the knife is sharp", spanishPhrase:"el cuchillo es filoso",module:"module 02"},
+{english:"edge", spanish:"borde (m)",englishPhrase:"the edges are sharp", spanishPhrase:"los bordes son filosos",module:"module 02"},
+{english:"studious", spanish:"estudioso/a",englishPhrase:"she is very studious", spanishPhrase:"es muy estudiosa",module:"module 02"},
+{english:"to ratify", spanish:"ratificar",englishPhrase:"they want to ratify the treaty as soon as possible", spanishPhrase:"quieren ratificar el tratado tan pronto como sea posible",module:"module 02"},
+{english:"wheat", spanish:"trigo (m)",englishPhrase:"wheat is good for your diet", spanishPhrase:"el trigo es bueno para tu dieta",module:"module 02"},
+{english:"platform", spanish:"plataforma (f)",englishPhrase:"we need to build a very strong platform", spanishPhrase:"necesitamos construir una plataforma muy fuerte",module:"module 02"},
+{english:"paranoid", spanish:"paranoico/a",englishPhrase:"they are super paranoid", spanishPhrase:"están súper paranoicos",module:"module 02"},
+{english:"bicycle", spanish:"bicicleta (f)",englishPhrase:"I love your new bike", spanishPhrase:"me encanta tu nueva bicicleta",module:"module 02"},
+{english:"spark", spanish:"chispa (f)",englishPhrase:"there were sparks from the motor", spanishPhrase:"habia chispas del motor",module:"module 02"},
+{english:"lighting", spanish:"iluminación (f)",englishPhrase:"the lighting is beautiful in this room", spanishPhrase:"la iluminación es preciosa en este cuarto",module:"module 02"},
+{english:"circular", spanish:"circular",englishPhrase:"the shape is circular", spanishPhrase:"la forma es circular",module:"module 02"},
+{english:"headquarters", spanish:"sede (f)",englishPhrase:"the headquarters of the company is in Madrid", spanishPhrase:"la sede de la empresa está en Madrid",module:"module 02"},
+{english:"to be situated", spanish:"encontrarse",englishPhrase:"the headquarters is situated in Venice", spanishPhrase:"la sede se encuentra en Valencia",module:"module 02"},
+{english:"tray", spanish:"charola(f), bandeja (f)",englishPhrase:"can you bring me a tray please?", spanishPhrase:"me puedes traer una charola por favor?",module:"module 02"},
+{english:"to aggravate", spanish:"agravar",englishPhrase:"I don't want to aggravate the situation", spanishPhrase:"no quiero agravar la situación",module:"module 02"},
+{english:"marriage", spanish:"matrimonio (m)",englishPhrase:"it's obvious they have a very happy marriage", spanishPhrase:"es obvio que tienen un matrimonio muy feliz",module:"module 02"},
+{english:"trapped", spanish:"atrapado/a",englishPhrase:"she feels trapped in the marriage", spanishPhrase:"se siente atrapada en el matrimonio",module:"module 02"},
+{english:"unforgetable", spanish:"inolvidable",englishPhrase:"the experience was unforgettable", spanishPhrase:"la experiencia fue inolvidable",module:"module 02"},
+{english:"to run into someone (to meet by chance)", spanish:"toparse con",englishPhrase:"yesterday I ran into an old friend in the supermarket", spanishPhrase:"ayer me topé con un viejo amigo en el supermercado",module:"module 02"},
+{english:"to crash, to bump into someone", spanish:"chocar con",englishPhrase:"she crashed into my car at the traffic lights", spanishPhrase:"chocó con mi carro en el semáforo",module:"module 02"},
+{english:"rag, cleaning cloth", spanish:"trapo (m), garra(f)",englishPhrase:"do you need a cloth to clean it?", spanishPhrase:"necesitas una garra para limpiarlo?",module:"module 02"},
+{english:"highly", spanish:"altamente",englishPhrase:"it's highly recommended", spanishPhrase:"es altamente recomendado",module:"module 02"},
+{english:"content", spanish:"contenido (m)",englishPhrase:"the course content is excellent", spanishPhrase:"el contenido del curso es excelente",module:"module 02"},
+{english:"graphic", spanish:"gráfico/a",englishPhrase:"the content is highly graphic", spanishPhrase:"el contenido es altamente gráfico",module:"module 02"},
+{english:"to analyze", spanish:"analizar",englishPhrase:"first I need to analyze the content of the course", spanishPhrase:"primero necesito analizar el contenido del curso",module:"module 02"},
+{english:"to charge (money)", spanish:"cobrar",englishPhrase:"he charged me $100 pesos an hour", spanishPhrase:"me cobró cien pesos por hora",module:"module 02"},
+{english:"to charge (phone, device)", spanish:"cargar",englishPhrase:"I have to charge my phone before I leave", spanishPhrase:"tengo que cargar mi teléfono antes de irme",module:"module 02"},
+{english:"willpower", spanish:"fuerza de voluntad (f)",englishPhrase:"it takes a lot of work and willpower to be successful", spanishPhrase:"es necesario mucho trabajo y fuerza de voluntad para tener éxito",module:"module 02"},
+{english:"to advertise, to announce", spanish:"anunciar",englishPhrase:"it's important to advertise your services if you have a business", spanishPhrase:"es importante anunciar sus servicios si tienes una empresa",module:"module 02"},
+{english:"advertisement", spanish:"anuncio (m)",englishPhrase:"I saw an advertisement in the newspaper", spanishPhrase:"vi un anuncio en el periódico",module:"module 02"},
+{english:"ghost", spanish:"fantasma (m)",englishPhrase:"he told me he saw a ghost in the house", spanishPhrase:"me dijo que vio un fantasma en la casa",module:"module 02"},
+{english:"member", spanish:"miembro, socio (m)",englishPhrase:"how many members are there in the group?", spanishPhrase:"cuántos miembros hay en el grupo?",module:"module 02"},
+{english:"care, carefully", spanish:"cuidado, con cuidado",englishPhrase:"you have to drive carefully whenever there's a lot of traffic", spanishPhrase:"tienes que manejar con cuidado cuando hay mucho tráfico",module:"module 02"},
+{english:"place", spanish:"lugar (m)",englishPhrase:"this place is perfect for a picnic", spanishPhrase:"este lugar es perfecto para un picnic",module:"module 02"},
+{english:"to turn", spanish:"girar (doblar)",englishPhrase:"if you can turn here please, towards the shop", spanishPhrase:"si puedes girar aguí por favor, hacia la tienda",module:"module 02"},
+{english:"left", spanish:"izquierda (f)",englishPhrase:"if you can turn (to the) left here please", spanishPhrase:"si puedes girar a la izquierda aquí por favor",module:"module 02"},
+{english:"right", spanish:"derecha (f)",englishPhrase:"do I turn to the right here?", spanishPhrase:"giro a la derecha aquí?",module:"module 02"},
+{english:"straight ahead", spanish:"todo derecho",englishPhrase:"it's straight ahead", spanishPhrase:"es todo derecho",module:"module 02"},
+{english:"rights", spanish:"derechos (m)",englishPhrase:"I know my rights", spanishPhrase:"conozco mis derechos (bajo de ley)",module:"module 02"},
+{english:"to sue", spanish:"demandar",englishPhrase:"they're going to sue me", spanishPhrase:"van a demandarme",module:"module 02"},
+{english:"foreigner", spanish:"extranjero/a",englishPhrase:"there are many foreigners here", spanishPhrase:"hay muchos extranjeros aquí",module:"module 02"},
+{english:"law suit", spanish:"demanda (f)",englishPhrase:"I can't face another lawsuit", spanishPhrase:"no puedo afrontar otra demanda",module:"module 02"},
+{english:"ribbon", spanish:"cinta (f)",englishPhrase:"do we have any ribbon?", spanishPhrase:"tenemos cinta?",module:"module 02"},
+{english:"to trick, deceive", spanish:"engañar",englishPhrase:"they tried to trick me", spanishPhrase:"trataron de engañarme",module:"module 02"},
+{english:"bag", spanish:"bolsa (f)",englishPhrase:"I lost my bag", spanishPhrase:"se me perdió la bolsa",module:"module 02"},
+{english:"specialist", spanish:"especialista (m/f)",englishPhrase:"I thought he was a specialist", spanishPhrase:"pensaba que era un especialista",module:"module 02"},
+{english:"speed", spanish:"velocidad (f)",englishPhrase:"the speed of acceleration was incredible", spanishPhrase:"la velocidad de aceleración era increíble",module:"module 02"},
+{english:"reaction", spanish:"reacción (f)",englishPhrase:"did you see their reaction?", spanishPhrase:"viste sus reacciones?",module:"module 02"},
+{english:"to grow, to grow up", spanish:"crecer",englishPhrase:"my grandfather grew up here", spanishPhrase:"mi abuelo creció aquí",module:"module 02"},
+{english:"ranch", spanish:"rancho (m)",englishPhrase:"my grandmother grew up on a ranch", spanishPhrase:"mi abuela creció en un rancho",module:"module 02"},
        ],
       prevPhrase() {
         // this.currPhrase = (this.currPhrase+1) % this.phrases.length; 
