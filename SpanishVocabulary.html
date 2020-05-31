@@ -67,7 +67,7 @@
   display: flex;
   flex-direction:row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   color: #eee;
   grid-row-start: 1;
   grid-column: 1 / span 13;
@@ -99,22 +99,34 @@
   grid-row-start: 4;
   grid-column: 1 / span 13;
 }
+
+SELECT {
+  border-radius: 5px;
+  background-color: #333;
+  border: 1px solid #eee;
+  color: #eee;
+}
         </style>
     </head>
 <body>
   <div class="website" x-data="phrases()" x-init="() => {init()}">
         <div class="header navbar-dark bg-dark"> 
-          <span x-html="currShuffle+1" ></span> / <span x-html="phrases.length"></span>
+          <div><span x-html="currShuffle+1" ></span> / <span x-html="workingPhrases.length"></span></div>
+          <div><select x-model="currModule" x-on:change="changeModule()">
+            <template x-for="moduleName in modules">
+              <option x-text="moduleName"></option>
+            </template>
+          </select></div>
         </div>
         <div class="c2 phraseBox" @swipeleft="nextPhrase()" @swiperight="prevPhrase()"> 
-            <div class="entryWord" x-html="phrases[currPhrase].english"></div>
-            <div class="entryPhrase" x-html="phrases[currPhrase].englishPhrase"></div>
+            <div class="entryWord" x-html="currDisplay.english"></div>
+            <div class="entryPhrase" x-html="currDisplay.englishPhrase"></div>
         </div>
         <div class="c3 phraseBox" @click="isOpen = !isOpen"  @swipeleft="nextPhrase()" @swiperight="prevPhrase()">
           <div class="entryWord" x-show="!isOpen">&nbsp;</div>
           <div class="entryPhrase" x-show="!isOpen">Click to show answer</div>
-            <div class="entryWord" x-html="phrases[currPhrase].spanish" x-show="isOpen"></div>
-            <div class="entryPhrase" x-html="phrases[currPhrase].spanishPhrase"  x-show="isOpen"></div>
+            <div class="entryWord" x-html="currDisplay.spanish" x-show="isOpen"></div>
+            <div class="entryPhrase" x-html="currDisplay.spanishPhrase"  x-show="isOpen"></div>
         </div>
       <nav class="footer navbar-dark bg-dark flex-row-reverse">
         <div class="btn-group" role="group" aria-label="Basic example">
@@ -133,6 +145,10 @@
               currPhrase: 0,
               currShuffle: 0,
               shuffleArray: [],
+              modules: [],
+              currModule: 0,
+              workingPhrases: [],
+              currDisplay: {english:"", spanish:"",englishPhrase:"", spanishPhrase:"",module:""},
               phrases: [
               {english:"part", spanish:"parte (f)",englishPhrase:"I don't know where this part goes", spanishPhrase:"no sé a dónde va esta parte",module:"module 01"},
 {english:"shape", spanish:"forma (f)",englishPhrase:"what shape is this?", spanishPhrase:"qué forma es esto?",module:"module 01"},
@@ -289,16 +305,18 @@
         // this.currPhrase = (this.currPhrase+1) % this.phrases.length; 
         // this.currPhrase = this.randomIntFromInterval(0,this.phrases.length-1);
         this.currShuffle--;
-        if (this.currShuffle === -1) this.currShuffle = this.phrases.length-1;
+        if (this.currShuffle === -1) this.currShuffle = this.workingPhrases.length-1;
         this.currPhrase = parseInt(this.shuffleArray[this.currShuffle]);
+        this.currDisplay = this.workingPhrases[this.currPhrase];
         this.isOpen = false;
       },
       nextPhrase() {
         // this.currPhrase = (this.currPhrase+1) % this.phrases.length; 
         // this.currPhrase = this.randomIntFromInterval(0,this.phrases.length-1);
         this.currShuffle++;
-        if (this.currShuffle === this.phrases.length) this.currShuffle = 0;
+        if (this.currShuffle === this.workingPhrases.length) this.currShuffle = 0;
         this.currPhrase = parseInt(this.shuffleArray[this.currShuffle]);
+        this.currDisplay = this.workingPhrases[this.currPhrase];
         this.isOpen = false;
       },
       randomIntFromInterval(min, max) { // min and max included 
@@ -315,9 +333,22 @@
           this.shuffleArray[top] = tmp;
         }
       },
-      init() {
-        this.generateRandomArray(this.phrases.length);
+      changeModule() {
         this.currPhrase = parseInt(this.shuffleArray[0]);
+        this.currShuffle = 0;
+        this.isOpen = false;
+        this.workingPhrases = this.phrases.filter( data => data.module === this.currModule );
+        this.currDisplay = this.workingPhrases[this.currPhrase];
+      },
+      init() {
+        this.modules = [... new Set(this.phrases.map(data => data.module))];
+        this.currModule = this.modules[0];
+
+        this.workingPhrases = this.phrases.filter( data => data.module === this.currModule );
+        
+        this.generateRandomArray(this.workingPhrases.length);
+        this.currPhrase = parseInt(this.shuffleArray[0]);
+        this.currDisplay = this.workingPhrases[this.currPhrase];
       },
     }
     }
