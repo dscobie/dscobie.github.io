@@ -265,7 +265,7 @@ html, body {
 
 <body>
 
-<div x-data="images()" x-html="buildContainer()" x-ref="website">
+<div x-data="images()" x-html="currWebsite" x-ref="website" x-init="() => {init()}">
 </div>
 
 <div class="landscape">
@@ -277,8 +277,56 @@ html, body {
     function images() {
       return {
             isOpen: false,
-            currPhrase: 0,
+            shuffleArray: [],
+            currShuffle: 0,
+            currWebsite: "",
             logoText: "<div class=\"tag\">scobie<br/>was<br/>here</div><div class=\"refresh\"><span class=\"icon-redo\"></span></div>",
+            init() {
+                this.generateRandomArray(this.imageList.length);
+                this.buildContainer();
+            },
+            generateRandomArray(inLength) {
+                this.shuffleArray = [];
+                for (i=0;i<inLength;++i) this.shuffleArray.push(i);
+                
+                var tmp, current, top = this.shuffleArray.length;
+                if(top) while(--top) {
+                    current = Math.floor(Math.random() * (top + 1));
+                    tmp = this.shuffleArray[current];
+                    this.shuffleArray[current] = this.shuffleArray[top];
+                    this.shuffleArray[top] = tmp;
+                }
+            },
+            buildImages(imageCount, logoSpot, containerName) {
+                var result = "";
+                var currItem = 0;
+
+                result = "<div class=\"" + containerName + " container\">";
+                for (i = 0; i<imageCount; i++) {
+                    if (i == logoSpot) {
+                        result += "<div class=\"c" + (i+1) + " logo\" @click=\"buildContainer()\">" + this.logoText + "</div>";
+                    } else {
+                        this.currShuffle++;
+                        if (this.currShuffle === this.shuffleArray.length) {
+//                            this.generateRandomArray(this.imageList.length);
+                            this.currShuffle = 0;
+                        }
+                        currItem = parseInt(this.shuffleArray[this.currShuffle]);
+                        result += "<div class=\"c" + (i+1) + "\"><a data-fancybox=\"gallery\" data-caption=\"" + this.imageList[currItem].caption + "<br/>" + this.imageList[currItem].location + ", " + this.imageList[currItem].country + ", " + this.imageList[currItem].date + "\" href=\"" + this.imageList[currItem].url + "\"><img src=\"" + this.imageList[currItem].url + "\"></a></div>";
+                    }
+                }
+                result += "</div>";
+                return result;
+            },
+            buildContainer() {
+                var currItem = this.randomIntFromInterval(0,this.containers.length-1);
+                var currContainer = this.containers[currItem];
+
+                this.currWebsite = this.buildImages(currContainer.displayCount, currContainer.logoSpot, currContainer.CSSname);
+            },
+            randomIntFromInterval(min, max) { // min and max included 
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            },
             containers: [
                   {
                       "name": "container1",
@@ -875,42 +923,10 @@ html, body {
                       "date": "April 2017",
                       "caption": "Homer Tom visits us in Vietnam."
                   } 
-                  ],
-    buildImages(imageCount, logoSpot, containerName) {
-      var result = "";
-      var currItem = this.randomIntFromInterval(0,this.imageList.length-1);
-      var shownItems = [];
-
-      result = "<div class=\"" + containerName + " container\">";
-      for (i = 0; i<imageCount; i++) {
-          if (i == logoSpot) {
-              result += "<div class=\"c" + (i+1) + " logo\" @click=\"$refs.website.innerHTML=buildContainer()\">" + this.logoText + "</div>";
-          } else {
-             while (shownItems.includes(currItem)) {
-               currItem = this.randomIntFromInterval(0,this.imageList.length-1);
-           }
-           shownItems.push(currItem);
-           result += "<div class=\"c" + (i+1) + "\"><a data-fancybox=\"gallery\" data-caption=\"" + this.imageList[currItem].caption + "<br/>" + this.imageList[currItem].location + ", " + this.imageList[currItem].country + ", " + this.imageList[currItem].date + "\" href=\"" + this.imageList[currItem].url + "\"><img src=\"" + this.imageList[currItem].url + "\"></a></div>";
-           // result += "<div class=\"c" + (i+1) + "\"><a href=\"\"><img src=\"" + this.imageList[currItem].url + "\"></a></div>";
-          }
-      }
-      result += "</div>";
-      return result;
-    },
-    buildContainer() {
-      var currItem = this.randomIntFromInterval(0,this.containers.length-1);
-      // currItem = 0;
-      var currContainer = this.containers[currItem];
-
-      return(this.buildImages(currContainer.displayCount, currContainer.logoSpot, currContainer.CSSname));
-    },
-    randomIntFromInterval(min, max) { // min and max included 
-      return Math.floor(Math.random() * (max - min + 1) + min);
-    }
+                  ]
   }  
 }
 </script>
-
 
 </body>
 </html>
