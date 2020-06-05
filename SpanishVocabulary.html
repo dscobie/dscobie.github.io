@@ -5,18 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Spanish Vocabulary Flashcards</title>
-        <link rel="stylesheet" 
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
-              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-              crossorigin="anonymous">
+    <title>Spanish Vocabulary Flashcards</title>
+    <link rel="stylesheet" 
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous">
       
-        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v1.9.8/dist/alpine.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v1.9.8/dist/alpine.js"></script>
         
-        <script>
-          var SWIPE_THRESHOLD = 50;
-        </script>
-        <script src="./Tocca.js"></script>
+    <script>
+      var SWIPE_THRESHOLD = 50;
+    </script>
+    <script src="./Tocca.js"></script>
         <style>
           html, body {
             margin: 0;
@@ -27,6 +27,7 @@
           }
           .phraseBox {
             display: flex;
+            height: 100%;
             flex-direction:column;
             align-items: center;
             justify-content: center;
@@ -34,6 +35,7 @@
             border-radius: 8px; 
             border: 1px solid #aaa; 
             background: #eee;
+            padding: 10px;
           }
           button {
             background: #99f;
@@ -127,14 +129,14 @@ SELECT {
           </div>
         </div>
         <div class="c2 phraseBox" @swipeleft="nextPhrase()" @swiperight="prevPhrase()"> 
-            <div class="entryWord" x-html="currDisplay.english"></div>
-            <div class="entryPhrase" x-html="currDisplay.englishPhrase"></div>
+            <span class="entryWord" x-html="currDisplay.english"></span>
+            <span class="entryPhrase" x-html="currDisplay.englishPhrase"></span>
         </div>
         <div class="c3 phraseBox" @click="isOpen = !isOpen"  @swipeleft="nextPhrase()" @swiperight="prevPhrase()">
-          <div class="entryWord" x-show="!isOpen">&nbsp;</div>
-          <div class="entryPhrase" x-show="!isOpen">click to show answer</div>
-            <div class="entryWord" x-html="currDisplay.spanish" x-show="isOpen"></div>
-            <div class="entryPhrase" x-html="currDisplay.spanishPhrase"  x-show="isOpen"></div>
+          <span class="entryWord" x-show="!isOpen">&nbsp;</span>
+          <span class="entryWord" x-html="currDisplay.spanish" x-show="isOpen"></span>
+          <span class="entryPhrase" x-show="!isOpen">click to show answer</span>
+          <span class="entryPhrase" x-html="currDisplay.spanishPhrase"  x-show="isOpen"></span>
         </div>
       <nav class="footer navbar-dark bg-dark flex-row-reverse">
         <div class="btn-group" role="group" aria-label="Basic example">
@@ -193,6 +195,7 @@ SELECT {
         }
       },
       changeView() {
+        this.workingphrases = [];
         if (this.currDatatype === "all") {
           this.workingPhrases = this.phrases.filter( data => data.module === this.currModule );
         } else {
@@ -391,7 +394,7 @@ SELECT {
 {english:"embarrassment", spanish:"vergüenza (f)",englishPhrase:"her embarrassment was obvious to everyone", spanishPhrase:"su vergüenza era obvia para todos",module:"module 04",type:"words"},
 {english:"injection", spanish:"inyección (f)",englishPhrase:"i hate injections!", spanishPhrase:"¡odio las inyecciónes!",module:"module 04",type:"words"},
 {english:"cellar, warehouse", spanish:"bodega (f)",englishPhrase:"we have to order it from the warehouse", spanishPhrase:"tenemos que pedirlo de la bodega",module:"module 04",type:"words"},
-{english:"stock, broth (cooking)", spanish:"caldo (m)",englishPhrase:"the soup is made with chicken brot", spanishPhrase:"la sopa se hace con caldo de pollo",module:"module 04",type:"words"},
+{english:"stock, broth (cooking)", spanish:"caldo (m)",englishPhrase:"the soup is made with chicken broth", spanishPhrase:"la sopa se hace con caldo de pollo",module:"module 04",type:"words"},
 {english:"tasty, delicious", spanish:"sabroso(a)",englishPhrase:"the fish stock is very tasty", spanishPhrase:"el caldo de pescado es muy sabroso",module:"module 04",type:"words"},
 {english:"to sweat", spanish:"sudar",englishPhrase:"i'm sweating like crazy with this heat", spanishPhrase:"estoy sudando como loco(a) con este calor",module:"module 04",type:"words"},
 {english:"reward", spanish:"recompensa (f)",englishPhrase:"i wonder what her reward will be?", spanishPhrase:"me pregunto cuál sera su recompensa?",module:"module 04",type:"words"},
@@ -419,6 +422,56 @@ SELECT {
 {english:"border (country)", spanish:"frontera (f)",englishPhrase:"a country must protect it's borders", spanishPhrase:"una país tiene que proteger sus fronteras",module:"module 04",type:"words"},
 {english:"attack", spanish:"ataque (m)",englishPhrase:"an attack at daybreak", spanishPhrase:"un ataque en la madrugada",module:"module 04",type:"words"},
 {english:"justified", spanish:"justificado(a)",englishPhrase:"the attack was not justified", spanishPhrase:"el ataque no fue justificado",module:"module 04",type:"words"},
+{english:"cinema", spanish:"cine (m)",englishPhrase:"do you want to go to the cinema tonight?", spanishPhrase:"quieres ir al cine esta noche?",module:"module 05",type:"words"},
+{english:"noise", spanish:"ruido (m)",englishPhrase:"where is that noise coming from?", spanishPhrase:"de dónde viene ese ruido?",module:"module 05",type:"words"},
+{english:"advice", spanish:"consejo (m)",englishPhrase:"can I give you some advice?", spanishPhrase:"puedo darte un consejo?",module:"module 05",type:"words"},
+{english:"pleasure", spanish:"placer (m)",englishPhrase:"it was a pleasure", spanishPhrase:"fue un placer",module:"module 05",type:"words"},
+{english:"useful", spanish:"útil",englishPhrase:"it will be very useful", spanishPhrase:"será muy útil",module:"module 05",type:"words"},
+{english:"camera", spanish:"cámara",englishPhrase:"I dropped my camera", spanishPhrase:"se me cayó la cámara",module:"module 05",type:"words"},
+{english:"branch (tree)", spanish:"rama (f)",englishPhrase:"we should cut that branch", spanishPhrase:"deberíamos cortar esta rama",module:"module 05",type:"words"},
+{english:"method", spanish:"método ",englishPhrase:"it's a new method", spanishPhrase:"es un método nuevo",module:"module 05",type:"words"},
+{english:"owner", spanish:"dueño(a)",englishPhrase:"they're the owners of the house", spanishPhrase:"son los dueños de la casa",module:"module 05",type:"words"},
+{english:"analysis", spanish:"análisis (m)",englishPhrase:"I agree with her analysis of the situation", spanishPhrase:"estoy de acuerdo con su análisis de la situación",module:"module 05",type:"words"},
+{english:"church", spanish:"iglesia (f)",englishPhrase:"it's next to the church", spanishPhrase:"está al lado de la iglesia",module:"module 05",type:"words"},
+{english:"battle", spanish:"batalla (f)",englishPhrase:"the war had many terrible battles", spanishPhrase:"la guerra tuvo muchos batallas terribles",module:"module 05",type:"words"},
+{english:"south", spanish:"sur (m)",englishPhrase:"it's a city in the south of the country", spanishPhrase:"es una ciudad en el sur del país",module:"module 05",type:"words"},
+{english:"husband", spanish:"marido, esposo (m)",englishPhrase:"I'll call my husband later", spanishPhrase:"llamaré a mi marido más tarde",module:"module 05",type:"words"},
+{english:"wife", spanish:"esposa (f)",englishPhrase:"his wife is very beautiful", spanishPhrase:"su esposa es muy bonita (hermosa)",module:"module 05",type:"words"},
+{english:"leaf, sheet of paper", spanish:"hoja (f)",englishPhrase:"the leaves are falling", spanishPhrase:"las hojas están cayendo",module:"module 05",type:"words"},
+{english:"risk", spanish:"riesgo (m)",englishPhrase:"why take the risk?", spanishPhrase:"por qué tomar el riesgo?",module:"module 05",type:"words"},
+{english:"message", spanish:"mensaje (m)",englishPhrase:"an important message", spanishPhrase:"un mensaje importante",module:"module 05",type:"words"},
+{english:"to sound", spanish:"sonar",englishPhrase:"it sounds wrong to me", spanishPhrase:"me suena mal",module:"module 05",type:"words"},
+{english:"sale", spanish:"venta (f)",englishPhrase:"there's a big sale", spanishPhrase:"hay una gran venta",module:"module 05",type:"words"},
+{english:"novel (book)", spanish:"novela (f)",englishPhrase:"she wrote a famous novel", spanishPhrase:"escribió una novela famosa",module:"module 05",type:"words"},
+{english:"faith", spanish:"fe (f)",englishPhrase:"faith is an important part of my life", spanishPhrase:"la fe es una parte de mi vida muy importante",module:"module 05",type:"words"},
+{english:"employee", spanish:"empleado(a)",englishPhrase:"the employees are not happy", spanishPhrase:"los empleados no están contentos",module:"module 05",type:"words"},
+{english:"immense, vast", spanish:"inmenso(a)",englishPhrase:"Australia is a vast country", spanishPhrase:"Australia es un país inmenso",module:"module 05",type:"words"},
+{english:"blame, fault", spanish:"culpa (f)",englishPhrase:"I am to blame", spanishPhrase:"yo tengo la culpa",module:"module 05",type:"words"},
+{english:"prepared", spanish:"preparado(a)",englishPhrase:"she's well prepared for the exam", spanishPhrase:"ella está bien preparado para el examen",module:"module 05",type:"words"},
+{english:"enemy", spanish:"enemigo(a)",englishPhrase:"he's not your enemy, he's your friend", spanishPhrase:"no es tu enemigo, es tu amigo",module:"module 05",type:"words"},
+{english:"to cause", spanish:"causar",englishPhrase:"I don't know what caused it", spanishPhrase:"no sé qué lo causó",module:"module 05",type:"words"},
+{english:"call", spanish:"llamada (f)",englishPhrase:"there was a call for you", spanishPhrase:"había una llamada para ti",module:"module 05",type:"words"},
+{english:"health", spanish:"salud (f)",englishPhrase:"how is your health?", spanishPhrase:"cómo está tu salud?",module:"module 05",type:"words"},
+{english:"wood", spanish:"madera (f)",englishPhrase:"what type of wood is it?", spanishPhrase:"qué tipo de madera es?",module:"module 05",type:"words"},
+{english:"dog", spanish:"perro(a)",englishPhrase:"she has a female dog at home", spanishPhrase:"tiene una perra en casa",module:"module 05",type:"words"},
+{english:"exactly", spanish:"exactamente",englishPhrase:"he's exactly the man we need", spanishPhrase:"es exactamente el hombre que necesitamos",module:"module 05",type:"words"},
+{english:"exercise", spanish:"ejercicio (m)",englishPhrase:"you should exercise more often", spanishPhrase:"deberías hacer ejercicio más frecuente",module:"module 05",type:"words"},
+{english:"daily", spanish:"diario",englishPhrase:"I exercise daily", spanishPhrase:"hago ejercicio a diario",module:"module 05",type:"words"},
+{english:"heart", spanish:"corazón (m)",englishPhrase:"she has a good heart", spanishPhrase:"tiene un buen corazón",module:"module 05",type:"words"},
+{english:"french", spanish:"francés (m)",englishPhrase:"she only speaks french", spanishPhrase:"sólo habla francés",module:"module 05",type:"words"},
+{english:"memory", spanish:"recuerdo (m)",englishPhrase:"I have wonderful memories from that time", spanishPhrase:"tengo recuerdos maravillosos de esa época",module:"module 05",type:"words"},
+{english:"to deny", spanish:"negar",englishPhrase:"they deny everything", spanishPhrase:"lo niegan todo",module:"module 05",type:"words"},
+{english:"project", spanish:"proyecto (m)",englishPhrase:"it's my new project", spanishPhrase:"es mi proyecto nuevo",module:"module 05",type:"words"},
+{english:"blood", spanish:"sangre (f)",englishPhrase:"what blood type are you?", spanishPhrase:"qué tipo de sangre eres?",module:"module 05",type:"words"},
+{english:"meeting (informal)", spanish:"reunión (f)",englishPhrase:"there's a meeting of the group tomorrow", spanishPhrase:"hay una reunión del grupo mañana",module:"module 05",type:"words"},
+{english:"lawyer", spanish:"abogado(a)",englishPhrase:"do you know a good lawyer?", spanishPhrase:"conoces a un buen abogado?",module:"module 05",type:"words"},
+{english:"meeting (formal)", spanish:"junta (f)",englishPhrase:"I have a meeting with my lawyer today", spanishPhrase:"tengo una junta con mi abogada hoy",module:"module 05",type:"words"},
+{english:"panic", spanish:"pánico (m)",englishPhrase:"he's calm, he doesn't panic", spanishPhrase:"es tranquilo, no entra en pánico",module:"module 05",type:"words"},
+{english:"shame (pity)", spanish:"lástima (f)",englishPhrase:"it's a shame she doesn't visit you", spanishPhrase:"es una lástima que no te visita",module:"module 05",type:"words"},
+{english:"service", spanish:"servicio (m)",englishPhrase:"it's a public service", spanishPhrase:"es un servicio público",module:"module 05",type:"words"},
+{english:"free", spanish:"gratuito(a)",englishPhrase:"it's a free service", spanishPhrase:"es un servicio gratuito",module:"module 05",type:"words"},
+{english:"to offer", spanish:"ofrecer",englishPhrase:"what services do they offer for free?", spanishPhrase:"qué servicios ofrecen de forma gratuita?",module:"module 05",type:"words"},
+{english:"to recognize", spanish:"reconocer",englishPhrase:"I don’t recognize him", spanishPhrase:"no los reconozco",module:"module 05",type:"words"},
 {english:"", spanish:"",englishPhrase:"this part of the story is very interesting", spanishPhrase:"esta parte de la historia es muy interesante",module:"module 01",type:"phrases"},
 {english:"", spanish:"",englishPhrase:"i can't handle rejection", spanishPhrase:"no puedo manejar el rechazo",module:"module 01",type:"phrases"},
 {english:"", spanish:"",englishPhrase:"the tank is full", spanishPhrase:"el tanque está lleno",module:"module 01",type:"phrases"},
@@ -518,7 +571,7 @@ SELECT {
 {english:"", spanish:"",englishPhrase:"an anonymous note", spanishPhrase:"una nota anónima",module:"module 04",type:"phrases"},
 {english:"", spanish:"",englishPhrase:"he never received a reward", spanishPhrase:"nunca recibió una recompensa",module:"module 04",type:"phrases"},
 {english:"", spanish:"",englishPhrase:"i told him no but he did it anyway", spanishPhrase:"le dije que no pero lo hizo de todas maneras",module:"module 04",type:"phrases"},
-{english:"", spanish:"",englishPhrase:"what symptoms do you have?", spanishPhrase:"qué síntomas tienes?",module:"module 04",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"what symptoms do you have?", spanishPhrase:"¿qué síntomas tienes?",module:"module 04",type:"phrases"},
 {english:"", spanish:"",englishPhrase:"only a court can decide yes or no", spanishPhrase:"sólo un tribunal puede decidir sí o no",module:"module 04",type:"phrases"},
 {english:"", spanish:"",englishPhrase:"i'm afraid of injections", spanishPhrase:"tengo miedo de las inyecciones",module:"module 04",type:"phrases"},
 {english:"", spanish:"",englishPhrase:"it's a basic strategy", spanishPhrase:"es una estrategia básica",module:"module 04",type:"phrases"},
@@ -528,7 +581,30 @@ SELECT {
 {english:"", spanish:"",englishPhrase:"everyone sweats in the cellar because it's hot", spanishPhrase:"todo el mundo suda en la bodega porque hace calor",module:"module 04",type:"phrases"},
 {english:"", spanish:"",englishPhrase:"i can't open the zipper", spanishPhrase:"no puedo abrir el cierre",module:"module 04",type:"phrases"},
 {english:"", spanish:"",englishPhrase:"a very comfortable bed", spanishPhrase:"una cama muy cómoda",module:"module 04",type:"phrases"},
-{english:"", spanish:"",englishPhrase:"how can i break this cycle?", spanishPhrase:"cómo puedo romper este ciclo?",module:"module 04",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"how can i break this cycle?", spanishPhrase:"¿cómo puedo romper este ciclo?",module:"module 04",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"french cinema is fascinating", spanishPhrase:"el cine francés es fascinante",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"daily exercise is excellent for your heart and health", spanishPhrase:"el ejercicio diario es excelente para su corazón y la salud",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"his wife has alot of faith in the church", spanishPhrase:"su esposa tiene mucha fe en la iglesia",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the lawyer offered his service free", spanishPhrase:"el abogado ofreció su servicio gratuito",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the meeting (informal) with the owner was very useful", spanishPhrase:"la ruinión con la dueña fue muy útil",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"today my dog turned exactly 11 years old", spanishPhrase:"hoy mi perro cumple exactamente once años",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"in the meeting (formal) the employee accepted his guilt", spanishPhrase:"en la junta el empleado aceptó su culpa",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"seeing blood makes me panic", spanishPhrase:"ver sangre me da (me causa) pánico",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the enemy was prepared for the battle", spanishPhrase:"el enemigo estaba preparado para la batalla",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"that branch has very green leaves", spanishPhrase:"esa rama tiene hojas muy verdes",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the south of the country is immense", spanishPhrase:"el sur del país es inmenso",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the risk is too much", spanishPhrase:"el riesgo es demasiado",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the quality of the wood is excellent", spanishPhrase:"la calidad de la madera es excelente",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the husband left her a message", spanishPhrase:"el marido le dejó un mensaje",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"it's a shame the project didn't work", spanishPhrase:"es una lástima que el proyecto no funcionó",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the analysis and advice are free", spanishPhrase:"el análisis y el consejo son gratuitos",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"his wife is going to deny his calls", spanishPhrase:"su esposa va a negar sus llamadas",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the memory of his dog makes him happy", spanishPhrase:"el recuerdo de su perro le hace feliz",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"there's a sale tonight", spanishPhrase:"hay una venta esta noche",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"have you read that novel yet?", spanishPhrase:"¿has leído esa novela todavía?",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the sound of the sea gives me pleasure", spanishPhrase:"el sonido del mar me da placer",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"the camera recorded the noise", spanishPhrase:"la cámara grabó el ruido",module:"module 05",type:"phrases"},
+{english:"", spanish:"",englishPhrase:"it's a new method that we want to try", spanishPhrase:"es un método nuevo que queremos intentar",module:"module 05",type:"phrases"},
        ],
     }
     }
