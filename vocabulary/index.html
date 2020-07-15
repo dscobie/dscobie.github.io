@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="manifest" href="manifest.json">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Spanish Vocabulary">
+    <meta name="apple-mobile-web-app-title" content="Spanish Vocabulary">
+    <meta name="theme-color" content="#FF9800">
+    <meta name="msapplication-navbutton-color" content="#FF9800">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-starturl" content="/index.html">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="icon" sizes="128x128" href="/icons/ds-192x192.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="/icons/apple-touch-icon.png">
+    <link rel="icon" sizes="192x192" href="/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/apple-touch-icon.png">
+    <link rel="icon" sizes="256x256" href="/icons/ds-512x512.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="/icons/apple-touch-icon.png">
+    <link rel="icon" sizes="384x384" href="/icons/ds-512x512.png">
+    <link rel="apple-touch-icon" sizes="384x384" href="/icons/apple-touch-icon.png">
+    <link rel="icon" sizes="512x512" href="/icons/ds-512x512.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/icons/apple-touch-icon.png">
+
+    <title>Spanish Vocabulary Flashcards</title>
+
+    <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./vocabulary.css">
+    
+    <script src="./alpine.js"></script>
+
+    <!-- code for touch/swipe -->
+    <script> var SWIPE_THRESHOLD = 50; </script>
+    <script src="./tocca.js"></script>
+    <!-- code for touch/swipe -->
+</head>
+<body>
+  <div class="website" x-data="phrases()" x-init="() => {init()}">
+        <div class="header navbar-dark bg-dark"> 
+          <div><span x-html="currShuffle+1" ></span> / <span x-html="workingPhrases.length"></span></div>
+          <div>
+            <select x-model="currDatatype" x-on:change="changeView()">
+              <template x-for="datatypeName in datatypes">
+                <option x-text="datatypeName"></option>
+              </template>
+            </select>
+
+            <select x-model="currModule" x-on:change="changeView()">
+              <template x-for="moduleName in modules">
+                <option x-text="moduleName"></option>
+              </template>
+            </select>
+          </div>
+        </div>
+        <div class="c2 phraseBox" @swipeleft="nextPhrase()" @swiperight="prevPhrase()"> 
+            <span class="entryWord" x-html="currDisplay.english"></span>
+            <span class="entryPhrase" x-html="currDisplay.englishPhrase"></span>
+        </div>
+        <div class="c3 phraseBox" @click="isOpen = !isOpen"  @swipeleft="nextPhrase()" @swiperight="prevPhrase()">
+          <span class="entryWord" x-show="!isOpen">&nbsp;</span>
+          <span class="entryWord" x-html="currDisplay.spanish" x-show="isOpen"></span>
+          <span class="entryPhrase" x-show="!isOpen">click to show answer</span>
+          <span class="entryPhrase" x-html="currDisplay.spanishPhrase"  x-show="isOpen"></span>
+        </div>
+      <nav class="footer navbar-dark bg-dark flex-row-reverse">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-secondary" @click="prevPhrase()">Prev</button>
+          <button type="button" class="btn btn-secondary" @click="nextPhrase()">Next</button>
+          <button type="button" class="btn btn-secondary" x-show="isOpen" x-on:click="isOpen = !isOpen">Hide Answer</button>
+          <button type="button" class="btn btn-secondary" x-show="!isOpen" x-on:click="isOpen = !isOpen">Show Answer</button>
+        </div>
+      </nav>
+    </div>
+
+<script type="text/javascript">
+      function phrases() {
+        return {
+              isOpen: false,
+              currPhrase: 0,
+              currShuffle: 0,
+              shuffleArray: [],
+              modules: [],
+              currModule: 0,
+              datatypes: [],
+              currDatatype: 0,
+              workingPhrases: [],
+              currDisplay: {english:"", spanish:"",englishPhrase:"", spanishPhrase:"",module:"",type:""},
+      prevPhrase() {
+        // this.currPhrase = (this.currPhrase+1) % this.phrases.length; 
+        // this.currPhrase = this.randomIntFromInterval(0,this.phrases.length-1);
+        this.currShuffle--;
+        if (this.currShuffle === -1) this.currShuffle = this.workingPhrases.length-1;
+        this.currPhrase = parseInt(this.shuffleArray[this.currShuffle]);
+        this.currDisplay = this.workingPhrases[this.currPhrase];
+        this.isOpen = false;
+      },
+      nextPhrase() {
+        // this.currPhrase = (this.currPhrase+1) % this.phrases.length; 
+        // this.currPhrase = this.randomIntFromInterval(0,this.phrases.length-1);
+        this.currShuffle++;
+        if (this.currShuffle === this.workingPhrases.length) this.currShuffle = 0;
+        this.currPhrase = parseInt(this.shuffleArray[this.currShuffle]);
+        this.currDisplay = this.workingPhrases[this.currPhrase];
+        this.isOpen = false;
+      },
+      randomIntFromInterval(min, max) { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      },
+      generateRandomArray(inLength) {
+        this.shuffleArray = [];
+        for (i=0;i<inLength;++i) this.shuffleArray.push(i);
+
+        var tmp, current, top = this.shuffleArray.length;
+        if(top) while(--top) {
+          current = Math.floor(Math.random() * (top + 1));
+          tmp = this.shuffleArray[current];
+          this.shuffleArray[current] = this.shuffleArray[top];
+          this.shuffleArray[top] = tmp;
+        }
+      },
+      changeView() {
+        this.workingphrases = [];
+        if (this.currDatatype === "all") {
+          this.workingPhrases = this.phrases.filter( data => data.module === this.currModule );
+        } else {
+          this.workingPhrases = this.phrases.filter( data => (data.module === this.currModule && data.type === this.currDatatype));
+        }
+        this.generateRandomArray(this.workingPhrases.length);  
+
+        this.currPhrase = parseInt(this.shuffleArray[0]);
+        this.currShuffle = 0;
+        this.isOpen = false;
+        this.currDisplay = this.workingPhrases[this.currPhrase];
+      },
+      phrases: [],
+      init() {
+        fetch('./vocabulary.json')
+        .then(res => res.json())
+        .then(data => {
+            this.phrases = data;
+            this.modules = [... new Set(this.phrases.map(data => data.module))];
+            this.currModule = this.modules[0];
+            this.datatypes = [... new Set(this.phrases.map(data => data.type))];
+            this.datatypes.push("all");
+            this.currDatatype = this.datatypes[0];
+
+            this.workingPhrases = this.phrases.filter( data => (data.module === this.currModule && data.type === this.currDatatype));
+            
+            this.generateRandomArray(this.workingPhrases.length);
+            this.currPhrase = parseInt(this.shuffleArray[0]);
+            this.currDisplay = this.workingPhrases[this.currPhrase];
+            console.log("done");
+        });
+      },
+    }
+    }
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+    .then(registration => {
+      console.log('Service Worker is registered', registration);
+    })
+    .catch(err => {
+      console.error('Registration failed:', err);
+    });
+  });
+}    
+</script>    
+</body>
+</html>
