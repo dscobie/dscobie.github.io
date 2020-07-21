@@ -8,7 +8,7 @@ const filesToCache = [
     '/vocabulary/vocabulary.json'
   ];
 
-const staticCacheName = 'pages-cache-v2';
+const staticCacheName = 'pages-cache-v3';
 
 self.addEventListener('install', event => {
   console.log('Attempting to install service worker and cache static assets');
@@ -20,6 +20,16 @@ self.addEventListener('install', event => {
   );
 });
 
+self.addEventListener('fetch', function(event) {
+  console.log('Fetch event for ', event.request.url);
+  event.respondWith(
+    fetch(event.request).catch(function() {
+      return caches.match(event.request);
+    })
+  );
+});
+
+/***
 self.addEventListener('fetch', event => {
     console.log('Fetch event for ', event.request.url);
     event.respondWith(
@@ -48,3 +58,4 @@ self.addEventListener('fetch', event => {
       })
     );
   });
+  */
