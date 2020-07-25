@@ -8,7 +8,7 @@ const filesToCache = [
     '/vocabulary/vocabulary.json'
   ];
 
-const staticCacheName = 'pages-cache-v6';
+const staticCacheName = 'pages-cache-v7';
 
 self.addEventListener('install', event => {
   console.log('Attempting to install service worker and cache static assets');
@@ -23,18 +23,34 @@ self.addEventListener('install', event => {
 // network first, then cache
  self.addEventListener('fetch', function(event) {
   console.log('Fetch event for ', event.request.url);
-  event.respondWith(
-    fetch(event.request).then(response => {
-      return caches.open(staticCacheName).then(cache => {
-        cache.put(event.request.url, response.clone());
-        console.log('revalidated', event.request.url);
-        return response;
-      });
-    })
-    .catch(function() {
-      return caches.match(event.request);
-    })
-  );
+  
+  if (event.request.url.match('vocabulary.json')) {
+    console.log('Processing ', event.request.url);
+    event.respondWith(
+      fetch(event.request).then(response => {
+        return caches.open(staticCacheName).then(cache => {
+          cache.put(event.request.url, response.clone());
+          console.log('Revalidated', event.request.url);
+          return response;
+        });
+      })
+      .catch(function() {
+        return caches.match(event.request);
+      })
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request)
+      .then(response => {
+        if (response) {
+          console.log('Found ', event.request.url, ' in cache');
+          return response;
+        }
+        console.log('Network request for ', event.request.url);
+        return fetch(event.request)
+      })
+    );
+  }
 });
 
 /***
