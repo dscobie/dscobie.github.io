@@ -408,12 +408,11 @@
           },
         init() {
           if (window.localStorage.getItem('dbCreated') === 'true') {
-            this.showCourses = false;
+            this.doHideAllWindows();
             this.showCoursesPage(this.activeCourseList);
-            this.showArticles = true;
             this.showArticlesPage(this.activeArticleList);
-            this.showTournaments = true;
             this.showTournamentsPage(this.activeTournamentList);
+            this.showArticles = true;
           }
           else 
             this.showIntro = true;
