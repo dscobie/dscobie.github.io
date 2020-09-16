@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="Amateurgolf.com">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Amateurgolf.com Web App Demo</title>
+    <link rel="canonical" href="./index.html">
+
+
+    <link rel="manifest" href="manifest.json">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Amateurgolf.com">
+    <meta name="apple-mobile-web-app-title" content="Amateurgolf.com">
+    <meta name="theme-color" content="#800">
+    <meta name="msapplication-navbutton-color" content="#666">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-starturl" content="/index.html">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" href="./icons/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="./icons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./icons/android-192x192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon-180x180.png" sizes="180x180">
+    <meta name="msapplication-config" content="./icons/browserconfig.xml">
+
+
+    <!-- Bootstrap core CSS -->
+<link href="./css/bootstrap.min.css" rel="stylesheet">
+<script src="./js/alpine.js"></script>
+<script src="./js/dexie.js"></script>
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .agclogo {
+        height: 25px;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+        .agclogo { 
+          height: 45px;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="./css/starter-template.css" rel="stylesheet">
+  </head>
+  <body>
+  <div class="wholeinterface"  x-data="dataloader()" x-init="() => {init()}">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="./"><img src="./images/agclogo.png" class="agclogo" alt="" loading="lazy"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#" @click="doShowSettings()">
+          <svg class="bi" width="32" height="32" fill="currentColor" aria-labelledby="title">
+            <title id="title" lang="en">Settings</title>
+            <use xlink:href="bootstrap-icons.svg#gear"/>
+          </svg>
+        </span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <svg class="bi" width="32" height="32" fill="currentColor" aria-labelledby="title">
+            <title id="title" lang="en">Shopping Cart</title>
+            <use xlink:href="bootstrap-icons.svg#cart2"/>
+          </svg>
+        </span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <svg class="bi" width="32" height="32" fill="currentColor" aria-labelledby="title">
+            <title id="title" lang="en">Profile</title>
+            <use xlink:href="bootstrap-icons.svg#person"/>
+          </svg>
+        </span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle form-control-lg" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CONTENT</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+          <a class="dropdown-item" href="#" @click="doShowArticles()">News</a>
+          <a class="dropdown-item" href="#" @click="doShowTournaments()">Tournaments</a>
+          <a class="dropdown-item" href="#" @click="doShowCourses()">Courses</a>
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control form-control-sm mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+      <button class="btn btn-secondary form-control-sm my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+<main role="main" class="container">
+
+
+<div class="coursesWindow" x-show="showCourses">
+  <div class="card" style="width: 100%;">
+    <div class="card-body" id="coursesIntro">
+      <h5 class="card-title">Welcome to Amateurgolf.com</h5>
+      <p class="card-text">Welcome.  You are running a demo of the Amateurgolf.com Web App.</p>
+    </div>
+  </div>
+  <div class="container"><div class="row row-cols-3">
+    <template x-for="item in activeCourseList">
+      <div class="col card" style="padding:0; width:100%;border-radius:5px;">
+        <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; height:120px; object-fit: cover;" alt="">
+        <div class="card-body" id="homeIntro">
+          <h6 class="card-title" x-text="item.courseName" style="font-weight:600;"></h5>
+          <p class="card-text" x-text="getHTMLText(item.featuredTeaser)"></p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="card-link">View Course</a>
+        </div>
+      </div>
+    </template>  
+  </div></div>
+</div>
+<div class="articlesWindow" x-show="showArticles">
+  <div class="card" style="width: 100%;">
+    <div class="card-body" id="coursesIntro">
+      <h5 class="card-title">Welcome to Amateurgolf.com</h5>
+      <p class="card-text">Welcome.  You are running a demo of the Amateurgolf.com Web App.</p>
+    </div>
+  </div>
+  <div class="container"><div class="row row-cols-3">
+    <template x-for="item in activeArticleList">
+      <div class="col card" style="padding:0; width:100%;border-radius:5px;margin-bottom:10px;">
+        <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; height:120px; object-fit: cover;" alt="">
+        <div class="card-body" id="homeIntro">
+          <h6 class="card-title" x-text="item.title" style="font-weight:600;"></h5>
+          <p class="card-text" x-text="getHTMLText(item.teaser)"></p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="card-link">View Article</a>
+        </div>
+      </div>
+    </template>  
+  </div></div>
+</div>
+<div class="tournamentWindow" x-show="showTournaments">
+  <div class="card" style="width: 100%;">
+    <div class="card-body" id="coursesIntro">
+      <h5 class="card-title">Welcome to Amateurgolf.com</h5>
+      <p class="card-text">Welcome.  You are running a demo of the Amateurgolf.com Web App.</p>
+    </div>
+  </div>
+  <div class="container"><div class="row row-cols-3">
+    <template x-for="item in activeTournamentList">
+      <div class="col card" style="padding:0; width:100%;border-radius:5px;margin-bottom:10px;">
+        <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; height:120px; object-fit: cover;" alt="">
+        <div class="card-body" id="homeIntro">
+          <h6 class="card-title" x-text="item.title" style="font-weight:600;"></h5>
+          <p class="card-text"><span x-text="item.courseName"></span>, <span x-text="item.courseState"></span></p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="card-link">View Tournament</a>
+        </div>
+      </div>
+    </template>  
+  </div></div>
+</div>
+
+
+      <div class="card-body" id="settingsWindow" x-show="showSettings">
+        <h5 class="card-title">Settings</h5>
+        <p class="card-text">Use the button below to re-import the database.  Normally this will happen in the background, but hey this is a work in progress!</p>
+        <p class="card-text"><button type="button" class="btn btn-primary" @click="doImport(); return false;">Re-Import Data</button></p>
+      </div>
+      <div class="card-body" id="introWindow" x-show="showIntro">
+      <h5 class="card-title">Welcome to Amateurgolf.com</h5>
+      <p class="card-text">This is a demo site to test Amateurgolf.com content in a Progressive Web Application.</p>
+      <p class="card-text">It looks like you don't have any content imported yet.  Click the Import button below to begin.</p>
+      <p class="card-text">This will import all the latest News, Tournaments, and Courses to your device.  Once loaded the site won't have to make calls to the Amateurgolf.com website for data and will work really fast.  It will also work when you are offline or have a bad connection!</p>
+      <p class="card-text">On a production site you wouldn't see this message, it would just start loading data in for the user.  But hey, we're testing some stuff here!</p>
+      <p class="card-text"><button type="button" class="btn btn-primary" @click="doImport(); return false;">Import Data</button></p>
+    </div>
+    <div class="card-body" id="loadWindow" x-show="showLoading">
+      <h5 class="card-title">Loading data</h5>
+      <p class="card-text">Ok, here we go.  There are three files to load.</p>
+      <p class="card-text" id="newsLoading">Loading the latest news...</p>
+      <p class="card-text" id="tourLoading" x-show="showTourLoading">Loading the latest tournament database...</p>
+      <p class="card-text" id="courLoading" x-show="showCourLoading">Loading the latest course database...</p>
+      <p class="card-text" id="doneLoading" x-show="showDoneLoading">OK, that's it.  Content is loaded into your system and you are ready to go.  Click the Amateurgolf.com logo in the upper left corner and the homepage should load.</p>
+    </div>
+  </div>
+
+</main><!-- /.container https://code.jquery.com/jquery-3.5.1.slim.min.js -->
+<script src="./js/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="./js/jquery.slim.min.js"><\/script>')</script><script src="./js/bootstrap.bundle.min.js"></script>
+
+      <script type="text/javascript">
+        function dataloader() {
+          return {
+                db: null,
+                isLoading: false,
+                showHome: false,
+                showIntro: false,
+                showLoading: false,
+                showTourLoading: false,
+                showCourLoading: false,
+                showDoneLoading: false,
+                showCourses: false,
+                showArticles: false,
+                showTournaments: false,
+                showSettings: false,
+                showNews: false,
+                articles: [],
+                courses: [],
+                tournaments: [],
+                activeCourseList: [],
+                activeArticleList: [],
+                activeTournamentList: [],
+                dbArticleCount: 0,
+                dbCoursesCount: 0,
+                dbTournamentsCount: 0,
+          doHideAllWindows() {
+            this.showHome = false;
+            this.showIntro = false;
+            this.showLoading = false;
+            this.showCourses = false;
+            this.showTournaments = false;  
+            this.showArticles = false;
+            this.showSettings = false;
+          },
+          doShowCourses() {
+            this.doHideAllWindows();
+            this.showCourses = true;
+          },
+          doShowArticles() {
+            this.doHideAllWindows();
+            this.showArticles = true;
+          },
+          doShowTournaments() {
+            this.doHideAllWindows();
+            this.showTournaments = true;  
+          },
+          doShowSettings() {
+            this.doHideAllWindows();
+            this.showSettings = true;
+          },
+          doImport() {
+            this.showLoading = true;
+            this.showIntro = false;
+
+            var db = new Dexie("agcDB");
+            db.version(1).stores({
+              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
+              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
+            });
+
+            this.loadNews(db);
+            this.loadTours(db);
+            this.loadCourses(db);
+            this.showDoneLoading = true;
+            window.localStorage.setItem('dbCreated', 'true');
+            window.localStorage.setItem('dbCreatedDate', Date.Now);
+          },
+          getImageURL(inURL) {
+            return "https://www.amateurgolf.com" + inURL;
+          },
+          getHTMLText(inText) {
+            return inText.replaceAll("\r\n","");
+          },
+            loadNews(db) {
+              fetch('./json/articles.json')
+              .then(res => res.json())
+              .then(data => {
+                this.articles = data;
+                db.articles.bulkAdd(data).then(function(lastKey) {
+                    console.log("Done adding " + data.length + " to the articles store.");
+                }).catch(Dexie.BulkError, function (e) {
+                    // Explicitely catching the bulkAdd() operation makes those successful
+                    // additions commit despite that there were errors.
+                    console.error ("Some raindrops did not succeed. However, " +
+                      100000-e.failures.length + " raindrops was added successfully");
+                });
+
+               $("#newsLoading").html("Finished loading " + this.articles.length + " articles.");
+              })
+            },
+            loadTours(db) {
+              this.showTourLoading = true;
+              fetch('./json/tournaments.json')
+              .then(res => res.json())
+              .then(data => {
+                this.tournaments = data;
+                
+                db.tournaments.bulkAdd(data).then(function(lastKey) {
+                    console.log("Done adding " + data.length + " to the tournaments store.");
+                }).catch(Dexie.BulkError, function (e) {
+                    // Explicitely catching the bulkAdd() operation makes those successful
+                    // additions commit despite that there were errors.
+                    console.error ("Some raindrops did not succeed. However, " +
+                      100000-e.failures.length + " raindrops was added successfully");
+                });
+                
+                $("#tourLoading").html("Finished loading " + this.tournaments.length + " tournaments.");
+              })
+            },
+            loadCourses(db) {
+              this.showCourLoading = true;
+              fetch('./json/courses.json')
+              .then(res => res.json())
+              .then(data => {
+                this.courses = data;
+
+                db.courses.bulkAdd(data).then(function(lastKey) {
+                    console.log("Done adding " + data.length + " to the courses store.");
+                }).catch(Dexie.BulkError, function (e) {
+                    // Explicitely catching the bulkAdd() operation makes those successful
+                    // additions commit despite that there were errors.
+                    console.error ("Some raindrops did not succeed. However, " +
+                      100000-e.failures.length + " raindrops was added successfully");
+                });
+
+                $("#courLoading").html("Finished loading " + this.courses.length + " courses.");
+              })
+            },
+          showCoursesPage(inList) {
+            var db = new Dexie('agcDB');
+            db.version(1).stores({
+              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
+              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
+            });
+            db.courses.where("featured").equals(1).each(function (obj) {
+            // When we come here, data is fully populated and we can log all objects.
+              inList.push(obj);
+              // console.log("Found object: " + JSON.stringify(obj.courseName));
+            }).then(function () {
+              console.log("Finished.");
+            }).catch(function (error) {
+                // In our each() callback above fails, OR db.open() fails due to any reason,
+                // including our ajax call failed, this operation will fail and we will get
+                // the error here!
+                console.error(error.stack || error);
+                // Note that we could also have catched it on db.open() but in this sample,
+                // we show it here.
+            });
+          },
+          showArticlesPage(inList) {
+            var db = new Dexie('agcDB');
+            db.version(1).stores({
+              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
+              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
+            });
+            db.articles.where("priority").above(1)
+                  .limit(15)
+                  .each(function (obj) {
+            // When we come here, data is fully populated and we can log all objects.
+              inList.push(obj);
+              console.log("Found object: " + JSON.stringify(obj.courseName));
+            }).then(function () {
+              console.log("Finished.");
+            }).catch(function (error) {
+                // In our each() callback above fails, OR db.open() fails due to any reason,
+                // including our ajax call failed, this operation will fail and we will get
+                // the error here!
+                console.error(error.stack || error);
+                // Note that we could also have catched it on db.open() but in this sample,
+                // we show it here.
+            });
+          },
+          showTournamentsPage(inList) {
+            var db = new Dexie('agcDB');
+            db.version(1).stores({
+              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
+              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
+            });
+            db.tournaments.where("featured").equals(1)
+                  .or("nowPlaying").equals(1)
+                  .limit(15)
+                  .each(function (obj) {
+            // When we come here, data is fully populated and we can log all objects.
+              inList.push(obj);
+              console.log("Found object: " + JSON.stringify(obj.courseName));
+            }).then(function () {
+              console.log("Finished.");
+            }).catch(function (error) {
+                // In our each() callback above fails, OR db.open() fails due to any reason,
+                // including our ajax call failed, this operation will fail and we will get
+                // the error here!
+                console.error(error.stack || error);
+                // Note that we could also have catched it on db.open() but in this sample,
+                // we show it here.
+            });
+          },
+        init() {
+          if (window.localStorage.getItem('dbCreated') === 'true') {
+            this.showCourses = false;
+            this.showCoursesPage(this.activeCourseList);
+            this.showArticles = true;
+            this.showArticlesPage(this.activeArticleList);
+            this.showTournaments = true;
+            this.showTournamentsPage(this.activeTournamentList);
+          }
+          else 
+            this.showIntro = true;
+        }
+      }}
+  </script>
+  
+<script>
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+            .then(registration => {
+              console.log('Service Worker is registered', registration);
+            })
+            .catch(err => {
+              console.error('Registration failed:', err);
+            });
+          });
+        }    
+</script>    
+</div>        
+</body>
+</html>
