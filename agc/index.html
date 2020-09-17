@@ -261,7 +261,7 @@
         <p>
           <span x-text="currTournament.courseCity"></span>, <span x-text="currTournament.courseState"></span>
         </p>
-
+        <p><span x-text="getDateFromSQLDate(currTournament.tourDateBegin)"></span> - <span x-text="getDateFromSQLDate(currTournament.tourDateEnd)"></span></p>
         <p class="card-text" x-html="getHTMLStrippedText(currTournament.notes)"></p>
       </div>
   </div>
@@ -405,6 +405,32 @@
           },
           getHTMLStrippedText(inText) {
             return inText.replaceAll("\r\n","");
+          },
+          getToday() {
+            var d = new Date();
+            var dyear = d.getFullYear();
+            var dmon = "0" + d.getMonth();
+            dmon = dmon.substring(dmon.length - 2, 2);
+            var dday = "0" + d.getDay();
+            dday = dday.substring(dday.length - 2, 2);
+            var today = dyear + "-" + dmon + "-" + dday + "T00:00:00";
+            return today;
+          },
+          getDateFromSQLDate(inSQLDate) {
+            // "2020-09-11T00:00:00"
+            var newDate = inSQLDate.substring(5,7) + "/" + inSQLDate.substring(8,10) + "/" + inSQLDate.substring(0,4);
+            return newDate;
+          },
+          getSQLDate(inDiff) {
+            var d = new Date();
+            d.setDate(d.getDate() + inDiff);
+            var dyear = d.getFullYear();
+            var dmon = "0" + d.getMonth();
+            dmon = dmon.slice(dmon.length-2,2);
+            var dday = d.getDate();
+            if (dday.length == 1)  dday = "0" + dday;
+            var today = dyear + "-" + dmon + "-" + dday + "T00:00:00";
+            return today;
           },
           sqlToJsDate(sqlDate) {
             //alert(sqlDate);
@@ -670,8 +696,7 @@
               courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
               tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
             });
-            db.tournaments.where("featured").equals(1)
-                  .or("nowPlaying").equals(1)
+            db.tournaments.where("tourDateBegin").aboveOrEqual(this.getSQLDate(-3))
                   .limit(15)
                   .each(function (obj) {
             // When we come here, data is fully populated and we can log all objects.
@@ -689,6 +714,7 @@
             });
           },
         init() {
+          this.getDateFromSQLDate("2020-09-11T00:00:00");
           if (window.localStorage.getItem('dbCreated') === 'true') {
             this.doHideAllWindows();
             this.showCoursesPage(this.activeCourseList);
