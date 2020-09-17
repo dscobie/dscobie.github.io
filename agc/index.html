@@ -27,13 +27,13 @@
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon-180x180.png" sizes="180x180">
     <meta name="msapplication-config" content="./icons/browserconfig.xml">
 
-
-    <!-- Bootstrap core CSS -->
+<!-- Bootstrap core CSS -->
 <link href="./css/bootstrap.min.css" rel="stylesheet">
+
 <script src="./js/alpine.js"></script>
 <script src="./js/dexie.js"></script>
 
-    <style>
+<style>
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -52,12 +52,18 @@
       .agclogo {
         height: 35px;
       }
+      .card-img-top {
+        height:170px; 
+      }
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
         }
         .agclogo { 
           height: 45px;
+        }
+        .card-img-top {
+          height:140px; 
         }
       }
     </style>
@@ -124,18 +130,17 @@
       <p class="card-text">Welcome.  You are running a demo of the Amateurgolf.com Web App.</p>
     </div>
   </div>
-  <div class="container"><div class="row row-cols-3">
+  <div class="container cardlink"><div class="row row-cols-lg-3 row-cols-md-2">
     <template x-for="item in activeCourseList">
-      <div class="col card" style="padding:0; width:100%;border-radius:5px;">
-        <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; height:120px; object-fit: cover;" alt="">
+      <a href="#" @click="alert(item.courseName)">
+      <div class="col card" style="padding:0; width:100%;height:100%;border-radius:12px;margin-bottom:10px;">
+        <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; object-fit: cover;" alt="">
         <div class="card-body" id="homeIntro">
           <h6 class="card-title" x-text="item.courseName" style="font-weight:600;"></h5>
           <p class="card-text" x-text="getHTMLText(item.featuredTeaser)"></p>
         </div>
-        <div class="card-footer">
-          <a href="#" class="card-link">View Course</a>
-        </div>
       </div>
+    </a>
     </template>  
   </div></div>
 </div>
@@ -146,11 +151,11 @@
       <p class="card-text">Welcome.  You are running a demo of the Amateurgolf.com Web App.</p>
     </div>
   </div>
-  <div class="container cardlink"><div class="row row-cols-3">
+  <div class="container cardlink"><div class="row row-cols-lg-3 row-cols-md-2">
     <template x-for="item in activeArticleList">
-      <a href="#" @click="alert(item.title)">
-      <div class="col card" style="padding:0; width:100%;height:100%;border-radius:8px;margin-bottom:10px;">
-        <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; height:125px; object-fit: cover;" alt="">
+      <a href="#" @click="doShowArticle(item.id)">
+      <div class="col card" style="padding:0; width:100%;height:100%;border-radius:12px;margin-bottom:10px;">
+        <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; object-fit: cover;" alt="">
         <div class="card-body" id="homeIntro">
           <h6 class="card-title" x-text="item.title" style="font-weight:600;"></h5>
           <p class="card-text" x-text="getHTMLText(item.teaser)"></p>
@@ -161,28 +166,36 @@
   </div></div>
 </div>
 <div class="tournamentWindow" x-show="showTournaments">
-  <div class="card" style="width: 100%;">
+  <div class="card" style="width:100%;">
     <div class="card-body" id="coursesIntro">
       <h5 class="card-title">Welcome to Amateurgolf.com</h5>
       <p class="card-text">Welcome.  You are running a demo of the Amateurgolf.com Web App.</p>
     </div>
   </div>
-  <div class="container"><div class="row row-cols-3">
+  <div class="container cardlink"><div class="row row-cols-lg-3 row-cols-md-2">
     <template x-for="item in activeTournamentList">
-      <div class="col card" style="padding:0; width:100%;border-radius:5px;margin-bottom:10px;">
-        <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; height:120px; object-fit: cover;" alt="">
+      <a href="#" @click="alert(item.title)">
+      <div class="col card" style="border:1px solid #f00;padding:0;width:100%;height:100%;border-radius:12px;margin-bottom:10px;">
+        <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; object-fit: cover;" alt="">
         <div class="card-body" id="homeIntro">
           <h6 class="card-title" x-text="item.title" style="font-weight:600;"></h5>
           <p class="card-text"><span x-text="item.courseName"></span>, <span x-text="item.courseState"></span></p>
         </div>
-        <div class="card-footer">
-          <a href="#" class="card-link">View Tournament</a>
-        </div>
       </div>
+      </a>
     </template>  
   </div></div>
 </div>
 
+<div class="articleDisplay" x-show="showArticlePage">
+  <div class="card" style="width: 100%;">
+    <img x-bind:src="getImageURL(currArticle.imageURL)" class="card-img-top" style="width:100%; object-fit: cover;" alt="">
+    <div class="card-body" id="coursesIntro">
+      <h5 class="card-title" x-text="currArticle.title"></h5>
+      <p class="card-text" x-html="getHTMLText(currArticle.articleText)"></p>
+    </div>
+  </div>
+</div>
 
       <div class="card-body" id="settingsWindow" x-show="showSettings">
         <h5 class="card-title">Settings</h5>
@@ -233,10 +246,16 @@
                 activeCourseList: [],
                 activeArticleList: [],
                 activeTournamentList: [],
+                currCourse: "",
+                currTournament: "",
+                currArticle: {"id": 0,"title": "Placement data.","teaser": "","articleText": "","featured": 0,"priority": 0,"archived": 0,"timesviewed": 0,"typeName": "","imageURL": "/images/agclogo-new.png","imageCaption": "","tournamentID": 0,"tourName": "","tourDateBegin": "","tourDateEnd": ""},
                 dbArticleCount: 0,
                 dbCoursesCount: 0,
                 dbTournamentsCount: 0,
                 currContentSelected: "",
+                showCoursePage: false,
+                showTournamentPage: false,
+                showArticlePage: false,
           doHideAllWindows() {
             this.showHome = false;
             this.showIntro = false;
@@ -245,11 +264,19 @@
             this.showTournaments = false;  
             this.showArticles = false;
             this.showSettings = false;
+            this.showCoursePage = false;
+            this.showTournamentPage = false;
+            this.showArticlePage = false;
           },
           doShowCourses() {
             this.doHideAllWindows();
             this.currContentSelected = "Courses";
             this.showCourses = true;
+          },
+          doShowCourse(courseID) {
+            this.doHideAllWindows();
+            this.showCourse(courseID, 'currCourse');
+            this.showCoursePage = true;
           },
           doShowArticles() {
             this.doHideAllWindows();
@@ -287,7 +314,8 @@
             return "https://www.amateurgolf.com" + inURL;
           },
           getHTMLText(inText) {
-            return inText.replaceAll("\r\n","");
+            return inText.replaceAll("\r\n","<p>");
+            //return inText;
           },
             loadNews(db) {
               fetch('./json/articles.json')
@@ -299,8 +327,7 @@
                 }).catch(Dexie.BulkError, function (e) {
                     // Explicitely catching the bulkAdd() operation makes those successful
                     // additions commit despite that there were errors.
-                    console.error ("Some raindrops did not succeed. However, " +
-                      100000-e.failures.length + " raindrops was added successfully");
+                    console.error(error.stack || error);
                 });
 
                $("#newsLoading").html("Finished loading " + this.articles.length + " articles.");
@@ -318,8 +345,7 @@
                 }).catch(Dexie.BulkError, function (e) {
                     // Explicitely catching the bulkAdd() operation makes those successful
                     // additions commit despite that there were errors.
-                    console.error ("Some raindrops did not succeed. However, " +
-                      100000-e.failures.length + " raindrops was added successfully");
+                    console.error(error.stack || error);
                 });
                 
                 $("#tourLoading").html("Finished loading " + this.tournaments.length + " tournaments.");
@@ -337,13 +363,34 @@
                 }).catch(Dexie.BulkError, function (e) {
                     // Explicitely catching the bulkAdd() operation makes those successful
                     // additions commit despite that there were errors.
-                    console.error ("Some raindrops did not succeed. However, " +
-                      100000-e.failures.length + " raindrops was added successfully");
+                    console.error(error.stack || error);
                 });
 
                 $("#courLoading").html("Finished loading " + this.courses.length + " courses.");
               })
             },
+          showCourse(courseID, storage) {
+            var db = new Dexie('agcDB');
+            db.version(1).stores({
+              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
+              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
+            });
+            db.courses.where("courseID").equals(courseID).each(function (obj) {
+            // When we come here, data is fully populated and we can log all objects.
+              storage = obj;
+              // console.log("Found object: " + JSON.stringify(obj.courseName));
+            }).then(function () {
+              console.log("Finished.");
+            }).catch(function (error) {
+                // In our each() callback above fails, OR db.open() fails due to any reason,
+                // including our ajax call failed, this operation will fail and we will get
+                // the error here!
+                console.error(error.stack || error);
+                // Note that we could also have catched it on db.open() but in this sample,
+                // we show it here.
+            });
+          },
           showCoursesPage(inList) {
             var db = new Dexie('agcDB');
             db.version(1).stores({
@@ -366,6 +413,31 @@
                 // we show it here.
             });
           },
+          async doShowArticle(articleID) {
+            this.doHideAllWindows();
+            await this.showArticle(articleID,this.currArticle);
+            this.currArticle = JSON.parse(window.localStorage.getItem('currArticle'));
+            this.showArticlePage = true;
+          },
+          async showArticle(articleID, storage) {
+            var db = new Dexie('agcDB');
+            db.version(1).stores({
+              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
+              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
+            });
+            await db.articles.get(articleID).then(function (obj) {
+              window.localStorage.setItem('currArticle', JSON.stringify(obj));
+              console.log("Found object: " + JSON.stringify(obj.title));
+            }).catch(function (error) {
+                // In our each() callback above fails, OR db.open() fails due to any reason,
+                // including our ajax call failed, this operation will fail and we will get
+                // the error here!
+                console.error(error.stack || error);
+                // Note that we could also have catched it on db.open() but in this sample,
+                // we show it here.
+            });
+          },
           showArticlesPage(inList) {
             var db = new Dexie('agcDB');
             db.version(1).stores({
@@ -378,7 +450,7 @@
                   .each(function (obj) {
             // When we come here, data is fully populated and we can log all objects.
               inList.push(obj);
-              console.log("Found object: " + JSON.stringify(obj.courseName));
+              console.log("Found object: " + JSON.stringify(obj.title));
             }).then(function () {
               console.log("Finished.");
             }).catch(function (error) {
@@ -403,7 +475,7 @@
                   .each(function (obj) {
             // When we come here, data is fully populated and we can log all objects.
               inList.push(obj);
-              console.log("Found object: " + JSON.stringify(obj.courseName));
+              console.log("Found object: " + JSON.stringify(obj.title));
             }).then(function () {
               console.log("Finished.");
             }).catch(function (error) {
