@@ -73,7 +73,7 @@
   <body>
   <div class="wholeinterface"  x-data="dataloader()" x-init="() => {init()}">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="./"><img src="./images/agclogo.png" class="agclogo" alt="" loading="lazy"></a>
+      <a class="navbar-brand" href="#" @click="switchArticlesPage()"><img src="./images/agclogo.png" class="agclogo" alt="" loading="lazy"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -147,8 +147,13 @@
 <div class="articlesWindow" x-show="showArticles">
   <div class="card" style="width: 100%;">
     <div class="card-body" id="coursesIntro">
-      <h5 class="card-title">Welcome to Amateurgolf.com</h5>
-      <p class="card-text">Welcome.  You are running a demo of the Amateurgolf.com Web App.</p>
+      <h5 class="card-title">Amateurgolf.com News</h5>
+      <p class="card-text">Filter: 
+        <select x-model="currArticleType" x-on:change="switchArticlesPage()">
+          <template x-for="typeName in articleTypes">
+            <option x-text="typeName"></option>
+          </template>
+        </select>
     </div>
   </div>
   <div class="container cardlink"><div class="row row-cols-lg-3 row-cols-md-2">
@@ -188,13 +193,26 @@
 </div>
 
 <div class="articleDisplay" x-show="showArticlePage">
+  <a class="nav-link" href="#" @click="doShowArticles()">
+    <svg class="bi" width="32" height="32" fill="#333" aria-labelledby="title">
+      <title id="title" lang="en">Return to News</title>
+      <use xlink:href="bootstrap-icons.svg#arrow-left"/>
+    </svg>
+  </span></a>
   <div class="card" style="width: 100%;">
-    <img x-bind:src="getImageURL(currArticle.imageURL)" class="card-img-top" style="width:100%; object-fit: cover;" alt="">
-    <div class="card-body" id="coursesIntro">
-      <h5 class="card-title" x-text="currArticle.title"></h5>
-      <p class="card-text" x-html="getHTMLText(currArticle.articleText)"></p>
-    </div>
+
+      <div class="card-body" id="coursesIntro">
+        <img x-bind:src="getImageURL(currArticle.imageURL)" class="img-fluid" style="max-width: 100%; height: auto" alt="">
+        <h5 class="card-title" x-text="currArticle.title"></h5>
+        <p class="card-text" x-html="getHTMLText(currArticle.articleText)"></p>
+      </div>
   </div>
+  <a class="nav-link" href="#" @click="doShowArticles()">
+    <svg class="bi" width="32" height="32" fill="#333" aria-labelledby="title">
+      <title id="title" lang="en">Return to News</title>
+      <use xlink:href="bootstrap-icons.svg#arrow-left"/>
+    </svg>
+  </span></a>
 </div>
 
       <div class="card-body" id="settingsWindow" x-show="showSettings">
@@ -248,7 +266,7 @@
                 activeTournamentList: [],
                 currCourse: "",
                 currTournament: "",
-                currArticle: {"id": 0,"title": "Placement data.","teaser": "","articleText": "","featured": 0,"priority": 0,"archived": 0,"timesviewed": 0,"typeName": "","imageURL": "/images/agclogo-new.png","imageCaption": "","tournamentID": 0,"tourName": "","tourDateBegin": "","tourDateEnd": ""},
+                currArticle: {"id": 0,"title": "Placement data.","teaser": "","articleText": "","articleBeginDate":"2020-08-10T00:00:00","articleEndDate":"2020-08-10T00:00:00","active":"0","featured": 0,"priority": 0,"archived": 0,"timesviewed": 0,"typeName": "","imageURL": "/images/agclogo-new.png","imageCaption": "","tournamentID": 0,"tourName": "","tourDateBegin": "2020-08-10T00:00:00","tourDateEnd": "2020-08-10T00:00:00"},
                 dbArticleCount: 0,
                 dbCoursesCount: 0,
                 dbTournamentsCount: 0,
@@ -256,6 +274,8 @@
                 showCoursePage: false,
                 showTournamentPage: false,
                 showArticlePage: false,
+                currArticleType: "Featured News",
+                articleTypes: ["Featured News", "Latest News", "Equipment Reviews"],
           doHideAllWindows() {
             this.showHome = false;
             this.showIntro = false;
@@ -292,13 +312,19 @@
             this.doHideAllWindows();
             this.showSettings = true;
           },
+          async switchArticlesPage() {
+            this.activeArticleList = [];
+            this.doHideAllWindows();
+            await this.showArticlesPage(this.activeArticleList);
+            this.showArticles = true;
+          },
           doImport() {
             this.showLoading = true;
             this.showIntro = false;
 
             var db = new Dexie("agcDB");
-            db.version(1).stores({
-              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+            db.version(2).stores({
+              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
               courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
               tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
             });
@@ -316,6 +342,26 @@
           getHTMLText(inText) {
             return inText.replaceAll("\r\n","<p>");
             //return inText;
+          },
+          sqlToJsDate(sqlDate) {
+            //alert(sqlDate);
+            //sqlDate in SQL DATETIME format ("yyyy-mm-dd hh:mm:ss.ms")
+            var sqlDateArr1 = sqlDate.split("-");
+            //format of sqlDateArr1[] = ['yyyy','mm','dd hh:mm:ms']
+            var sYear = sqlDateArr1[0];
+            var sMonth = (Number(sqlDateArr1[1]) - 1).toString();
+            var sqlDateArr2 = sqlDateArr1[2].split(" ");
+            //format of sqlDateArr2[] = ['dd', 'hh:mm:ss.ms']
+            var sDay = sqlDateArr2[0];
+            var sqlDateArr3 = sqlDateArr2[1].split(":");
+            //format of sqlDateArr3[] = ['hh','mm','ss.ms']
+            var sHour = sqlDateArr3[0];
+            var sMinute = sqlDateArr3[1];
+            var sqlDateArr4 = sqlDateArr3[2].split(".");
+            //format of sqlDateArr4[] = ['ss','ms']
+            var sSecond = sqlDateArr4[0];
+            var sMillisecond = sqlDateArr4[1];
+            return new Date(sYear,sMonth,sDay,sHour,sMinute,sSecond,sMillisecond);
           },
             loadNews(db) {
               fetch('./json/articles.json')
@@ -371,8 +417,8 @@
             },
           showCourse(courseID, storage) {
             var db = new Dexie('agcDB');
-            db.version(1).stores({
-              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+            db.version(2).stores({
+              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
               courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
               tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
             });
@@ -393,8 +439,8 @@
           },
           showCoursesPage(inList) {
             var db = new Dexie('agcDB');
-            db.version(1).stores({
-              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+            db.version(2).stores({
+              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
               courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
               tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
             });
@@ -417,12 +463,13 @@
             this.doHideAllWindows();
             await this.showArticle(articleID,this.currArticle);
             this.currArticle = JSON.parse(window.localStorage.getItem('currArticle'));
+            //alert(this.currArticle.tourDateBegin);
             this.showArticlePage = true;
           },
           async showArticle(articleID, storage) {
             var db = new Dexie('agcDB');
-            db.version(1).stores({
-              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+            db.version(2).stores({
+              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
               courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
               tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
             });
@@ -438,34 +485,54 @@
                 // we show it here.
             });
           },
-          showArticlesPage(inList) {
+          async showArticlesPage(inList) {
             var db = new Dexie('agcDB');
-            db.version(1).stores({
-              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+            db.version(2).stores({
+              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
               courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
               tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
             });
-            db.articles.where("priority").above(1)
-                  .limit(15)
-                  .each(function (obj) {
-            // When we come here, data is fully populated and we can log all objects.
-              inList.push(obj);
-              console.log("Found object: " + JSON.stringify(obj.title));
-            }).then(function () {
-              console.log("Finished.");
-            }).catch(function (error) {
-                // In our each() callback above fails, OR db.open() fails due to any reason,
-                // including our ajax call failed, this operation will fail and we will get
-                // the error here!
+            if (this.currArticleType === "Featured News") {
+              await db.articles.where("priority").belowOrEqual(2)
+                    .limit(20)
+                    .each(function (obj) {
+                inList.push(obj);
+                console.log("Found object: " + JSON.stringify(obj.title));
+              }).then(function () {
+                console.log("Finished.");
+              }).catch(function (error) {
                 console.error(error.stack || error);
-                // Note that we could also have catched it on db.open() but in this sample,
-                // we show it here.
-            });
+              });
+            }
+            if (this.currArticleType === "Latest News") {
+              await db.articles.where("priority").aboveOrEqual(3)
+                    .limit(20)
+                    .each(function (obj) {
+                inList.push(obj);
+                console.log("Found object: " + JSON.stringify(obj.title));
+              }).then(function () {
+                console.log("Finished.");
+              }).catch(function (error) {
+                console.error(error.stack || error);
+              });
+            }
+            if (this.currArticleType === "Equipment Reviews") {
+              await db.articles.where("typeName").equals("Equipment Review")
+                    .limit(20)
+                    .each(function (obj) {
+                inList.push(obj);
+                console.log("Found object: " + JSON.stringify(obj.title));
+              }).then(function () {
+                console.log("Finished.");
+              }).catch(function (error) {
+                console.error(error.stack || error);
+              });
+            }
           },
           showTournamentsPage(inList) {
             var db = new Dexie('agcDB');
-            db.version(1).stores({
-              articles: 'id,title,teaser,articleText,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
+            db.version(2).stores({
+              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
               courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
               tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
             });
