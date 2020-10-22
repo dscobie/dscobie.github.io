@@ -31,7 +31,6 @@
 <link href="./css/bootstrap.min.css" rel="stylesheet">
 
 <script src="./js/alpine.js"></script>
-<script src="./js/dexie.js"></script>
 
 <style>
       .bd-placeholder-img {
@@ -173,8 +172,13 @@
 <div class="tournamentWindow" x-show="showTournaments">
   <div class="card" style="width:100%;">
     <div class="card-body" id="coursesIntro">
-      <h5 class="card-title">Welcome to Amateurgolf.com</h5>
-      <p class="card-text">Welcome.  You are running a demo of the Amateurgolf.com Web App.</p>
+      <h5 class="card-title">Tournaments</h5>
+      <p class="card-text">Filter: 
+        <select x-model="currTournamentType" x-on:change="switchTournamentsPage()">
+          <template x-for="typeName in tournamentTypes">
+            <option x-text="typeName"></option>
+          </template>
+        </select>
     </div>
   </div>
   <div class="container cardlink"><div class="row row-cols-lg-3 row-cols-md-2">
@@ -183,7 +187,8 @@
       <div class="col card" style="padding:0;width:100%;height:100%;border-radius:12px;margin-bottom:10px;">
         <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; object-fit: cover;" alt="">
         <div class="card-body" id="homeIntro">
-          <h6 class="card-title" x-text="item.title" style="font-weight:600;"></h5>
+          <h6 class="card-title" x-text="item.title" style="font-weight:600;"></h6>
+          <p><span x-text="getDateFromSQLDate(item.tourDateBegin)"></span> - <span x-text="getDateFromSQLDate(item.tourDateEnd)"></span></p>
           <p class="card-text"><span x-text="item.courseName"></span>, <span x-text="item.courseState"></span></p>
         </div>
       </div>
@@ -322,8 +327,6 @@
                 activeCourseList: [],
                 activeArticleList: [],
                 activeTournamentList: [],
-                currCourse: "",
-                currTournament: "",
                 currArticle: {"id": 0,"title": "Placement data.","teaser": "","articleText": "","articleBeginDate":"2020-08-10T00:00:00","articleEndDate":"2020-08-10T00:00:00","active":"0","featured": 0,"priority": 0,"archived": 0,"timesviewed": 0,"typeName": "","imageURL": "/images/agclogo-new.png","imageCaption": "","tournamentID": 0,"tourName": "","tourDateBegin": "2020-08-10T00:00:00","tourDateEnd": "2020-08-10T00:00:00"},
                 currCourse: {"id":0,"courseName": "","courseAddress": "","courseCity": "","courseState": "","courseZipcode": "","courseURL": "www.amateurgolf.com","coursePhone": "","featured": 1,"featuredTeaser": "","imageURL": "/images/agclogo-new.png","imageCaption": ""},
                 currTournament: {"id": 0,"title": "","tourDateBegin": "2020-09-11T00:00:00","tourDateEnd": "2020-09-13T00:00:00","notes": "","active": 1,"isMajor": "0","usgaEvent": "0","poweredByAGC": "No","latestResultsURL": "","entryFormURL": "","tournamentFormat": "","featured": 0,"nowPlaying": 0,"courseID": 0,"courseName": "","courseCity": "","courseState": "","imageURL": "/images/agclogo-new.png","imageCaption": ""},
@@ -335,6 +338,8 @@
                 showCoursePage: false,
                 showTournamentPage: false,
                 showArticlePage: false,
+                currTournamentType: "Now Playing",
+                tournamentTypes: ["Now Playing", "Just Finished", "Playing Soon"],
                 currArticleType: "Featured News",
                 articleTypes: ["Featured News", "Latest News", "Equipment Reviews"],
                 doHideAllWindows() {
@@ -373,29 +378,17 @@
             this.doHideAllWindows();
             this.showSettings = true;
           },
-          async switchArticlesPage() {
+          switchArticlesPage() {
             this.activeArticleList = [];
             this.doHideAllWindows();
-            await this.showArticlesPage(this.activeArticleList);
+            this.showArticlesPage(this.activeArticleList);
             this.showArticles = true;
           },
-          doImport() {
-            this.showLoading = true;
-            this.showIntro = false;
-
-            var db = new Dexie("agcDB");
-            db.version(2).stores({
-              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
-              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
-              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
-            });
-
-            this.loadNews(db);
-            this.loadTours(db);
-            this.loadCourses(db);
-            this.showDoneLoading = true;
-            window.localStorage.setItem('dbCreated', 'true');
-            window.localStorage.setItem('dbCreatedDate', Date.Now);
+          switchTournamentsPage() {
+            this.activeTournamentList = [];
+            this.doHideAllWindows();
+            this.showTournamentsPage(this.activeTournamentList);
+            this.showTournaments = true;
           },
           getImageURL(inURL) {
             return "https://www.amateurgolf.com" + inURL;
@@ -409,16 +402,28 @@
           getToday() {
             var d = new Date();
             var dyear = d.getFullYear();
-            var dmon = "0" + d.getMonth();
-            dmon = dmon.substring(dmon.length - 2, 2);
-            var dday = "0" + d.getDay();
-            dday = dday.substring(dday.length - 2, 2);
+            var dmon = "0" + (d.getMonth()+1);
+            dmon = dmon.substring(dmon.length - 2, dmon.length);
+            var dday = "0" + d.getDate();
+            dday = dday.substring(dday.length - 2, dday.length);
+            var today = dyear + "-" + dmon + "-" + dday + "T00:00:00";
+            return today;
+          },
+          getDateFromToday(numdays) {
+            var d = new Date();
+            d.setDate(d.getDate()+numdays);
+            var dyear = d.getFullYear();
+            var dmon = "0" + (d.getMonth()+1);
+            dmon = dmon.substring(dmon.length - 2, dmon.length);
+            var dday = "0" + d.getDate();
+            dday = dday.substring(dday.length - 2, dday.length);
             var today = dyear + "-" + dmon + "-" + dday + "T00:00:00";
             return today;
           },
           getDateFromSQLDate(inSQLDate) {
             // "2020-09-11T00:00:00"
             var newDate = inSQLDate.substring(5,7) + "/" + inSQLDate.substring(8,10) + "/" + inSQLDate.substring(0,4);
+            // console.log (new Date(newDate));
             return newDate;
           },
           getSQLDate(inDiff) {
@@ -452,275 +457,156 @@
             var sMillisecond = sqlDateArr4[1];
             return new Date(sYear,sMonth,sDay,sHour,sMinute,sSecond,sMillisecond);
           },
-            loadNews(db) {
-              fetch('./json/articles.json')
+          async doImport() {
+            this.showLoading = true;
+            this.showIntro = false;
+
+            await this.loadNews();
+            await this.loadTours();
+            await this.loadCourses();
+
+            this.showDoneLoading = true;
+            window.localStorage.setItem('dbCreated', 'true');
+            window.localStorage.setItem('dbCreatedDate', Date.Now);
+          },
+            async loadNews() {
+              fetch('./json/articles3.json')
               .then(res => res.json())
               .then(data => {
-                this.articles = data;
-                db.articles.bulkAdd(data).then(function(lastKey) {
-                    console.log("Done adding " + data.length + " to the articles store.");
-                }).catch(Dexie.BulkError, function (e) {
-                    // Explicitely catching the bulkAdd() operation makes those successful
-                    // additions commit despite that there were errors.
-                    console.error(error.stack || error);
-                });
-
-               $("#newsLoading").html("Finished loading " + this.articles.length + " articles.");
+                window.localStorage.setItem('articlesAll', JSON.stringify(data));
+                $("#newsLoading").html("Finished loading " + data.length + " articles.");
               })
             },
-            loadTours(db) {
+            async loadTours() {
               this.showTourLoading = true;
-              fetch('./json/tournaments.json')
+              fetch('./json/tournaments3.json')
               .then(res => res.json())
               .then(data => {
-                this.tournaments = data;
-                
-                db.tournaments.bulkAdd(data).then(function(lastKey) {
-                    console.log("Done adding " + data.length + " to the tournaments store.");
-                }).catch(Dexie.BulkError, function (e) {
-                    // Explicitely catching the bulkAdd() operation makes those successful
-                    // additions commit despite that there were errors.
-                    console.error(error.stack || error);
-                });
-                
-                $("#tourLoading").html("Finished loading " + this.tournaments.length + " tournaments.");
+                window.localStorage.setItem('tournamentsAll', JSON.stringify(data));
+                $("#tourLoading").html("Finished loading " + data.length + " tournaments.");
               })
             },
-            loadCourses(db) {
+            async loadCourses() {
               this.showCourLoading = true;
-              fetch('./json/courses.json')
+              fetch('./json/courses3.json')
               .then(res => res.json())
               .then(data => {
-                this.courses = data;
-
-                db.courses.bulkAdd(data).then(function(lastKey) {
-                    console.log("Done adding " + data.length + " to the courses store.");
-                }).catch(Dexie.BulkError, function (e) {
-                    // Explicitely catching the bulkAdd() operation makes those successful
-                    // additions commit despite that there were errors.
-                    console.error(error.stack || error);
-                });
-
-                $("#courLoading").html("Finished loading " + this.courses.length + " courses.");
+                window.localStorage.setItem('coursesAll', JSON.stringify(data));
+                $("#courLoading").html("Finished loading " + data.length + " courses.");
               })
             },
-          showCourse(courseID, storage) {
-            var db = new Dexie('agcDB');
-            db.version(2).stores({
-              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
-              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
-              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
-            });
-            db.courses.where("courseID").equals(courseID).each(function (obj) {
-            // When we come here, data is fully populated and we can log all objects.
-              storage = obj;
-              // console.log("Found object: " + JSON.stringify(obj.courseName));
-            }).then(function () {
-              console.log("Finished.");
-            }).catch(function (error) {
-                // In our each() callback above fails, OR db.open() fails due to any reason,
-                // including our ajax call failed, this operation will fail and we will get
-                // the error here!
-                console.error(error.stack || error);
-                // Note that we could also have catched it on db.open() but in this sample,
-                // we show it here.
-            });
-          },
           showCoursesPage(inList) {
-            var db = new Dexie('agcDB');
-            db.version(2).stores({
-              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
-              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
-              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
+            this.courses = JSON.parse(window.localStorage.getItem('coursesAll'));
+            var tempList = [];
+
+            tempList = this.courses.filter(function(item){
+              return item.featured <= 1;         
             });
-            db.courses.where("featured").equals(1).each(function (obj) {
-            // When we come here, data is fully populated and we can log all objects.
-              inList.push(obj);
-              // console.log("Found object: " + JSON.stringify(obj.courseName));
-            }).then(function () {
-              console.log("Finished.");
-            }).catch(function (error) {
-                // In our each() callback above fails, OR db.open() fails due to any reason,
-                // including our ajax call failed, this operation will fail and we will get
-                // the error here!
-                console.error(error.stack || error);
-                // Note that we could also have catched it on db.open() but in this sample,
-                // we show it here.
-            });
+            
+            for(var i = 0; i < tempList.length; i++) {
+              if (i < 6) inList.push(tempList[i]);
+            }
           },
-          async doShowCourse(courseID) {
-            this.currCourseTournaments = [];
+          doShowCourse(courseID) {
             this.doHideAllWindows();
-            await this.showCourse(courseID,this.currCourseTournaments);
-            this.currCourse = JSON.parse(window.localStorage.getItem('currCourse'));
-            //this.currCourseTournaments = JSON.parse(window.localStorage.getItem('currCourseTournaments'));
-            //alert(JSON.stringify(this.currCourseTournaments));
+            this.currCourse = this.courses.find(item => item.id == courseID);
             this.showCoursePage = true;
           },
-          async showCourse(courseID,storage) {
-            var resultList = [];
-            var db = new Dexie('agcDB');
-            db.version(2).stores({
-              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
-              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
-              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
-            });
-            await db.courses.get(courseID).then(function (obj) {
-              window.localStorage.setItem('currCourse', JSON.stringify(obj));
-              console.log("Found object: " + JSON.stringify(obj.courseName));
-            }).catch(function (error) {
-                // In our each() callback above fails, OR db.open() fails due to any reason,
-                // including our ajax call failed, this operation will fail and we will get
-                // the error here!
-                console.error(error.stack || error);
-                // Note that we could also have catched it on db.open() but in this sample,
-                // we show it here.
-            });
-            await db.tournaments.where("courseID").equals(courseID)
-            .each(function (obj) {
-                storage.push(obj);
-                console.log("Found object: " + JSON.stringify(obj.title));
-              })
-              .then(function (obj) {
-                window.localStorage.setItem('currCourseTournaments', JSON.stringify(obj));
-                console.log("Finished.");
-            }).catch(function (error) {
-                // In our each() callback above fails, OR db.open() fails due to any reason,
-                // including our ajax call failed, this operation will fail and we will get
-                // the error here!
-                console.error(error.stack || error);
-                // Note that we could also have catched it on db.open() but in this sample,
-                // we show it here.
-            });
-          },
-          async doShowArticle(articleID) {
+          doShowArticle(articleID) {
             this.doHideAllWindows();
-            await this.showArticle(articleID,this.currArticle);
-            this.currArticle = JSON.parse(window.localStorage.getItem('currArticle'));
-            //alert(this.currArticle.tourDateBegin);
+            this.currArticle = this.articles.find(item => item.id == articleID);
             this.showArticlePage = true;
           },
-          async showArticle(articleID) {
-            var db = new Dexie('agcDB');
-            db.version(2).stores({
-              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
-              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
-              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
-            });
-            await db.articles.get(articleID).then(function (obj) {
-              window.localStorage.setItem('currArticle', JSON.stringify(obj));
-              console.log("Found object: " + JSON.stringify(obj.title));
-            }).catch(function (error) {
-                // In our each() callback above fails, OR db.open() fails due to any reason,
-                // including our ajax call failed, this operation will fail and we will get
-                // the error here!
-                console.error(error.stack || error);
-                // Note that we could also have catched it on db.open() but in this sample,
-                // we show it here.
-            });
-          },
-          async doShowTournament(tournamentID) {
-            this.doHideAllWindows();
-            await this.showTournament(tournamentID);
-            this.currTournament = JSON.parse(window.localStorage.getItem('currTournament'));
-            //alert(this.currArticle.tourDateBegin);
-            this.showTournamentPage = true;
-          },
-          async showTournament(tournamentID) {
-            var db = new Dexie('agcDB');
-            db.version(2).stores({
-              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
-              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
-              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
-            });
-            await db.tournaments.get(tournamentID).then(function (obj) {
-              window.localStorage.setItem('currTournament', JSON.stringify(obj));
-              console.log("Found object: " + JSON.stringify(obj.title));
-            }).catch(function (error) {
-                // In our each() callback above fails, OR db.open() fails due to any reason,
-                // including our ajax call failed, this operation will fail and we will get
-                // the error here!
-                console.error(error.stack || error);
-                // Note that we could also have catched it on db.open() but in this sample,
-                // we show it here.
-            });
-          },
-          async showArticlesPage(inList) {
-            var db = new Dexie('agcDB');
-            db.version(2).stores({
-              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
-              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
-              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
-            });
+          showArticlesPage(inList) {
+            this.articles = JSON.parse(window.localStorage.getItem('articlesAll'));
+            var tempList = [];
+
             if (this.currArticleType === "Featured News") {
-              await db.articles.where("priority").belowOrEqual(2)
-                    .limit(20)
-                    .each(function (obj) {
-                inList.push(obj);
-                console.log("Found object: " + JSON.stringify(obj.title));
-              }).then(function () {
-                console.log("Finished.");
-              }).catch(function (error) {
-                console.error(error.stack || error);
-              });
+                tempList = this.articles.filter(function(item){
+                    return item.priority <= 2;         
+                });
+                for(var i = 0; i < tempList.length; i++) {
+                   if (i < 6) inList.push(tempList[i]);
+                }
             }
             if (this.currArticleType === "Latest News") {
-              await db.articles.where("priority").aboveOrEqual(3)
-                    .limit(20)
-                    .each(function (obj) {
-                inList.push(obj);
-                console.log("Found object: " + JSON.stringify(obj.title));
-              }).then(function () {
-                console.log("Finished.");
-              }).catch(function (error) {
-                console.error(error.stack || error);
-              });
+                tempList = this.articles.filter(function(item){
+                    return item.priority > 2;         
+                });
+                for(var i = 0; i < tempList.length; i++) {
+                    if (i < 12) inList.push(tempList[i]);
+                }
             }
             if (this.currArticleType === "Equipment Reviews") {
-              await db.articles.where("typeName").equals("Equipment Review")
-                    .limit(20)
-                    .each(function (obj) {
-                inList.push(obj);
-                console.log("Found object: " + JSON.stringify(obj.title));
-              }).then(function () {
-                console.log("Finished.");
-              }).catch(function (error) {
-                console.error(error.stack || error);
-              });
+                tempList = this.articles.filter(function(item){
+                    return item.typeName == "Equipment Review";         
+                });
+                for(var i = 0; i < tempList.length; i++) {
+                    if (i < 12) inList.push(tempList[i]);
+                }
             }
           },
+          doShowTournament(tournamentID) {
+            this.doHideAllWindows();
+            this.currTournament = this.tournaments.find(item => item.id == tournamentID);
+            this.showTournamentPage = true;
+          },
           showTournamentsPage(inList) {
-            var db = new Dexie('agcDB');
-            db.version(2).stores({
-              articles: 'id,title,teaser,articleText,articleBeginDate,articleEndDate,active,featured,priority,archived,timesviewed,typeName,imageURL,imageCaption,tournamentID,tourName,tourDateBegin,tourDateEnd',
-              courses: 'id,courseName,courseAddress,courseCity,courseState,courseZipcode,courseURL,coursePhone,featured,featuredTeaser,imageURL,imageCaption',
-              tournaments: 'id,title,tourDateBegin,tourDateEnd,notes,active,isMajor,usgaEvent,poweredByAGC,latestResultsURL,entryFormURL,tournamentFormat,featured,nowPlaying,courseID,courseName,courseCity,courseState,imageURL,imageCaption'
-            });
-            db.tournaments.where("tourDateBegin").aboveOrEqual(this.getSQLDate(-3))
-                  .limit(15)
-                  .each(function (obj) {
-            // When we come here, data is fully populated and we can log all objects.
-              inList.push(obj);
-              console.log("Found object: " + JSON.stringify(obj.title));
-            }).then(function () {
-              console.log("Finished.");
-            }).catch(function (error) {
-                // In our each() callback above fails, OR db.open() fails due to any reason,
-                // including our ajax call failed, this operation will fail and we will get
-                // the error here!
-                console.error(error.stack || error);
-                // Note that we could also have catched it on db.open() but in this sample,
-                // we show it here.
-            });
+            this.tournaments = JSON.parse(window.localStorage.getItem('tournamentsAll'));
+            var tempList = [];
+            
+            if (this.currTournamentType == "Now Playing") {
+              var compareDate = this.getDateFromToday(0);
+
+              tempList = this.tournaments.filter(function(item){
+                return (item.tourDateBegin <= compareDate && item.tourDateEnd >= compareDate) ;
+              });
+              tempList.sort(function(a,b) {
+                return new Date(a.tourDateBegin) - new Date(b.tourDateBegin);
+              });
+            
+              for(var i = 0; i < tempList.length; i++) {
+                inList.push(tempList[i]);
+              }
+            }
+            if (this.currTournamentType == "Just Finished") {
+              var startDate = this.getDateFromToday(-7);
+              var endDate = this.getDateFromToday(0);
+
+              tempList = this.tournaments.filter(function(item){
+                return (item.tourDateEnd >= startDate && item.tourDateEnd < endDate) ;
+              });
+              tempList.sort(function(a,b) {
+                return new Date(a.tourDateBegin) - new Date(b.tourDateBegin);
+              });
+            
+              for(var i = 0; i < tempList.length; i++) {
+                inList.push(tempList[i]);
+              }
+            }
+            if (this.currTournamentType == "Playing Soon") {
+              var startDate = this.getDateFromToday(1);
+              var endDate = this.getDateFromToday(7);
+
+              tempList = this.tournaments.filter(function(item){
+                return (item.tourDateBegin >= startDate && item.tourDateBegin <= endDate) ;
+              });
+              tempList.sort(function(a,b) {
+                return new Date(a.tourDateBegin) - new Date(b.tourDateBegin);
+              });
+            
+              for(var i = 0; i < tempList.length; i++) {
+                inList.push(tempList[i]);
+              }
+            }
           },
         init() {
-          this.getDateFromSQLDate("2020-09-11T00:00:00");
           if (window.localStorage.getItem('dbCreated') === 'true') {
-            this.doHideAllWindows();
-            this.showCoursesPage(this.activeCourseList);
-            this.showArticlesPage(this.activeArticleList);
-            this.showTournamentsPage(this.activeTournamentList);
-            this.showArticles = true;
+              this.doHideAllWindows();
+              this.showCoursesPage(this.activeCourseList);
+              this.showArticlesPage(this.activeArticleList);
+              this.showTournamentsPage(this.activeTournamentList);
+              this.showArticles = true;
           }
           else 
             this.showIntro = true;
