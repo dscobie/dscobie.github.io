@@ -253,6 +253,7 @@
             },
           doShowSettings() {
             this.doHideAllWindows();
+            this.doImport();
             this.showSettings = true;
           },
           switchPage() {
@@ -314,7 +315,7 @@
               .then(res => res.json())
               .then(data => {
                 window.localStorage.setItem('articlesAll', JSON.stringify(data));
-                // $("#newsLoading").html("Finished loading " + data.length + " articles.");
+                console.log("Finished loading " + data.length + " amateurgolf.com articles.");
               });
             },
             async loadDMS() {
@@ -323,7 +324,7 @@
               .then(res => res.json())
               .then(data => {
                 window.localStorage.setItem('dmsAll', JSON.stringify(data));
-                // $("#tourLoading").html("Finished loading " + data.length + " records from davescobie.com");
+                console.log("Finished loading " + data.length + " records from davescobie.com");
               })
             },
         init() {
