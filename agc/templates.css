@@ -49,10 +49,6 @@ html, body {
     object-fit: cover;
     border-radius: inherit;
 }
-.template8 > div {
-    min-height: 225px;
-    max-height: 250px;
-}
 .template1, .template2, .template3, .template4, .template5, .template6, .template7, .template8 {
     padding: 0;
     margin: 0 auto;
@@ -62,13 +58,11 @@ html, body {
     grid-gap: 10px;
 }
 .template1, .template3, .template4, .template5, .template6, .template7, .template8 {
-    grid-template-rows: repeat(1,1fr);
     grid-template-columns: repeat(1, 1fr);
     grid-template-areas: "c1" "c2" "c3" "c4" "c5" "c6";
 }
 .template2 {
     grid-template-columns: repeat(1, 1fr);
-    grid-template-rows: .6fr .6fr .6fr .6fr;
     grid-template-areas: "c1" "c2" "c3" "c4";
 }
 
@@ -115,8 +109,13 @@ html, body {
 }
 
 @media only screen and (min-width: 800px) {
+    .template1, .template2, .template3, .template5, .template6, .template7 {
+        grid-template-rows: repeat(3,200px);
+    }
+    .template8 {        
+        grid-template-rows: repeat(4,125px);
+    }
     .template1 {
-        grid-template-rows: repeat(3,1fr);
         grid-template-columns: repeat(6, 1fr);
         grid-template-areas: 
             "c1 c1 c1 c2 c2 c2" 
@@ -124,13 +123,11 @@ html, body {
             "c4 c4 c5 c5 c6 c6"
     }
     .template2 {
-        grid-template-rows: repeat(3,1fr);
         grid-template-columns: repeat(4, 1fr);
         grid-template-areas: 
             "c1 c1 c2 c2" "c1 c1 c3 c3" "c4 c4 c3 c3";
     }
     .template3 {
-        grid-template-rows: repeat(3,1fr);
         grid-template-columns: repeat(3, 1fr);
         grid-template-areas: 
             "c1 c1 c2" 
@@ -138,19 +135,16 @@ html, body {
             "c5 c6 c6";
     }
     .template5 {
-        grid-template-rows: repeat(3,1fr);
         grid-template-columns: repeat(4, 1fr);
         grid-template-areas: 
             "c1 c1 c2 c3" "c1 c1 c4 c4" "c1 c1 c5 c6";
     }
     .template6 {
-        grid-template-rows: repeat(3,1fr);
         grid-template-columns: repeat(4, 1fr);
         grid-template-areas: 
             "c2 c2 c1 c1" "c3 c4 c1 c1" "c5 c5 c6 c6";
     }
     .template7 {
-        grid-template-rows: repeat(3,1fr);
         grid-template-columns: repeat(3, 1fr);
         grid-template-areas: 
             "c2 c1 c1" 
@@ -158,7 +152,6 @@ html, body {
             "c4 c5 c6";
     }
     .template8 {
-        grid-template-rows: repeat(4,1fr);
         grid-template-columns: repeat(4, 1fr);
         grid-template-areas: 
             "c1 c1 c2 c3" 
