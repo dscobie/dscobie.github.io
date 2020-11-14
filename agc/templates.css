@@ -1,0 +1,175 @@
+html, body {
+    height: 100%;
+}
+.c1 { grid-area: c1; }
+.c2 { grid-area: c2; }
+.c3 { grid-area: c3; }
+.c4 { grid-area: c4; }
+.c5 { grid-area: c5; }
+.c6 { grid-area: c6; }
+.c7 { grid-area: c7; }
+.c8 { grid-area: c8; }
+.c9 { grid-area: c9; }
+.c10 { grid-area: c10; }
+
+.tcell > div .overlay {
+    position: absolute; 
+    bottom: 0; 
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); /* Black see-through */
+    background-image: linear-gradient(to top, rgba(0,0,0,.2), rgba(48,48,48,1));
+    color: #f1f1f1; 
+    width: 100%;
+    transition: .5s ease;
+    opacity:.7;
+    color: white;
+    font-size: .9em;
+    padding: 15px;
+    margin: 0;
+    text-align: left;
+  }
+  .tcell > div:hover .overlay {
+    opacity: 1;
+    color: #eee;
+  }
+  * {box-sizing: border-box;}
+  
+.tcell > div {
+    position: relative;
+    border: 1px solid #999;
+    width: 100%;
+    height: 100%;
+	color: #333;
+    border-radius: 7px;
+    min-height: 175px;
+}
+.tcell > div > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+.template8 > div {
+    min-height: 225px;
+    max-height: 250px;
+}
+.template1, .template2, .template3, .template4, .template5, .template6, .template7, .template8 {
+    padding: 0;
+    margin: 0 auto;
+    width: 100%;
+    border-radius: 8px;
+    display: grid;
+    grid-gap: 10px;
+}
+.template1, .template3, .template4, .template5, .template6, .template7, .template8 {
+    grid-template-rows: repeat(1,1fr);
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-areas: "c1" "c2" "c3" "c4" "c5" "c6";
+}
+.template2 {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: .6fr .6fr .6fr .6fr;
+    grid-template-areas: "c1" "c2" "c3" "c4";
+}
+
+@media only screen and (min-width: 600px) {
+    .template1, .template2, .template3, .template4, .template5, .template6, .template7, .template8 {
+        grid-auto-rows: 1fr;
+    }
+    .template1 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: "c1 c1" "c2 c3" "c4 c5" "c6 c6";
+    }
+    .template2 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: "c1 c1" "c2 c3" "c4 c4";
+    }
+    .template3 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: "c1 c2" "c3 c4" "c5 c6";
+    }
+    .template4 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: "c1 c1" "c2 c3" "c4 c4" "c5 c6";
+    }
+    .template5 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: "c1 c2" "c3 c4" "c5 c6";
+    }
+    .template6 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: "c1 c1" "c2 c3" "c4 c4" "c5 c6";
+    }
+    .template7 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: "c1 c2" "c3 c4" "c5 c6";
+    }
+    .template8 {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: 
+            "c1 c1"
+            "c2 c3" 
+            "c4 c5"
+            "c6 c6";
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    .template1 {
+        grid-template-rows: repeat(3,1fr);
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-areas: 
+            "c1 c1 c1 c2 c2 c2" 
+            "c1 c1 c1 c3 c3 c3"
+            "c4 c4 c5 c5 c6 c6"
+    }
+    .template2 {
+        grid-template-rows: repeat(3,1fr);
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-areas: 
+            "c1 c1 c2 c2" "c1 c1 c3 c3" "c4 c4 c3 c3";
+    }
+    .template3 {
+        grid-template-rows: repeat(3,1fr);
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas: 
+            "c1 c1 c2" 
+            "c3 c4 c2" 
+            "c5 c6 c6";
+    }
+    .template5 {
+        grid-template-rows: repeat(3,1fr);
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-areas: 
+            "c1 c1 c2 c3" "c1 c1 c4 c4" "c1 c1 c5 c6";
+    }
+    .template6 {
+        grid-template-rows: repeat(3,1fr);
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-areas: 
+            "c2 c2 c1 c1" "c3 c4 c1 c1" "c5 c5 c6 c6";
+    }
+    .template7 {
+        grid-template-rows: repeat(3,1fr);
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas: 
+            "c2 c1 c1" 
+            "c3 c1 c1" 
+            "c4 c5 c6";
+    }
+    .template8 {
+        grid-template-rows: repeat(4,1fr);
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-areas: 
+            "c1 c1 c2 c3" 
+            "c1 c1 c2 c3" 
+            "c4 c5 c6 c6"
+            "c4 c5 c6 c6";
+    }
+}
+@media only screen and (min-width: 1000px) {
+    .framework {
+        margin: 0 auto;
+        max-width: 1000px;
+    }
+}

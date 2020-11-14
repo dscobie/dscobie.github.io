@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="davescobie.com">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>DMS Templating System</title>
+    <link rel="canonical" href="./templates.html">
+
+
+    <link rel="manifest" href="manifest.json">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="DMS Templating">
+    <meta name="apple-mobile-web-app-title" content="DMS Templating">
+    <meta name="theme-color" content="#800">
+    <meta name="msapplication-navbutton-color" content="#666">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-starturl" content="/templates.html">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" href="./icons/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="./icons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./icons/android-192x192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon-180x180.png" sizes="180x180">
+    <meta name="msapplication-config" content="./icons/browserconfig.xml">
+
+<!-- Bootstrap core CSS -->
+<link href="./css/bootstrap.min.css" rel="stylesheet">
+
+<script src="./js/alpine.js"></script>
+
+<link rel="stylesheet" href="templates.css" />
+
+<style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      .cardlink a {
+          text-decoration: none;
+          color: #333;
+      }
+      .cardlink a:hover {
+          color: #009;
+      }
+      .agclogo {
+        height: 35px;
+      }
+      .card-img-top {
+        height:170px; 
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+        .agclogo { 
+          height: 45px;
+        }
+        .card-img-top {
+          height:140px; 
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="./css/starter-template.css" rel="stylesheet">
+  </head>
+  <body>
+  <div class="wholeinterface"  x-data="dataloader()" x-init="() => {init()}">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <a class="navbar-brand" href="#" @click="switchPage()">DMS</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <select class="nav-link form-control-lg" x-model="currContentSelected" x-on:change="switchPage()">
+            <option class="dropdown-item">random</option>
+            <option class="dropdown-item">amateurgolf.com</option>
+            <option class="dropdown-item">davescobie.com</option>
+        </select>
+      </li>
+      <li class="nav-item dropdown">
+        <select class="nav-link form-control-lg" x-model="currTemplateSelected" x-on:change="switchPage()">
+            <option class="dropdown-item">random</option>
+            <template x-for="item in containers">
+                <option class="dropdown-item" x-text="item.name"></option>
+            </template>
+        </select>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" @click="doShowSettings()">
+          <svg class="bi" width="32" height="32" fill="currentColor" aria-labelledby="title">
+            <title id="title" lang="en">Settings</title>
+            <use xlink:href="bootstrap-icons.svg#gear"/>
+          </svg>
+        </span></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main role="main" class="container">
+
+<div class="articlesWindow" x-show="showArticles">
+
+<span x-html="articleTemplate"></span>
+  <br/>
+  <!--
+  <div class="container cardlink"><div class="row row-cols-lg-3 row-cols-md-2">
+    <template x-for="item in activeArticleList">
+      <a href="#" @click="doShowArticle(item.id)">
+      <div class="col card" style="padding:0; width:100%;height:100%;border-radius:12px;margin-bottom:10px;">
+        <img x-bind:src="getImageURL(item.imageURL)" class="card-img-top" style="width:100%; object-fit: cover;" alt="">
+        <div class="card-body" id="homeIntro">
+          <h6 class="card-title" x-text="item.title" style="font-weight:600;"></h5>
+          <p class="card-text" x-text="getHTMLText(item.teaser)"></p>
+        </div>
+      </div>
+      </a>
+    </template>
+  </div></div>
+-->
+</div>
+
+<div class="card-body" id="settingsWindow" x-show="showSettings">
+    <h5 class="card-title">Settings</h5>
+</div>
+
+</main><!-- /.container https://code.jquery.com/jquery-3.5.1.slim.min.js -->
+<script src="./js/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="./js/jquery.slim.min.js"><\/script>')</script><script src="./js/bootstrap.bundle.min.js"></script>
+
+      <script type="text/javascript">
+        function dataloader() {
+          return {
+                db: null,
+                isLoading: false,
+                showArticles: false,
+                showSettings: false,
+                articles: [],
+                dmsList: [],
+                activeDMSList: [],
+                activeArticleList: [],
+                currArticle: {"id": 0,"title": "Placement data.","teaser": "","articleText": "","articleBeginDate":"2020-08-10T00:00:00","articleEndDate":"2020-08-10T00:00:00","active":"0","featured": 0,"priority": 0,"archived": 0,"timesviewed": 0,"typeName": "","imageURL": "/images/agclogo-new.png","imageCaption": "","tournamentID": 0,"tourName": "","tourDateBegin": "2020-08-10T00:00:00","tourDateEnd": "2020-08-10T00:00:00"},
+
+                containers: [
+                  {
+                      "name": "template1",
+                      "CSSname": "template1",
+                      "displayCount": 6,
+                      "logoSpot": 3
+                  },
+                  {
+                      "name": "template2",
+                      "CSSname": "template2",
+                      "displayCount": 4,
+                      "logoSpot": 4
+                  },
+                  {
+                      "name": "template3",
+                      "CSSname": "template3",
+                      "displayCount": 6,
+                      "logoSpot": 3
+                  },
+                  {
+                      "name": "template5",
+                      "CSSname": "template5",
+                      "displayCount": 6,
+                      "logoSpot": 3
+                  },
+                  {
+                      "name": "template6",
+                      "CSSname": "template6",
+                      "displayCount": 6,
+                      "logoSpot": 3
+                  },
+                  {
+                      "name": "template7",
+                      "CSSname": "template7",
+                      "displayCount": 6,
+                      "logoSpot": 3
+                  },
+                  {
+                      "name": "template8",
+                      "CSSname": "template8",
+                      "displayCount": 6,
+                      "logoSpot": 3
+                  }
+            ],
+            currContentView: "random",
+            currContentSelected: "random",
+            currTemplateSelected: "random",
+            articleTemplate: "",
+                doHideAllWindows() {
+                  this.showArticles = false;
+                  this.showSettings = false;
+                },
+            buildArticleTemplate(contentSpots, logoSpot, containerName) {
+                var result = "";
+                var shownList = [];
+                var useArticle = 0;
+                result = "<div class=\"" + containerName + " tcell\">";
+
+                for (i = 0; i<contentSpots; i++) {
+                        useArticle = Math.floor(Math.random() * (this.activeArticleList.length));
+                        while (shownList.indexOf(useArticle) > -1)
+                            useArticle = Math.floor(Math.random() * (this.activeArticleList.length));
+                        result += "<div class=\"c" + (i+1) + "\">";
+                        result += "<img src=\"" + this.getImageURL(this.activeArticleList[useArticle].imageURL) + "\">";
+                        if (this.activeArticleList[useArticle].title != "")
+                          result += "<div class=\"overlay\">" + this.activeArticleList[useArticle].title + "</div>";
+
+                        result += "</div>";
+                        shownList.push(useArticle);
+                }
+                result += "</div>";
+                return result;
+            },
+            buildDMSTemplate(contentSpots, logoSpot, containerName) {
+                var result = "";
+                var shownList = [];
+                var useArticle = 0;
+                result = "<div class=\"" + containerName + " tcell\">";
+
+                for (i = 0; i<contentSpots; i++) {
+                        useArticle = Math.floor(Math.random() * (this.activeDMSList.length));
+                        while (shownList.indexOf(useArticle) > -1)
+                            useArticle = Math.floor(Math.random() * (this.activeDMSList.length));
+                        result += "<div class=\"c" + (i+1) + "\">";
+                        result += "<img src=\"" + this.getImageURL(this.activeDMSList[useArticle].url) + "\">";
+                        if (this.activeDMSList[useArticle].caption != "")
+                          result += "<div class=\"overlay\">" + this.activeDMSList[useArticle].caption + "</div>";
+
+                        result += "</div>";
+                        shownList.push(useArticle);
+                }
+                result += "</div>";
+                return result;
+            },
+            showArticleTemplate() {
+                var useTemplate = Math.floor(Math.random() * (6 + 1));
+                var templateName = 'template' + (useTemplate+1);
+                this.articleTemplate = this.buildArticleTemplate(this.containers[useTemplate].displayCount,0,templateName);
+            },
+          doShowSettings() {
+            this.doHideAllWindows();
+            this.showSettings = true;
+          },
+          switchPage() {
+            var useTemplate = 0;
+            var templateName = "";
+            var useContent = 0;
+            var contentSpots = 0;
+            var template = [];
+            if (this.currTemplateSelected === "random") {
+                var useTemplate = Math.floor(Math.random() * this.containers.length);
+                // console.log(useTemplate);
+                templateName = this.containers[useTemplate].name;
+            } else {
+                templateName = this.currTemplateSelected;
+            }
+            template = this.containers.find(item=>item.name==templateName);
+            contentSpots = template.displayCount;
+
+            if (this.currContentSelected === "random") {
+                var useContent = Math.floor(Math.random() * 2);
+                if (useContent === 0) {
+                    this.currContentView = "amateurgolf.com";
+                } else {
+                    this.currContentView = "davescobie.com";
+                }
+            } else {
+                this.currContentView = this.currContentSelected;
+            }
+            if (this.currContentView === "amateurgolf.com" )
+                this.articleTemplate = this.buildArticleTemplate(contentSpots,0,templateName);
+            else 
+                this.articleTemplate = this.buildDMSTemplate(contentSpots,0,templateName);
+          },
+          getImageURL(inURL) {
+            if (this.currContentView === "amateurgolf.com")
+                return "https://www.amateurgolf.com" + inURL;
+            if (this.currContentView === "davescobie.com")
+                return "https://www.davescobie.com/" + inURL;
+          },
+          getHTMLText(inText) {
+            return inText.replaceAll("\r\n","<p>");
+          },
+          getHTMLStrippedText(inText) {
+            return inText.replaceAll("\r\n","");
+          },
+          async doImport() {
+            // this.showLoading = true;
+            // this.showIntro = false;
+
+            await this.loadNews();
+            await this.loadDMS();
+
+            // this.showDoneLoading = true;
+            window.localStorage.setItem('dbCreated', 'true');
+            window.localStorage.setItem('dbCreatedDate', Date.Now);
+          },
+            async loadNews() {
+              fetch('./json/articles3.json')
+              .then(res => res.json())
+              .then(data => {
+                window.localStorage.setItem('articlesAll', JSON.stringify(data));
+                // $("#newsLoading").html("Finished loading " + data.length + " articles.");
+              });
+            },
+            async loadDMS() {
+              this.showTourLoading = true;
+              fetch('./json/dms.json')
+              .then(res => res.json())
+              .then(data => {
+                window.localStorage.setItem('dmsAll', JSON.stringify(data));
+                // $("#tourLoading").html("Finished loading " + data.length + " records from davescobie.com");
+              })
+            },
+        init() {
+            if (window.localStorage.getItem('dbCreated') === 'true') {
+              this.doHideAllWindows();
+              this.articles = JSON.parse(window.localStorage.getItem('articlesAll'));
+              this.dmsList =  JSON.parse(window.localStorage.getItem('dmsAll'));
+              this.activeArticleList = JSON.parse(window.localStorage.getItem('articlesAll'));
+              this.activeDMSList =  JSON.parse(window.localStorage.getItem('dmsAll'));
+              
+              this.showArticleTemplate();
+              this.showArticles = true;
+              this.switchPage();
+          }
+          else {
+              this.doImport();
+              this.showArticles = true;
+              this.switchPage();
+          } 
+        }
+      }}
+  </script>
+  
+<script>
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+            .then(registration => {
+              console.log('Service Worker is registered', registration);
+            })
+            .catch(err => {
+              console.error('Registration failed:', err);
+            });
+          });
+        }    
+</script>    
+</div>        
+</body>
+</html>
