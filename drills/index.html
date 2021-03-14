@@ -46,15 +46,15 @@
 <body>
   <div class="website" x-data="drills()" x-init="() => {init()}">
         <div class="header navbar-dark bg-dark"> 
-          <div><span x-html="currState.currShuffle+1" ></span> / <span x-html="currState.workingDrills.length"></span></div>
+          <div><span x-html="currDState.currShuffle+1" ></span> / <span x-html="currDState.workingDrills.length"></span></div>
           <div>
-            <select x-model="currState.currLevel" x-on:change="changeLevel()">
+            <select x-model="currDState.currLevel" x-on:change="changeLevel()">
               <template x-for="levelName in levels">
                 <option x-text="levelName"></option>
               </template>
             </select>
 
-            <select x-model="currState.currTitle" x-on:change="changeTitle()">
+            <select x-model="currDState.currTitle" x-on:change="changeTitle()">
               <template x-for="titleName in titles">
                 <option x-text="titleName"></option>
               </template>
@@ -62,19 +62,19 @@
           </div>
         </div>
         <div class="c2 phraseBox" @swipeleft="nextItem()" @swiperight="prevItem()"> 
-            <span class="entryWord" x-html="currState.currDisplay.english"></span>
+            <span class="entryWord" x-html="currDState.currDisplay.english"></span>
         </div>
-        <div class="c3 phraseBox" @click="isOpen = !isOpen"  @swipeleft="nextItem()" @swiperight="prevItem()">
-          <span class="entryWord" x-show="!isOpen">&nbsp;</span>
-          <span class="entryWord" x-html="currState.currDisplay.spanish" x-show="isOpen"></span>
-          <span class="entryPhrase" x-show="!isOpen">click to show answer</span>
+        <div class="c3 phraseBox" @click="currDState.isOpen = !currDState.isOpen"  @swipeleft="nextItem()" @swiperight="prevItem()">
+          <span class="entryWord" x-show="!currDState.isOpen">&nbsp;</span>
+          <span class="entryWord" x-html="currDState.currDisplay.spanish" x-show="currDState.isOpen"></span>
+          <span class="entryPhrase" x-show="!currDState.isOpen">click to show answer</span>
         </div>
       <nav class="footer navbar-dark bg-dark flex-row-reverse">
         <div class="btn-group" role="group" aria-label="Basic example">
           <button type="button" class="btn btn-secondary" @click="prevItem()">Prev</button>
           <button type="button" class="btn btn-secondary" @click="nextItem()">Next</button>
-          <button type="button" class="btn btn-secondary" x-show="isOpen" x-on:click="isOpen = !isOpen">Hide Answer</button>
-          <button type="button" class="btn btn-secondary" x-show="!isOpen" x-on:click="isOpen = !isOpen">Show Answer</button>
+          <button type="button" class="btn btn-secondary" x-show="currDState.isOpen" x-on:click="currDState.isOpen = !currDState.isOpen">Hide Answer</button>
+          <button type="button" class="btn btn-secondary" x-show="!currDState.isOpen" x-on:click="currDState.isOpen = !currDState.isOpen">Show Answer</button>
         </div>
       </nav>
     </div>
@@ -82,86 +82,85 @@
 <script type="text/javascript">
       function drills() {
         return {
-              currState: {
+              currDState: {
                 currLevel: 0, 
                 currTitle:"", 
                 shuffleArray: [],
                 currShuffle: 0,
                 workingDrills: [], 
-                currDrill: 0, 
+                currDrill: 0,
+                isOpen: false,
                 currDisplay: {course:"", level:"", section:"", title:"", english:"", spanish:""}
               },
               allDrills: [],
               levels: [],
               titles: [],
-              isOpen: false,
       prevItem() {
-        this.currState.currShuffle--;
-        if (this.currState.currShuffle === -1) this.currState.currShuffle = this.currState.workingDrills.length-1;
-        this.currState.currDrill = parseInt(this.currState.shuffleArray[this.currState.currShuffle]);
-        this.currState.currDisplay = this.currState.workingDrills[this.currState.currDrill];
-        this.isOpen = false;
+        this.currDState.currShuffle--;
+        if (this.currDState.currShuffle === -1) this.currDState.currShuffle = this.currDState.workingDrills.length-1;
+        this.currDState.currDrill = parseInt(this.currDState.shuffleArray[this.currDState.currShuffle]);
+        this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
+        this.currDState.iisOpen = false;
         this.saveState();
       },
       nextItem() {
-        this.currState.currShuffle++;
-        if (this.currState.currShuffle === this.currState.workingDrills.length) this.currState.currShuffle = 0;
-        this.currState.currDrill = parseInt(this.currState.shuffleArray[this.currState.currShuffle]);
-        this.currState.currDisplay = this.currState.workingDrills[this.currState.currDrill];
-        this.isOpen = false;
+        this.currDState.currShuffle++;
+        if (this.currDState.currShuffle === this.currDState.workingDrills.length) this.currDState.currShuffle = 0;
+        this.currDState.currDrill = parseInt(this.currDState.shuffleArray[this.currDState.currShuffle]);
+        this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
+        this.currDState.iisOpen = false;
         this.saveState();
       },
       randomIntFromInterval(min, max) { // min and max included 
         return Math.floor(Math.random() * (max - min + 1) + min);
       },
       generateRandomArray(inLength) {
-        this.currState.shuffleArray = [];
-        for (i=0;i<inLength;++i) this.currState.shuffleArray.push(i);
+        this.currDState.shuffleArray = [];
+        for (i=0;i<inLength;++i) this.currDState.shuffleArray.push(i);
 
-        var tmp, current, top = this.currState.shuffleArray.length;
+        var tmp, current, top = this.currDState.shuffleArray.length;
         if(top) while(--top) {
           current = Math.floor(Math.random() * (top + 1));
-          tmp = this.currState.shuffleArray[current];
-          this.currState.shuffleArray[current] = this.currState.shuffleArray[top];
-          this.currState.shuffleArray[top] = tmp;
+          tmp = this.currDState.shuffleArray[current];
+          this.currDState.shuffleArray[current] = this.currDState.shuffleArray[top];
+          this.currDState.shuffleArray[top] = tmp;
         }
       },
       changeLevel() {
-        this.titles = [... new Set(this.allDrills.filter( data => (data.level === this.currState.currLevel)).map(data => data.title))];
-        this.currState.currTitle= this.titles[0];
+        this.titles = [... new Set(this.allDrills.filter( data => (data.level === this.currDState.currLevel)).map(data => data.title))];
+        this.currDState.currTitle= this.titles[0];
 
-        this.currState.workingDrills = this.allDrills.filter( data => (data.level === this.currState.currLevel && data.title === this.currState.currTitle));
+        this.currDState.workingDrills = this.allDrills.filter( data => (data.level === this.currDState.currLevel && data.title === this.currDState.currTitle));
             
-        this.generateRandomArray(this.currState.workingDrills.length);
-        this.currState.currDrill = parseInt(this.currState.shuffleArray[0]);
-        this.currState.currDisplay = this.currState.workingDrills[this.currState.currDrill];
+        this.generateRandomArray(this.currDState.workingDrills.length);
+        this.currDState.currDrill = parseInt(this.currDState.shuffleArray[0]);
+        this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
         this.saveState();
       },
       changeTitle() {
-        this.currState.workingDrills = [];
-        this.currState.workingDrills = this.allDrills.filter( data => (data.level === this.currState.currLevel && data.title === this.currState.currTitle));
+        this.currDState.workingDrills = [];
+        this.currDState.workingDrills = this.allDrills.filter( data => (data.level === this.currDState.currLevel && data.title === this.currDState.currTitle));
 
-        this.generateRandomArray(this.currState.workingDrills.length);  
+        this.generateRandomArray(this.currDState.workingDrills.length);  
 
-        this.currState.currDrill = parseInt(this.currState.shuffleArray[0]);
-        this.currState.currShuffle = 0;
-        this.isOpen = false;
-        this.currState.currDisplay = this.currState.workingDrills[this.currState.currDrill];
+        this.currDState.currDrill = parseInt(this.currDState.shuffleArray[0]);
+        this.currDState.currShuffle = 0;
+        this.currDState.iisOpen = false;
+        this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
         this.saveState();
       },
       saveState() {
-        window.localStorage.setItem('currState', JSON.stringify(this.currState));
+        window.localStorage.setItem('currDState', JSON.stringify(this.currDState));
       },
       buildDropDowns() {
         this.levels = [... new Set(this.allDrills.map(data => data.level))];
-        this.titles = [... new Set(this.allDrills.filter( data => (data.level === this.currState.currLevel)).map(data => data.title))];
+        this.titles = [... new Set(this.allDrills.filter( data => (data.level === this.currDState.currLevel)).map(data => data.title))];
       },
       init() {
-        console.log(JSON.parse(window.localStorage.getItem('currState')));
 
         if (JSON.parse(window.localStorage.getItem('allDrills')) != null) {
           this.allDrills = JSON.parse(window.localStorage.getItem('allDrills'));
-          this.currState = JSON.parse(window.localStorage.getItem('currState'));
+          this.currDState = JSON.parse(window.localStorage.getItem('currDState'));
           this.buildDropDowns();
         } else {
           fetch('./drills.json')
@@ -171,19 +170,19 @@
               this.buildDropDowns();
 
               this.levels = [... new Set(this.allDrills.map(data => data.level))];
-              this.currState.currLevel = this.levels[0];
+              this.currDState.currLevel = this.levels[0];
 
-              this.titles = [... new Set(this.allDrills.filter( data => (data.level === this.currState.currLevel)).map(data => data.title))];
-              this.currState.currTitle= this.titles[0];
+              this.titles = [... new Set(this.allDrills.filter( data => (data.level === this.currDState.currLevel)).map(data => data.title))];
+              this.currDState.currTitle= this.titles[0];
 
-              this.currState.workingDrills = this.allDrills.filter( data => (data.level === this.currState.currLevel && data.title === this.currState.currTitle));
+              this.currDState.workingDrills = this.allDrills.filter( data => (data.level === this.currDState.currLevel && data.title === this.currDState.currTitle));
               
-              this.generateRandomArray(this.currState.workingDrills.length);
-              this.currState.currDrill = parseInt(this.currState.shuffleArray[0]);
-              this.currState.currDisplay = this.currState.workingDrills[this.currState.currDrill];
+              this.generateRandomArray(this.currDState.workingDrills.length);
+              this.currDState.currDrill = parseInt(this.currDState.shuffleArray[0]);
+              this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
 
               window.localStorage.setItem('allDrills', JSON.stringify(this.allDrills));
-              window.localStorage.setItem('currState', JSON.stringify(this.currState));
+              window.localStorage.setItem('currDState', JSON.stringify(this.currDState));
           });
         }
 
