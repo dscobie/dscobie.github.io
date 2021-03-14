@@ -8,7 +8,7 @@ const filesToCache = [
     '/vocabulary/vocabulary.json'
   ];
 
-const staticCacheName = 'pages-cache-v8';
+const staticCacheName = 'pages-cache-v9';
 
 self.addEventListener('install', event => {
   console.log('Attempting to install service worker and cache static assets');
