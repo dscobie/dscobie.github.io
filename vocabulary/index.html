@@ -130,7 +130,6 @@
       },
       changeView() {
         this.currVState.workingPhrases = [];
-        console.log(this.currVState.currDataType);
         if (this.currVState.currDataType === "all") {
           this.currVState.workingPhrases = this.phrases.filter( data => data.module === this.currVState.currModule );
         } else {
@@ -167,7 +166,7 @@
             this.currVState.currModule = this.modules[0];
             this.datatypes = [... new Set(this.phrases.map(data => data.type))];
             this.datatypes.push("all");
-            this.currVState.currDataType = this.datatypes[1];
+            this.currVState.currDataType = this.datatypes[0];
 
             this.currVState.workingPhrases = this.phrases.filter( data => (data.module === this.currVState.currModule && data.type === this.currVState.currDataType));
             
