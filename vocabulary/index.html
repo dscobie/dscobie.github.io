@@ -46,15 +46,15 @@
 <body>
   <div class="website" x-data="phrases()" x-init="() => {init()}">
         <div class="header navbar-dark bg-dark"> 
-          <div><span x-html="currState.currShuffle+1" ></span> / <span x-html="currState.workingPhrases.length"></span></div>
+          <div><span x-html="currVState.currShuffle+1" ></span> / <span x-html="currVState.workingPhrases.length"></span></div>
           <div>
-            <select x-model="currState.currDatatype" x-on:change="changeView()">
+            <select x-model="currVState.currDataType" x-on:change="changeView()">
               <template x-for="datatypeName in datatypes">
                 <option x-text="datatypeName"></option>
               </template>
             </select>
 
-            <select x-model="currState.currModule" x-on:change="changeView()">
+            <select x-model="currVState.currModule" x-on:change="changeView()">
               <template x-for="moduleName in modules">
                 <option x-text="moduleName"></option>
               </template>
@@ -62,21 +62,21 @@
           </div>
         </div>
         <div class="c2 phraseBox" @swipeleft="nextPhrase()" @swiperight="prevPhrase()"> 
-            <span class="entryWord" x-html="currState.currDisplay.english"></span>
-            <span class="entryPhrase" x-html="currState.currDisplay.englishPhrase"></span>
+            <span class="entryWord" x-html="currVState.currDisplay.english"></span>
+            <span class="entryPhrase" x-html="currVState.currDisplay.englishPhrase"></span>
         </div>
-        <div class="c3 phraseBox" @click="isOpen = !isOpen"  @swipeleft="nextPhrase()" @swiperight="prevPhrase()">
-          <span class="entryWord" x-show="!isOpen">&nbsp;</span>
-          <span class="entryWord" x-html="currState.currDisplay.spanish" x-show="isOpen"></span>
-          <span class="entryPhrase" x-show="!isOpen">click to show answer</span>
-          <span class="entryPhrase" x-html="currState.currDisplay.spanishPhrase"  x-show="isOpen"></span>
+        <div class="c3 phraseBox" @click="currVState.isOpen = !currVState.isOpen"  @swipeleft="nextPhrase()" @swiperight="prevPhrase()">
+          <span class="entryWord" x-show="!currVState.isOpen">&nbsp;</span>
+          <span class="entryWord" x-html="currVState.currDisplay.spanish" x-show="currVState.isOpen"></span>
+          <span class="entryPhrase" x-show="!currVState.isOpen">click to show answer</span>
+          <span class="entryPhrase" x-html="currVState.currDisplay.spanishPhrase"  x-show="currVState.isOpen"></span>
         </div>
       <nav class="footer navbar-dark bg-dark flex-row-reverse">
         <div class="btn-group" role="group" aria-label="Basic example">
           <button type="button" class="btn btn-secondary" @click="prevPhrase()">Prev</button>
           <button type="button" class="btn btn-secondary" @click="nextPhrase()">Next</button>
-          <button type="button" class="btn btn-secondary" x-show="isOpen" x-on:click="isOpen = !isOpen">Hide Answer</button>
-          <button type="button" class="btn btn-secondary" x-show="!isOpen" x-on:click="isOpen = !isOpen">Show Answer</button>
+          <button type="button" class="btn btn-secondary" x-show="currVState.isOpen" x-on:click="currVState.isOpen = !currVState.isOpen">Hide Answer</button>
+          <button type="button" class="btn btn-secondary" x-show="!currVState.isOpen" x-on:click="currVState.isOpen = !currVState.isOpen">Show Answer</button>
         </div>
       </nav>
     </div>
@@ -84,71 +84,68 @@
 <script type="text/javascript">
       function phrases() {
         return {
-          currState: {
+          currVState: {
                 currPhrase: 0,
                 currShuffle: 0,
                 shuffleArray: [],
-                currModule: 0,
-                currDataType: 0, 
+                currModule: "",
+                currDataType: "", 
                 workingPhrases: [], 
-                currDisplay: {english:"", spanish:"",englishPhrase:"", spanishPhrase:"",module:"",type:""}
+                currDisplay: {english:"", spanish:"",englishPhrase:"", spanishPhrase:"",module:"",type:""},
+                isOpen: false,
               },
               phrases: [],
-              isOpen: false,
               modules: [],
               datatypes: [],
       prevPhrase() {
-        // this.currState.currPhrase = (this.currState.currPhrase+1) % this.phrases.length; 
-        // this.currState.currPhrase = this.randomIntFromInterval(0,this.phrases.length-1);
-        this.currState.currShuffle--;
-        if (this.currState.currShuffle === -1) this.currState.currShuffle = this.currState.workingPhrases.length-1;
-        this.currState.currPhrase = parseInt(this.currState.shuffleArray[this.currState.currShuffle]);
-        this.currState.currDisplay = this.currState.workingPhrases[this.currState.currPhrase];
-        this.isOpen = false;
+        this.currVState.currShuffle--;
+        if (this.currVState.currShuffle === -1) this.currVState.currShuffle = this.currVState.workingPhrases.length-1;
+        this.currVState.currPhrase = parseInt(this.currVState.shuffleArray[this.currVState.currShuffle]);
+        this.currVState.currDisplay = this.currVState.workingPhrases[this.currVState.currPhrase];
+        this.currVState.isOpen = false;
         this.saveState();
       },
       nextPhrase() {
-        // this.currState.currPhrase = (this.currState.currPhrase+1) % this.phrases.length; 
-        // this.currState.currPhrase = this.randomIntFromInterval(0,this.phrases.length-1);
-        this.currState.currShuffle++;
-        if (this.currState.currShuffle === this.currState.workingPhrases.length) this.currState.currShuffle = 0;
-        this.currState.currPhrase = parseInt(this.currState.shuffleArray[this.currState.currShuffle]);
-        this.currState.currDisplay = this.currState.workingPhrases[this.currState.currPhrase];
-        this.isOpen = false;
+        this.currVState.currShuffle++;
+        if (this.currVState.currShuffle === this.currVState.workingPhrases.length) this.currVState.currShuffle = 0;
+        this.currVState.currPhrase = parseInt(this.currVState.shuffleArray[this.currVState.currShuffle]);
+        this.currVState.currDisplay = this.currVState.workingPhrases[this.currVState.currPhrase];
+        this.currVState.isOpen = false;
         this.saveState();
       },
       randomIntFromInterval(min, max) { // min and max included 
         return Math.floor(Math.random() * (max - min + 1) + min);
       },
       generateRandomArray(inLength) {
-        this.currState.shuffleArray = [];
-        for (i=0;i<inLength;++i) this.currState.shuffleArray.push(i);
+        this.currVState.shuffleArray = [];
+        for (i=0;i<inLength;++i) this.currVState.shuffleArray.push(i);
 
-        var tmp, current, top = this.currState.shuffleArray.length;
+        var tmp, current, top = this.currVState.shuffleArray.length;
         if(top) while(--top) {
           current = Math.floor(Math.random() * (top + 1));
-          tmp = this.currState.shuffleArray[current];
-          this.currState.shuffleArray[current] = this.currState.shuffleArray[top];
-          this.currState.shuffleArray[top] = tmp;
+          tmp = this.currVState.shuffleArray[current];
+          this.currVState.shuffleArray[current] = this.currVState.shuffleArray[top];
+          this.currVState.shuffleArray[top] = tmp;
         }
       },
       changeView() {
-        this.currState.workingPhrases = [];
-        if (this.currState.currDataType === "all") {
-          this.currState.workingPhrases = this.phrases.filter( data => data.module === this.currState.currModule );
+        this.currVState.workingPhrases = [];
+        console.log(this.currVState.currDataType);
+        if (this.currVState.currDataType === "all") {
+          this.currVState.workingPhrases = this.phrases.filter( data => data.module === this.currVState.currModule );
         } else {
-          this.currState.workingPhrases = this.phrases.filter( data => (data.module === this.currState.currModule && data.type === this.currState.currDataType));
+          this.currVState.workingPhrases = this.phrases.filter( data => (data.module === this.currVState.currModule && data.type === this.currVState.currDataType));
         }
-        this.generateRandomArray(this.currState.workingPhrases.length);  
+        this.generateRandomArray(this.currVState.workingPhrases.length);  
 
-        this.currState.currPhrase = parseInt(this.currState.shuffleArray[0]);
-        this.currState.currShuffle = 0;
-        this.isOpen = false;
-        this.currState.currDisplay = this.currState.workingPhrases[this.currState.currPhrase];
+        this.currVState.currPhrase = parseInt(this.currVState.shuffleArray[0]);
+        this.currVState.currShuffle = 0;
+        this.currVState.isOpen = false;
+        this.currVState.currDisplay = this.currVState.workingPhrases[this.currVState.currPhrase];
         this.saveState();
       },
       saveState() {
-        window.localStorage.setItem('currState', JSON.stringify(this.currState));
+        window.localStorage.setItem('currVState', JSON.stringify(this.currVState));
       },
       buildDropDowns() {
         this.modules = [... new Set(this.phrases.map(data => data.module))];
@@ -157,9 +154,8 @@
       },
       init() {
         if (JSON.parse(window.localStorage.getItem('allVocabulary')) != null) {
-          console.log('in reload');
           this.phrases = JSON.parse(window.localStorage.getItem('allVocabulary'));
-          this.currState = JSON.parse(window.localStorage.getItem('currState'));
+          this.currVState = JSON.parse(window.localStorage.getItem('currVState'));
           this.buildDropDowns();
         } else {
 
@@ -168,19 +164,19 @@
           .then(data => {
             this.phrases = data;
             this.modules = [... new Set(this.phrases.map(data => data.module))];
-            this.currState.currModule = this.modules[0];
+            this.currVState.currModule = this.modules[0];
             this.datatypes = [... new Set(this.phrases.map(data => data.type))];
             this.datatypes.push("all");
-            this.currState.currDataType = this.datatypes[0];
+            this.currVState.currDataType = this.datatypes[1];
 
-            this.currState.workingPhrases = this.phrases.filter( data => (data.module === this.currState.currModule && data.type === this.currState.currDataType));
+            this.currVState.workingPhrases = this.phrases.filter( data => (data.module === this.currVState.currModule && data.type === this.currVState.currDataType));
             
-            this.generateRandomArray(this.currState.workingPhrases.length);
-            this.currState.currPhrase = parseInt(this.currState.shuffleArray[0]);
-            this.currState.currDisplay = this.currState.workingPhrases[this.currState.currPhrase];
+            this.generateRandomArray(this.currVState.workingPhrases.length);
+            this.currVState.currPhrase = parseInt(this.currVState.shuffleArray[0]);
+            this.currVState.currDisplay = this.currVState.workingPhrases[this.currVState.currPhrase];
 
             window.localStorage.setItem('allVocabulary', JSON.stringify(this.phrases));
-            window.localStorage.setItem('currState', JSON.stringify(this.currState));
+            window.localStorage.setItem('currVState', JSON.stringify(this.currVState));
           });
         }
       },
