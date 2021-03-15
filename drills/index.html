@@ -100,7 +100,7 @@
         if (this.currDState.currShuffle === -1) this.currDState.currShuffle = this.currDState.workingDrills.length-1;
         this.currDState.currDrill = parseInt(this.currDState.shuffleArray[this.currDState.currShuffle]);
         this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
-        this.currDState.iisOpen = false;
+        this.currDState.isOpen = false;
         this.saveState();
       },
       nextItem() {
@@ -108,7 +108,7 @@
         if (this.currDState.currShuffle === this.currDState.workingDrills.length) this.currDState.currShuffle = 0;
         this.currDState.currDrill = parseInt(this.currDState.shuffleArray[this.currDState.currShuffle]);
         this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
-        this.currDState.iisOpen = false;
+        this.currDState.isOpen = false;
         this.saveState();
       },
       randomIntFromInterval(min, max) { // min and max included 
@@ -145,7 +145,7 @@
 
         this.currDState.currDrill = parseInt(this.currDState.shuffleArray[0]);
         this.currDState.currShuffle = 0;
-        this.currDState.iisOpen = false;
+        this.currDState.isOpen = false;
         this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
         this.saveState();
       },

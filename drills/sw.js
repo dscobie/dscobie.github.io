@@ -8,7 +8,7 @@ const filesToCache = [
     '/drills/drills.json'
   ];
 
-const staticCacheName = 'pages-cache-drills-v2';
+const staticCacheName = 'pages-cache-drills-v3';
 
 self.addEventListener('install', event => {
   console.log('Attempting to install service worker and cache static assets');
