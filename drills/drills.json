@@ -934,5 +934,17 @@
     {"course":"SWP","level":"8","section":"2","title":"would","english":"if I were you, I would be very depressed","spanish":"yo que tú, estaría muy deprimido/a"},
     {"course":"SWP","level":"8","section":"2","title":"would","english":"I would be happy to help you","spanish":"estaría feliz de ayudarte"},
     {"course":"SWP","level":"8","section":"2","title":"would","english":"they would be happy to see you again","spanish":"estarían felices de verte otra vez"},
-    {"course":"SWP","level":"8","section":"2","title":"would","english":"she would be happy to know that you're here","spanish":"estaría feliz de saber que estás aquí"}
+    {"course":"SWP","level":"8","section":"2","title":"would","english":"she would be happy to know that you're here","spanish":"estaría feliz de saber que estás aquí"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"i've gone out with them","spanish":"he salido con ellos"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"i have spoken with you","spanish":"he hablado contigo"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"i have eaten here before","spanish":"he comido aqui antes"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"i have never danced with her","spanish":"nunca he bailado con ella"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"i've gone there many times with my family","spanish":"he ido allí muchas veces con mi familia"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"i have seen it","spanish":"lo he visto"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"i haven't seen her today","spanish":"no la he visto hoy"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"i haven't said it","spanish":"no lo he dicho"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"have you eaten?","spanish":"¿has comido?"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"we have visited many times","spanish":"hemos visitado muchas veces"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"they have rented it already","spanish":"ya lo han rentado"},
+    {"course":"SWP","level":"8","section":"4","title":"have past","english":"she has already arrived","spanish":"ella ya ha llegado"}
 ]
