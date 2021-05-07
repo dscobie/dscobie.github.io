@@ -1,0 +1,255 @@
+<!--
+  ## Introduction
+
+  Learn how to create your first AMP Story. The [`amp-story`](/content/amp-dev/documentation/components/reference/amp-story-v1.0.md) extension provides a new format for displaying visual content.
+-->
+<!-- -->
+<!doctype html>
+<html amp lang="en">
+  <head>
+    <meta charset="utf-8">
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <!-- ## Setup -->
+    <!-- AMP Stories are written using AMPHTML and they use their own AMP extension: `amp-story`. The first step is to import the `amp-story` in the header. -->
+    <script async custom-element="amp-story" src="https://cdn.ampproject.org/v0/amp-story-1.0.js"></script>
+    <!-- AMP Stories can make use of other AMP extensions such as `amp-video`. However, AMP Stories support only a subset of the available AMP extensions. You can find a full list of the supported extensions [here](/content/amp-dev/documentation/components/reference/amp-story.md#children-of-amp-story-grid-layer). -->
+    <script async custom-element="amp-video" src="https://cdn.ampproject.org/v0/amp-video-0.1.js"></script>
+    <title>Barbell Workout</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="canonical" href="<% canonical %>">
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+    <!-- Stories can be styled using CSS: -->
+    <style amp-custom>
+      amp-story {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI ", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji ", "Segoe UI Emoji ", "Segoe UI Symbol ";
+      }
+      amp-story-page * {
+        color: white;
+        text-align: center;
+      }
+      [template=thirds] {
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ## Writing the Story -->
+    <!-- Stories are declared inside the `amp-story` tag. Story-level metadata is provided via attributes. (The first four attributes are mandatory; the final two are optional, but recommended.) Note that this metadata augments, but does not replace, [Structured Data](https://developers.google.com/search/docs/data-types/article#amp). -->
+    <amp-story standalone
+      title="Barbell Workout"
+      publisher="AMP Project"
+      publisher-logo-src="<% hosts.platform %>/favicons/coast-228x228.png"
+      poster-portrait-src="<% hosts.platform %>/static/samples/img/story_dog2_portrait.jpg"
+      poster-square-src="<% hosts.platform %>/static/samples/img/story_dog2_square.jpg"
+      poster-landscape-src="<% hosts.platform %>/static/samples/img/story_dog2_landscape.jpg">
+
+      <!-- A story consists of one or more pages. Each page is declared by an `amp-story-page` element. Pages are designed by layering videos, images and text. Here we have a page that uses two layers. One layer filling the available space with an image and one text layer that shows a heading. -->
+      <amp-story-page id="01-introduction">
+        <amp-story-grid-layer template="fill">
+          <amp-img src="./images/01-introduction.jpg"
+                   width="540" height="304"
+                   layout="responsive">
+          </amp-img>
+        </amp-story-grid-layer>
+        <amp-story-grid-layer template="vertical">
+          <h1>Barbell exercises<br/>for everyone</h1>
+          <p>Testing AMP Stories</p>
+        </amp-story-grid-layer>
+      </amp-story-page>
+
+      <amp-story-page id="02-lateral-raise">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/02-lateral-raise.jpg"
+                   width="620" height="347"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>Lateral Raise</h1>
+				<div style="padding: 15px; text-align: left;">
+          	  	<p style="padding-bottom: 10px; text-align:left;">Stand holding a dumbbell in each hand next to your outer thighs. Keep your back straight and slowly lift the weights out to the sides until your arms are parallel with the floor. Your elbows should be slightly bent. Slowly lower the dumbbells back to the starting position.</p>
+			  	  <p style="padding-bottom: 10px; text-align:left;">“Lateral raises target the medial (outer) head of the deltoid muscle,” says Nyman. “You don’t need an awful lot of core strength to perform the movement, which is why it’s good for beginners.</p>
+			 	   <p style="padding-bottom: 10px; text-align:left;">“Imagine you are holding a bucket in each hand. As you raise your arms out to the side, tip the buckets as if to pour out the contents so that your thumbs point to the floor. This will ensure you hit the medial head as opposed to over-developing the front delt.”</p>	
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+
+      <amp-story-page id="03-biceps-curl">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/03-biceps-curl.jpg"
+                   width="620" height="347"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>Biceps Curl</h1>
+				<div style="padding: 15px; text-align: left;">
+					<p style="padding-bottom: 10px; text-align:left;">Hold a pair of dumbbells in front of your thighs with your palms facing out. Slowly curl the dumbbells up to your chest and then back down again.</p>
+					<p style="padding-bottom: 10px; text-align:left;">“Keep your elbows pinned to your sides,” says Nyman. “The minute your elbow comes up you are shifting the emphasis away from your biceps and onto your shoulders.</p>
+					<p style="padding-bottom: 10px; text-align:left;">"If you’re a beginner you may be wary of picking up heavy weights. With biceps curls you won’t need to worry about that because it’s not about going heavy, it’s about the feel of the muscle lengthening and shortening. You can change grip to target different heads of the muscle but for a beginner I’d recommend using a supinated grip – palms facing up.”</p>
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+
+      <amp-story-page id="04-triceps-kickback">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/04-triceps-kickback.jpg"
+                   width="620" height="349"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>Triceps Kickback</h1>
+				<div style="padding: 15px; text-align: left;">
+					<p style="padding-bottom: 10px; text-align:left;">Pair this move with the biceps curl to ensure you’re working both of the major muscle groups in your upper arm. Like the biceps curl, the triceps kick-back is an isolation move, in that it targets solely the triceps.</p>
+					<p style="padding-bottom: 10px; text-align:left;">Set up a bench so you can place one knee, shin and foot on it, and then bend over until your torso is parallel to the floor, holding the bench with one hand. In the other hand, hold a dumbbell and place your upper arm against your body with your elbow bent at 90°. Straighten your arm, moving the dumbbell backwards until your forearm is parallel to the ground, making sure to keep your upper arm still so you’re only using your triceps for the lift. Slowly lower the weight back to the start.</p>
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+
+      <amp-story-page id="05-lunge">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/05-lunge.jpg"
+                   width="620" height="348"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>Lunge</h1>
+				<div style="padding: 15px; text-align: left;">
+					<p style="padding-bottom: 10px; text-align:left;">Holding dumbbells by your sides, take a big step forwards and lower your body until both knees are bent at 90°. Then push up through the front leg and return to the starting position.</p>
+					<p style="padding-bottom: 10px; text-align:left;">“Working your legs is essential for many reasons, including building strength, muscle and burning loads of calories,” says Nyman. “But if you’re a beginner the thought of getting under a heavy barbell for a set of squats may seem intimidating. So instead grab a pair of dumbbells and get lunging. It’s a great way to add resistance to your legs and glute work, without the fear of being left in a heap under the squat rack.”</p>
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+
+      <amp-story-page id="06-overhead-press">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/06-overhead-press.jpg"
+                   width="620" height="347"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>Overhead Press</h1>
+				<div style="padding: 15px; text-align: left;">
+					<p style="padding-bottom: 10px; text-align:left;">You can do this either seated or standing. Hold a pair of dumbbells by your shoulders with your elbows out to the sides and bent at 90°. Extend through your elbows and press the weights overhead, then slowly bring them back to the starting position.</p>
+					<p style="padding-bottom: 10px; text-align:left;">“While lateral raises are good for working the delts, performing heavy overhead (or shoulder) presses is a great way to add serious strength,” says Nyman. “Make sure you don’t arch your back too much. If you do you’ll probably end up using your upper chest instead of your shoulders.”</p>
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+		
+		 <amp-story-page id="07-dumbbell-bench-press">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/07-dumbbell-bench-press.jpg"
+                   width="620" height="348"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>Bench Press</h1>
+				<div style="padding: 15px; text-align: left;">
+					<p style="padding-bottom: 10px; text-align:left;">This is a great option for beginners if you stick to a weight you’re comfortable with. Using dumbbells will work more muscles around the shoulders and chest than using a barbell because they’re forced to keep the weights stable, and it’s well worth developing those muscles before moving on to heavier barbells. Lie on a flat workout bench with your feet flat on the floor. Hold the dumbbells above your chest, palms facing towards your feet with your arms fully extended. Bend at the elbows to lower the dumbbells slowly until they reach your chest. Pause for one second, then press both dumbbells up powerfully.</p>
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+		
+		<amp-story-page id="08-chest-flye">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/08-chest-flye.jpg"
+                   width="620" height="347"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>Chest Flye</h1>
+				<div style="padding: 15px; text-align: left;">
+					<p style="padding-bottom: 10px; text-align:left;">Lie on your back on a flat bench with your feet on the floor. Hold the dumbbells above your chest with your arms almost straight, palms facing each other. Slowly lower them out to the sides, then bring them back up above your chest. Your arms should have a slight bend in the elbows throughout.</p>
+					<p style="padding-bottom: 10px; text-align:left;">“Doing chest flyes is a great way to isolate the chest,” says Nyman. “Most pressing chest movements will enlist the help of the shoulders and triceps, but flyes keep the focus purely on the chest.</p>
+					<p style="padding-bottom: 10px; text-align:left;">“Exaggerate the arch in your lower back slightly. This will help keep the tension on your chest as opposed to your shoulders.”</p>
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+		
+		<amp-story-page id="09-bent-over-row">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/09-bent-over-row.jpg"
+                   width="620" height="347"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>Bent-over Row</h1>
+				<div style="padding: 15px; text-align: left;">
+					<p style="padding-bottom: 10px; text-align:left;">Stand with your feet shoulder-width apart. Bend your knees and lean over from your waist, keeping your neck lined up with your spine. Let the dumbbells hang with straight arms, then slowly bring them up to your chest by squeezing your shoulders together.</p>
+					<p style="padding-bottom: 10px; text-align:left;">"Using dumbbells to perform bent-over rows is a great way to ensure you develop both sides of your upper back evenly," says Nyman.</p>
+					<p style="padding-bottom: 10px; text-align:left;">"Think of Donald Duck – stick your bum out and ensure you maintain the natural curve in your lumbar spine (lower back)."</p>
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+		
+		<amp-story-page id="10-front-squat">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/10-front-squat.jpg"
+                   width="620" height="347"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>Front Squat</h1>
+				<div style="padding: 15px; text-align: left;">
+					<p style="padding-bottom: 10px; text-align:left;">Hold a pair of dumbbells up by your shoulders with your elbows by your sides and palms facing each other. Lower into a squat until your thighs are parallel with the ground, then drive back up to the starting position.</p>
+					<p style="padding-bottom: 10px; text-align:left;">“It’s not as daunting as getting under a loaded barbell, and performing squats while holding dumbbells by your shoulders will challenge your core in a different way to the barbell version,” says Nyman. “Because the weight is slightly in front of you, you’ll place more emphasis on your quads, too.”</p>
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+	
+	    <amp-story-page id="11-front-raise">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/11-front-raise.jpg"
+                   width="620" height="349"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>Front Raise</h1>
+				<div style="padding: 15px; text-align: left;">
+					<p style="padding-bottom: 10px; text-align:left;">The first thing to know about this exercise is that it works the front part of your shoulders. The second thing to know is that you need to use light dumbbells. You don’t need much weight at all to work this area, and going too heavy risks a shoulder injury. You can lift two dumbbells simultaneously or work one arm at a time. Hold the weight in front of your thighs in an overhand grip, so your palms face your body. Keeping your arms extended and your back straight, lift the weight in front of you to shoulder height, then lower it slowly.</p>
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+
+		<amp-story-page id="12-t-pressup">
+        <amp-story-grid-layer template="thirds">
+          <amp-img grid-area="upper-third"
+                   src="./images/12-t-pressup.jpg"
+                   width="620" height="348"
+                               layout="responsive">
+          </amp-img>
+		  <div>
+		  		<h1>T Press-up</h1>
+				<div style="padding: 15px; text-align: left;">
+					<p style="padding-bottom: 10px; text-align:left;">A press-up with a twist, quite literally. The T press-up enhances the already considerable benefits of the exercise by increasing the challenge to your core. Take a pair of dumbbells (hexagonal ones are ideal for this because they provide a more stable base) and get into the press-up position, holding a weight in each hand directly under your shoulders, with your feet shoulder-width apart. Perform a press-up and once you’ve pushed back up, lift one dumbbell off the ground and rotate your torso until that arm is extended towards the ceiling. Pause at the top, then rotate back down slowly and go into another press-up.</p>
+				</div>  
+		</div>
+		</amp-story-grid-layer>
+		</amp-story-page>
+		
+		
+      <!-- A "bookend" panel containing links to other resources will appear on the last page of your story if you include an `amp-story-bookend` that references a [bookend JSON config](/static/samples/json/bookend.json). -->
+      <amp-story-bookend src="<% hosts.platform %>/static/samples/json/bookend.json" layout="nodisplay">
+      </amp-story-bookend>
+    </amp-story>
+  </body>
+</html>
