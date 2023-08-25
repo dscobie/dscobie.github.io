@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Spanish Drills">
+  <meta name="apple-mobile-web-app-title" content="Italian Drills">
+  <meta name="theme-color" content="#FF9800">
+  <meta name="msapplication-navbutton-color" content="#FF9800">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="msapplication-starturl" content="/index.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="shortcut icon" href="icons/favicon.ico">
+  <link rel="icon" type="image/png" href="icons/ds-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="icons/ds-32x32.png" sizes="32x32">
+
+  <link rel="icon" sizes="128x128" href="icons/ds-128x128.png">
+  <link rel="apple-touch-icon" sizes="128x128" href="icons/ds-128x128.png">
+  <link rel="icon" sizes="192x192" href="icons/ds-192x192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/ds-192x192.png">
+  <link rel="icon" sizes="256x256" href="icons/ds-256x256.png">
+  <link rel="apple-touch-icon" sizes="256x256" href="icons/ds-256x256.png">
+  <link rel="icon" sizes="384x384" href="icons/ds-384x384.png">
+  <link rel="apple-touch-icon" sizes="384x384" href="icons/ds-384x384.png">
+  <link rel="icon" sizes="512x512" href="icons/ds-512x512.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/ds-512x512.png">
+
+  <title>Italian Drills Flashcards</title>
+
+  <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./vocabulary.css">
+
+  <script src="./alpine.js"></script>
+
+  <!-- code for touch/swipe -->
+  <script> var SWIPE_THRESHOLD = 50; </script>
+  <script src="./tocca.js"></script>
+  <!-- code for touch/swipe -->
+</head>
+
+<body>
+  <div class="website" x-data="drills()" x-init="() => {init()}">
+    <div class="header navbar-dark bg-dark">
+      <div><span x-html="currDState.currShuffle+1"></span> / <span x-html="currDState.workingDrills.length"></span>
+      </div>
+      <div>
+        <select x-model="currDState.currTitle" x-on:change="changeTitle()">
+          <template x-for="titleName in titles">
+            <option x-text="titleName"></option>
+          </template>
+        </select>
+      </div>
+    </div>
+    <div class="c2 phraseBox" @swipeleft="nextItem()" @swiperight="prevItem()">
+      <span class="entryWord" x-html="currDState.currDisplay.english"></span>
+    </div>
+    <div class="c3 phraseBox" @click="currDState.isOpen = !currDState.isOpen" @swipeleft="nextItem()"
+      @swiperight="prevItem()">
+      <span class="entryWord" x-show="!currDState.isOpen">&nbsp;</span>
+      <span class="entryWord" x-html="currDState.currDisplay.translate" x-show="currDState.isOpen"></span>
+      <span class="entryPhrase" x-show="!currDState.isOpen">click to show answer</span>
+    </div>
+    <nav class="footer navbar-dark bg-dark flex-row-reverse">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary" @click="prevItem()">Prev</button>
+        <button type="button" class="btn btn-secondary" @click="nextItem()">Next</button>
+        <button type="button" class="btn btn-secondary" x-show="currDState.isOpen"
+          x-on:click="currDState.isOpen = !currDState.isOpen">Hide Answer</button>
+        <button type="button" class="btn btn-secondary" x-show="!currDState.isOpen"
+          x-on:click="currDState.isOpen = !currDState.isOpen">Show Answer</button>
+      </div>
+    </nav>
+  </div>
+
+  <script type="text/javascript">
+    function drills() {
+      return {
+        currDState: {
+          currTitle: "",
+          shuffleArray: [],
+          currShuffle: 0,
+          workingDrills: [],
+          currDrill: 0,
+          isOpen: false,
+          currDisplay: { course: "", section: "", title: "", english: "", translate: "" }
+        },
+        allDrills: [],
+        titles: [],
+        prevItem() {
+          this.currDState.currShuffle--;
+          if (this.currDState.currShuffle === -1) this.currDState.currShuffle = this.currDState.workingDrills.length - 1;
+          this.currDState.currDrill = parseInt(this.currDState.shuffleArray[this.currDState.currShuffle]);
+          this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
+          this.currDState.isOpen = false;
+          this.saveState();
+        },
+        nextItem() {
+          this.currDState.currShuffle++;
+          if (this.currDState.currShuffle === this.currDState.workingDrills.length) this.currDState.currShuffle = 0;
+          this.currDState.currDrill = parseInt(this.currDState.shuffleArray[this.currDState.currShuffle]);
+          this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
+          this.currDState.isOpen = false;
+          this.saveState();
+        },
+        randomIntFromInterval(min, max) { // min and max included 
+          return Math.floor(Math.random() * (max - min + 1) + min);
+        },
+        generateRandomArray(inLength) {
+          this.currDState.shuffleArray = [];
+          for (i = 0; i < inLength; ++i) this.currDState.shuffleArray.push(i);
+
+          var tmp, current, top = this.currDState.shuffleArray.length;
+          if (top) while (--top) {
+            current = Math.floor(Math.random() * (top + 1));
+            tmp = this.currDState.shuffleArray[current];
+            this.currDState.shuffleArray[current] = this.currDState.shuffleArray[top];
+            this.currDState.shuffleArray[top] = tmp;
+          }
+        },
+        changeTitle() {
+          this.currDState.workingDrills = [];
+          this.currDState.workingDrills = this.allDrills.filter(data => data.title === this.currDState.currTitle);
+
+          this.generateRandomArray(this.currDState.workingDrills.length);
+
+          this.currDState.currDrill = parseInt(this.currDState.shuffleArray[0]);
+          this.currDState.currShuffle = 0;
+          this.currDState.isOpen = false;
+          this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
+          this.saveState();
+        },
+        saveState() {
+          window.localStorage.setItem('currDState', JSON.stringify(this.currDState));
+        },
+        buildDropDowns() {
+          this.titles = [... new Set(this.allDrills.map(data => data.title))];
+        },
+        init() {
+
+          if (JSON.parse(window.localStorage.getItem('allDrills')) != null) {
+            this.allDrills = JSON.parse(window.localStorage.getItem('allDrills'));
+            this.currDState = JSON.parse(window.localStorage.getItem('currDState'));
+            this.buildDropDowns();
+          } else {
+            fetch('./drills.json')
+              .then(res => res.json())
+              .then(data => {
+                this.allDrills = data;
+                this.buildDropDowns();
+
+                this.titles = [... new Set(this.allDrills.map(data => data.title))];
+                this.currDState.currTitle = this.titles[0];
+
+                this.currDState.workingDrills = this.allDrills.filter(data => (data.title === this.currDState.currTitle));
+
+                this.generateRandomArray(this.currDState.workingDrills.length);
+                this.currDState.currDrill = parseInt(this.currDState.shuffleArray[0]);
+                this.currDState.currDisplay = this.currDState.workingDrills[this.currDState.currDrill];
+
+                window.localStorage.setItem('allDrills', JSON.stringify(this.allDrills));
+                window.localStorage.setItem('currDState', JSON.stringify(this.currDState));
+              });
+          }
+
+        },
+      }
+    }
+  </script>
+  <script>
+    if (1 == 1) {
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(registration => {
+              console.log('Service Worker is registered', registration);
+            })
+            .catch(err => {
+              console.error('Registration failed:', err);
+            });
+        });
+      }
+    }
+  </script>
+</body>
+
+</html>

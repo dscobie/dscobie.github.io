@@ -1,0 +1,31 @@
+{
+  "name": "Italian Drills",
+  "short_name": "Italian Drills",
+  "lang": "en-US",
+  "start_url": "/italian/index.html",
+  "display": "standalone",
+  "theme_color": "#333",
+  "background_color": "#FF9800",
+  "icons": [
+    {
+      "src": "icons/ds-128x128.png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "icons/ds-192x192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icons/ds-256x256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "icons/ds-384x384.png",
+      "sizes": "384x384"
+    },
+    {
+      "src": "icons/ds-512x512.png",
+      "sizes": "512x512"
+    }
+  ]
+}
