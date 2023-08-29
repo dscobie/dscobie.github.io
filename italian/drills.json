@@ -1293,5 +1293,555 @@
         "title": "Unit 16-20",
         "english": "yes, you are very professional",
         "translate": "si, lei è molto professionale"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "stay here with us!",
+        "translate": "stai qui con noi!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "go to the park!",
+        "translate": "andate al parco!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "say something!",
+        "translate": "dite qualcosa!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "speak louder!",
+        "translate": "parla più forte!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "get in the car!",
+        "translate": "entra in macchina!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "call the doctor!",
+        "translate": "chiama il dottore!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "talk on the phone with your grandmother!",
+        "translate": "parla al telefono con tua nonna!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "take the umbrella!",
+        "translate": "prendi l´ombrello!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "open the door!",
+        "translate": "apri la porta!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "drink more water!",
+        "translate": "bevi più acqua!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "how is the new professor?",
+        "translate": "com´è la nuova professoressa?"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "how many students are there in your class?",
+        "translate": "quanti alunni ci sono nella tua classe?"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i like to study",
+        "translate": "mi piace studiare"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "we have no classes today",
+        "translate": "non abbiamo lezioni oggi"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "my grades are good",
+        "translate": "i miei voti sono buoni"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "we are high school classmates",
+        "translate": "siamo compagni di liceo"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "how many students are there in your university?",
+        "translate": "quanti studenti ci sono nella tua università?"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i have a university degree",
+        "translate": "ho una laurea"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "which bus goes to the hotel?",
+        "translate": "quale autobus va all´albergo"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "how do i get to the airport?",
+        "translate": "come si arriva all´aeroporto?"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i took the bus and i missed the train",
+        "translate": "ho preso l´autobus e ho perso il treno"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i have my passport",
+        "translate": "ho il mio passaporto"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "which is your suitcase?",
+        "translate": "qual è la tua valigia?"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "our trip is in november",
+        "translate": "il nostro viaggio è a novembre"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "two months ago i went to china",
+        "translate": "due mesi fa sono andata in cina"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "obviously she lives in france",
+        "translate": "oviamente vive in francia"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "have you ever gone to africa?",
+        "translate": "sei mai andato in africa?"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "in asia they eat it",
+        "translate": "in asia lo mangiano"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "do we turn to the right or left?",
+        "translate": "giriamo a destra o sinistra?"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "take the first street on the right!",
+        "translate": "prendete la prima strada a destra!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i am waiting in front of the train station",
+        "translate": "aspetto davanti alla stazione ferroviaria"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "there is a park in the middle of the city",
+        "translate": "c´è un parco nel mezzo della città"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "take the first street on the right",
+        "translate": "prendi la prima strada a destra"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "at the end of the bridge, turn left",
+        "translate": "alla fine del ponte gira a sinistra"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "we go toward the north",
+        "translate": "andiamo verso il nord"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "many ports are to the east",
+        "translate": "molti porti sono a est"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "she wanted to be a teacher",
+        "translate": "voleva essere un´insegnante"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i was late to school",
+        "translate": "ero in ritardo a scuola"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "he was my student",
+        "translate": "era il mio studente"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "we went to the same school",
+        "translate": "andavamo all stessa scuola"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "he did not like school",
+        "translate": "a lui non piaceva la scuola"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i talked with her for an hour",
+        "translate": "io ho parlato con lei per un´ora"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "he used to talk to me every day",
+        "translate": "lui mi parlava ogni giorno"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "people were entering whenever the wanted",
+        "translate": "la gente entrava quando voleva"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "she wanted to eat fish",
+        "translate": "lei voleva mangiare pesce"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i was feeling very lonely",
+        "translate": "mi sentivo molto solo"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i am not afraid of anything",
+        "translate": "non ho paura di niente"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i was really embarrassed",
+        "translate": "ero davvero imbarazzata"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "you made me worry",
+        "translate": "mi hai fatto preoccupare"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i am not angry",
+        "translate": "non sono arrabbiata"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i am very happy now",
+        "translate": "sono molto felice ora"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "i am as tired as you",
+        "translate": "sono stanco come te"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "my father kisses my mother as soon as he returns",
+        "translate": "mio padre bacia mia madre appena ritorna"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "give me a kiss!",
+        "translate": "dammi un bacio!"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "what are your objectives?",
+        "translate": "quali sono i tuoi obiettivi?"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "we have only two possibilities",
+        "translate": "abbiamo solo due possibilità"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "you have great potential",
+        "translate": "avete delle grandi capacità"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "come to me if you have difficulties",
+        "translate": "vieni da me se hai delle difficoltà"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "that is your responsibility",
+        "translate": "quella è la tua responsabilità"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "which qualities do you look for in a person?",
+        "translate": "quali qualità cerchi in una persona?"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "what is the level of difficulty?",
+        "translate": "qual è il livello di difficoltà?"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "their society is very different",
+        "translate": "la loro società è molto diversa"
+    },
+    {
+        "title": "Unit 21-25",
+        "english": "the authorities have stopped a third person",
+        "translate": "le autorità hanno fermato una terza persona"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i like sports",
+        "translate": "mi piacciono gli sport"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "do you want to see the match together?",
+        "translate": "vuoi vedere la partita insieme?"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "see you tomorrow at the gym",
+        "translate": "ci vediamo domani in palestra"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "he is one of the strongest italian players",
+        "translate": "è uno dei più forti giocatori italiani"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "do you like to swim?",
+        "translate": "ti piace nuotare?"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "on thursday we go to the swimming pool",
+        "translate": "giovedi andiamo in piscina"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "it is the best sport",
+        "translate": "è lo sport migliore"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "the computer is new",
+        "translate": "il computer è nuovo"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i fix computers almost every week",
+        "translate": "lo riparo i computer quasi ogni settimana"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "she had arrived with her daughter and her husband",
+        "translate": "era arrivata con la figlia e il marito"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "she had gone to school with her parents and two sisters",
+        "translate": "era andata a scuola con i genitori e le due sorelle"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "the parents had not understood anything",
+        "translate": "i genitori non avevano capito nulla"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "she had called her friend",
+        "translate": "aveva chiamato il suo amico"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "we had become best friends that year",
+        "translate": "eravamo diventate migliori amichi quell´anno"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "few had believed",
+        "translate": "pochi avevano creduto"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "the wolf had followed us the whole night",
+        "translate": "il lupo ci aveva seguito tutta la notte"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "we had waited for that bus",
+        "translate": "noi avevamo aspettato quell´autobus"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "this dress is too shiny",
+        "translate": "questo vestito è troppo brillante"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "they have the same skirt in that store",
+        "translate": "hanno una gonna uguale in quel negozio"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "her shoes are expensive",
+        "translate": "le sue scarpe sono costose"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "it is a very cute shirt",
+        "translate": "è una maglia davvero carina"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "is the skirt too expensive?",
+        "translate": "la gonna è troppo costosa?"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "these skirts are too expensive",
+        "translate": "queste gonne sono troppo costose"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "the teacher explains it clearly",
+        "translate": "l´insegnante lo spiega chiaramente"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "our teacher rarely laughs",
+        "translate": "la nostra insegnante ride raramente"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "why don you do your homework imeediately?",
+        "translate": "perchè non fai i tuoi compiti immediatamente?"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i am so tired that i cannot study",
+        "translate": "sono talmente stanco che non posso studiare"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i do not know exactly which number it is",
+        "translate": "non so esattamente qual è il numero"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "it is practically impossible",
+        "translate": "è praticamente impossibile"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "generally we all eat at the table together",
+        "translate": "generalmente mangiamo a tavola tuti insieme"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "how did you find out the truth?",
+        "translate": "come hai saputo la verità?"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "really, it has no importance",
+        "translate": "davvero, non ha importanza"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "do not miss this opportunity!",
+        "translate": "non perdere questa opportunità!"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i do not like your behavior",
+        "translate": "non mi piace il tuo comportamento"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i prefer the first option",
+        "translate": "preferisco la prima opzione"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i have the flu!",
+        "translate": "ho preso l´influenza!"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "you gave me the flu",
+        "translate": "mi hai passato l´influenza"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i am entirely under his influence",
+        "translate": "sono completamente sotto la sua influenza"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i have a good influence on the children",
+        "translate": "ho una buona influenza sui bambini"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i do not want to cross the street",
+        "translate": "non voglio attraversare la strada"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i saw him turn left",
+        "translate": "l´ho visto girare a sinistra"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "would you help me to push the car?",
+        "translate": "mi aiuti a spingere la macchina?"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i want to stop here",
+        "translate": "mi voglio fermare qua"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "which street do i take to go back?",
+        "translate": "quale strada prendo per ritornare?"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "he told me to pass you the telephone",
+        "translate": "mi ha detto di passarti il telefono"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i want to tell him everything",
+        "translate": "voglio dirgli tutto"
+    },
+    {
+        "title": "Unit 26-30",
+        "english": "i want to put it in another place",
+        "translate": "voglio metterla in un altro posto"
     }
 ]
