@@ -11,6 +11,8 @@
     <script src="./includes/bootstrap.bundle5.2.min.js"></script>
     <meta name="theme-color" content="#712cf9">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
     <style>
         body {
             min-height: 75rem;
@@ -104,18 +106,19 @@
         formRadioTemplate: '<div class=&quot;form-check&quot;><input class=&quot;form-check-input&quot; type=&quot;[[type]]&quot; name=&quot;[[name]]&quot; id=&quot;[[namevalue]]&quot; [[checked]]><label class=&quot;form-check-label&quot; for=&quot;[[namevalue2]]&quot;>[[value]]</label></div>',
         formSwitchTemplate: '<div class=&quot;form-check form-switch col-md-[[size]]&quot;><input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; id=&quot;[[name]]&quot; [[checked]]><label class=&quot;form-check-label&quot; for=&quot;[[name2]]&quot;>[[label]]</label></div>',
         formFields: ['type','columns','name','label','placeholder','options'], 
-        fieldTemplate: { type: '', columns: 0, name: '', label: '', placeholder: '', options: ''},
+        fieldTemplate: { type: '', columns: 0, name: '', label: '', placeholder: '', options: '', required: 'no'},
         addField() {
             var newField = {...this.fieldTemplate};
             var addForm = document.getElementById('addField').elements;
 
             newField.type = addForm.type.value;
             newField.columns = addForm.columns.value;
-            newField.name = addForm.name.value;
             newField.label = addForm.name.value;
+            newField.name = addForm.name.value.replace(' ','');;
             newField.placeholder = '';
             newField.options = addForm.options.value;
-
+            newField.required = 'no';
+            
             var tableField = this.parseField(newField);
 
             return tableField;
@@ -137,6 +140,9 @@
             var workingJSON = this.qfState.workingForm.formJSON;
             workingJSON.push(newField);
             
+            var addForm = document.getElementById('addField')
+            addForm.reset();
+
             var workingHTML = this.getFormHTMLFromJSON(workingJSON,'preview');
         
             this.qfState.workingForm.formJSON = workingJSON;
@@ -179,6 +185,7 @@
             projects: [],
             systemTemplates: [],
             userTemplates: [],
+            editFieldJSON: [  {'name': 'name','type': 'text','columns': '12','options': [  ''],'placeholder': '','required': 'no','label': 'name'  },  {'type': 'select','columns': '6','name': 'type','label': 'type','placeholder': '','options': [  'text',  'date',  'select',  'radio',  'textarea',  'switch',  'array',  'empty']  },  {'type': 'select','columns': '6','name': 'columns','label': 'columns','placeholder': '','options': [  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '10',  '11',  '12']  },  {'name': 'options','type': 'array','columns': '12','options': '','placeholder': '','required': 'y','label': 'options'  },  {'name': 'placeholder','type': 'text','columns': '12','options': '','placeholder': 'use for select or radio fields','required': '','label': 'placeholder'  },  {'name': 'required','type': 'select','columns': '12','options': [  'yes',  ' no'],'placeholder': '','required': 'y','label': 'required'  }],
             workingForm: { metaInfo: { gridFields: '', useLabelsForCardView: true}, formJSON: [], formHTML: 'Form will be shown here.' },
             modalData: { title: '', dataObject: 'default', dataRecord: {index: -1, data: []}, Form: { formJSON: [], formHTML: ''}}
         },
@@ -429,6 +436,10 @@
             console.log(this.qfState.projects[this.qfState.projectCurrent]);
         },
         getModalFormSave() {
+            var resolveFunction = this.qfState.modalData.resolveFunction;
+            eval(resolveFunction + '()');
+        },
+        modalSaveDataRecord() {
             // modalData: { title: '', dataObject: 'default', dataRecord: {index: -1, data: []}, Form: { formJSON: [], formHTML: ''}}
             var modalRecord = this.getModalFormData();
 
@@ -440,6 +451,8 @@
                 this.qfState.projects[this.qfState.projectCurrent].Data[this.qfState.modalData.dataRecord.index] = modalRecord;
             }
 
+            this.qfState.modalData.Form.formHTML = '';
+            
             this.saveState();
         },
         getHTMLFromFieldValue(inName, inType) {
@@ -534,36 +547,37 @@
 
             this.saveState();
         },
-        showModal (inTitle, inObject, inData = undefined, inIndex = undefined) {
-            // modalData: { title: '', dataObject: 'default', dataRecord: {index: -1, data: []}, Form: { formJSON: [], formHTML: ''}}
+        modalFormSaveFieldEdit() {
+       
+            var formData = this.getModalFormData();
+            formData.label = formData.name;
+            formData.name = formData.name.replace(' ', '');
 
+            this.qfState.workingForm.formJSON[this.qfState.modalData.dataRecord.index] = formData;
+            
+            this.qfState.workingForm.formHTML = this.getFormHTMLFromJSON(this.qfState.workingForm.formJSON,'editfield');
+       
+            this.saveState();
+        },
+        showModal(inTitle, inJSON, inResolveFunction, inIndex = -1, inData = undefined) {
             this.qfState.modalData.title = inTitle;
-            this.qfState.modalData.modalObject = inObject;
-
+            this.qfState.modalData.resolveFunction = inResolveFunction;
+            this.qfState.modalData.modalObject = 'default';
             if (inData == undefined) {
                 this.qfState.modalData.dataRecord.index = -1;
                 this.qfState.modalData.dataRecord.data = {};
             } else {
                 this.qfState.modalData.dataRecord.index = inIndex;
-                this.qfState.modalData.dataRecord.data = inData;
+                this.qfState.modalData.dataRecord.data = inData;            
             }
-
-            if (inObject == 'default') {
-                this.qfState.modalData.Form.formHTML = this.qfState.projects[this.qfState.projectCurrent].Form.formHTML;
-                this.qfState.modalData.Form.formJSON = this.qfState.projects[this.qfState.projectCurrent].Form.formJSON;
-            }
-
-            if (inData != undefined) {
-                var dataFields = this.qfState.modalData.Form.formJSON;
-                var htmlForm = this.getFormHTMLFromJSON(dataFields, '', inData); 
-                this.qfState.modalData.Form.formHTML = htmlForm;
-            }
+            this.qfState.modalData.Form.formJSON = inJSON;
+            this.qfState.modalData.Form.formHTML = this.getFormHTMLFromJSON(inJSON, '', inData);
 
             var myModal = new bootstrap.Modal(document.getElementById('dataModal'));
             myModal.show();
             this.saveState();
         },
-        switchProject(inProject) {
+                switchProject(inProject) {
             this.qfState.projectCurrent = inProject;
             this.saveState();
             this.showNavTab('nav-data-project-tab');
@@ -641,6 +655,9 @@
                 }
             }
             this.addNavSectionActive(this.qfState.interface.currentSection);
+
+            // this.qfState.editFieldJSON = this.qfState.workingForm.formJSON;
+            // this.saveState();
 
             // test code for setting up the modal, can be deleted.
             // var workingJSON = this.getFormJSONFromInput(this.formDescription3);
@@ -753,7 +770,9 @@
                                     <th scope="col">name</th>
                                     <th scope="col">type</th>
                                     <th scope="col">columns</th>
-                                    <th scope="col">options</th>
+                                    <th class="d-none d-lg-table-cell" scope="col">options</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -762,8 +781,10 @@
                                         <td x-text="field.label"></td>
                                         <td x-text="field.type"></td>
                                         <td x-text="field.columns"></td>
-                                        <td x-text="field.options"></td>
-
+                                        <td class="d-none d-lg-table-cell" x-text="field.options"></td>
+                                        <td><i @click="showModal('Edit Field', qfState.editFieldJSON, 'this.modalFormSaveFieldEdit', index, field)"
+                                                class="bi-pencil-square"></i></td>
+                                        <td><i @click="alert(index)" class="bi-trash"></i></td>
                                     </tr>
                                 </template>
                             </tbody>
@@ -869,20 +890,27 @@
                     <div class="tab-pane fade show" id="nav-data-project" role="tabpanel"
                         aria-labelledby="nav-data-project">
                         <br />
-                        <h5>Current Project</h5>
-                        <div x-if="qfState.projectCurrent">
-                            <div x-text=qfState.projects[qfState.projectCurrent].MetaData.title></div>
-                            <div x-text=qfState.projects[qfState.projectCurrent].MetaData.description></div>
+                        <template x-if="qfState.projectCurrent != -1">
                             <div>
-                                <span x-text=qfState.projects[qfState.projectCurrent].Data.length></span> records.
+                                <h5>Current Project</h5>
+
+                                <div x-text=qfState.projects[qfState.projectCurrent].MetaData.title></div>
+                                <div x-text=qfState.projects[qfState.projectCurrent].MetaData.description></div>
+                                <div>
+                                    <span x-text=qfState.projects[qfState.projectCurrent].Data.length></span> records.
+                                </div>
+
+                                <p>&nbsp;</p>
                             </div>
-                        </div>
-                        <p>&nbsp;</p>
+                        </template>
                         <h5>Switch Current Project</h5>
-                        <template x-for="(project, index) in qfState.projects">
+                        <template x-if="qfState.projectCurrent != -1" x-for="(project, index) in qfState.projects">
                             <div>
                                 <a href="#" x-text="project.MetaData.title" @click="switchProject(index)"></a>
                             </div>
+                        </template>
+                        <template x-if="qfState.projectCurrent == -1">
+                            <div>No projects are currently defined.</div>
                         </template>
                     </div>
                     <div class="tab-pane fade show" id="nav-data-meta" role="tabpanel"
@@ -908,30 +936,46 @@
 
                     <div class="tab-pane fade" id="nav-data-data" role="tabpanel" aria-labelledby="nav-data-data">
                         <!-- Button trigger modal -->
-                        <div align="right">
-                            <button @click="showModal('Add Record','default')" type="button" class="btn btn-primary">
-                                Add Record
-                            </button>
-                        </div>
-                        <div x-if="qfState.projectCurrent">
+                        <template x-if="qfState.projectCurrent != -1">
+                            <div align="right">
+                                <!-- inTitle, inJSON, inResolveFunction, inIndex = -1, inData = undefined-->
+                                <button
+                                    @click="showModal('Add Record', qfState.projects[qfState.projectCurrent].Form.formJSON, 'this.modalSaveDataRecord', -1)"
+                                    type="button" class="btn btn-primary">
+                                    Add Record
+                                </button>
+                            </div>
+                        </template>
 
-                            <template x-for="(record, index) in qfState.projects[qfState.projectCurrent].Data">
+                        <div>
+                            <template x-if="qfState.projectCurrent != -1">
                                 <div>
-                                    <a href="#" @click="showModal('Edit Record', 'default', record, index)"
-                                        x-text="getGoodDisplayName(record, index)"></a>
+                                    <template x-for="(record, index) in qfState.projects[qfState.projectCurrent].Data">
+                                        <div>
+                                            <a href="#"
+                                                @click="showModal('Edit Record', qfState.projects[qfState.projectCurrent].Form.formJSON, 'this.modalSaveDataRecord', index, record)"
+                                                x-text="getGoodDisplayName(record, index)"></a>
+                                        </div>
+                                    </template>
                                 </div>
                             </template>
+
                         </div>
                     </div>
+
                     <div class="tab-pane fade" id="nav-data-view" role="tabpanel" aria-labelledby="nav-data-view">
 
                         <div class="row" id="dataTemplateList">
-                            <template id="dataTemplateCardView"
-                                x-for="(record, index) in qfState.projects[qfState.projectCurrent].Data">
-                                <div class="card col-sm-6">
-                                    <div @click="showItem(index)" class="card-body"
-                                        x-html="getItemCardView(record,index)">
-                                    </div>
+                            <template x-if="qfState.projectCurrent != -1">
+                                <div>
+                                    <template id="dataTemplateCardView"
+                                        x-for="(record, index) in qfState.projects[qfState.projectCurrent].Data">
+                                        <div class="card col-sm-6">
+                                            <div @click="showItem(index)" class="card-body"
+                                                x-html="getItemCardView(record,index)">
+                                            </div>
+                                        </div>
+                                    </template>
                                 </div>
                             </template>
                         </div>
@@ -939,13 +983,15 @@
                         <div class="row" style="display: none" id="dataTemplateDetail">
                             <span class="row">
                                 <div class="card col-md-12"><a href="#" @click="showItem(-1)"
-                                        class="btn btn-light">Return to
+                                        class="btn btn-light">Return
+                                        to
                                         List</a>
                                 </div>
                                 <div id="cardDetail"></div>
 
                                 <div class="card col-md-12"><a href="#" @click="showItem(-1)"
-                                        class="btn btn-light">Return to
+                                        class="btn btn-light">Return
+                                        to
                                         List</a>
                                 </div>
                         </div>
