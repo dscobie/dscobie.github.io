@@ -904,9 +904,13 @@
                             </div>
                         </template>
                         <h5>Switch Current Project</h5>
-                        <template x-if="qfState.projectCurrent != -1" x-for="(project, index) in qfState.projects">
+                        <template x-if="qfState.projectCurrent != -1">
                             <div>
-                                <a href="#" x-text="project.MetaData.title" @click="switchProject(index)"></a>
+                                <template x-for="(project, index) in qfState.projects">
+                                    <div>
+                                        <a href="#" x-text="project.MetaData.title" @click="switchProject(index)"></a>
+                                    </div>
+                                </template>
                             </div>
                         </template>
                         <template x-if="qfState.projectCurrent == -1">
