@@ -189,6 +189,21 @@
             workingForm: { metaInfo: { gridFields: '', useLabelsForCardView: true}, formJSON: [], formHTML: 'Form will be shown here.' },
             modalData: { title: '', dataObject: 'default', dataRecord: {index: -1, data: []}, Form: { formJSON: [], formHTML: ''}}
         },
+        clearEverything() {
+            this.qfState.workingForm.formJSON = [];
+            this.qfState.workingForm.formHTML = 'Form will be shown here.';
+            this.qfState.workingForm.metaInfo.title = '';
+            this.qfState.workingForm.metaInfo.gridFields = '';
+            this.qfState.workingForm.metaInfo.useLabelsForCardView = true;
+            this.qfState.projectCurrent = -1;
+            this.qfState.projects = [];
+
+            this.saveState();
+
+            window.localStorage.setItem('currQFState', null);
+        
+            this.showNavTab('nav-design-design-tab');
+        },
         clearCurrentForm() {
             this.qfState.workingForm.formJSON = [];
             this.qfState.workingForm.formHTML = 'Form will be shown here.';
@@ -860,6 +875,9 @@
                         <p>Clicking the button below will clear all of the design for this form. You will be starting
                             over with a new form.</p>
                         <button @click='clearCurrentForm'>Clear</button>
+                        <p>&nbsp;</p>
+                        To clear all data and all projects, aka, start all over again, click the button below:
+                        <button @click='clearEverything'>Clear All Data</button>
                     </div>
 
                 </div>
