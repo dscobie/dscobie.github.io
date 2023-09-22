@@ -106,7 +106,22 @@
         formRadioTemplate: '<div class=&quot;form-check&quot;><input class=&quot;form-check-input&quot; type=&quot;[[type]]&quot; name=&quot;[[name]]&quot; id=&quot;[[namevalue]]&quot; [[checked]]><label class=&quot;form-check-label&quot; for=&quot;[[namevalue2]]&quot;>[[value]]</label></div>',
         formSwitchTemplate: '<div class=&quot;form-check form-switch col-md-[[size]]&quot;><input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; id=&quot;[[name]]&quot; [[checked]]><label class=&quot;form-check-label&quot; for=&quot;[[name2]]&quot;>[[label]]</label></div>',
         formFields: ['type','columns','name','label','placeholder','options'], 
-        fieldTemplate: { type: '', columns: 0, name: '', label: '', placeholder: '', options: '', required: 'no'},
+
+        projectTemplate: { id: 0, meta: {name: '', description: '', nextTableID: 1, currentTable: 1}, tables: [], enumerators: [] },
+        tableTemplate: { id: 0, meta: {name: '', description: '', nextFieldID: 1, nextDataID: 1, gridFields: '', useLabelsForCardView: true}, formJSON: [], formHTML: 'Form will be shown here.', data: [], template: '' },
+        fieldTemplate: { id: 0, type: '', columns: 0, name: '', label: '', placeholder: '', options: '', required: 'no'},
+
+        qfState: {
+            interface: { currentSection: 'home'},
+            projectCurrent: -1,
+            projects: [],
+            systemTemplates: [],
+            userTemplates: [],
+            editFieldJSON: [  {'name': 'name','type': 'text','columns': '12','options': [  ''],'placeholder': '','required': 'no','label': 'name'  },  {'type': 'select','columns': '6','name': 'type','label': 'type','placeholder': '','options': [  'text',  'date',  'select',  'radio',  'textarea',  'switch',  'array',  'empty']  },  {'type': 'select','columns': '6','name': 'columns','label': 'columns','placeholder': '','options': [  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '10',  '11',  '12']  },  {'name': 'options','type': 'array','columns': '12','options': '','placeholder': '','required': 'y','label': 'options'  },  {'name': 'placeholder','type': 'text','columns': '12','options': '','placeholder': 'use for select or radio fields','required': '','label': 'placeholder'  },  {'name': 'required','type': 'select','columns': '12','options': [  'yes',  ' no'],'placeholder': '','required': 'y','label': 'required'  }],
+            workingForm: { id: 0, meta: { name: '', description: '', nextFieldID: 1, nextDataID: 1, gridFields: '', useLabelsForCardView: true}, formJSON: [], formHTML: 'Form will be shown here.', data: []},
+            modalData: { title: '', dataObject: 'default', dataRecord: {index: -1, data: []}, Form: { formJSON: [], formHTML: ''}}
+        },
+        
         addField() {
             var newField = {...this.fieldTemplate};
             var addForm = document.getElementById('addField').elements;
@@ -120,18 +135,27 @@
             newField.required = 'no';
             
             var tableField = this.parseField(newField);
+            tableField.id = this.getWorkingFormNextID();
 
             return tableField;
         },
+        getWorkingFormNextID() {
+            var nextID = this.qfState.workingForm.meta.nextFieldID;
+            this.qfState.workingForm.meta.nextFieldID++;
+
+            return nextID;
+        },
         saveMetaInfo() {
-            var newField = {...this.fieldTemplate};
+            this.saveState();
+        },
+        saveMetaInfoOld() {
             var addForm = document.getElementById('metaform').elements;
 
-            this.qfState.projects[this.qfState.projectCurrent].Form.metaInfo.gridFields = addForm.gridfields.value;
+            this.qfState.workingForm.meta.gridFields = addForm.gridFields.value;
             if (addForm.uselabelsforcardsview.value === 'true')
-                this.qfState.projects[this.qfState.projectCurrent].Form.metaInfo.useLabelsForCardView = true;
+                this.qfState.workingForm.meta.useLabelsForCardView = true;
             else
-                this.qfState.projects[this.qfState.projectCurrent].Form.metaInfo.useLabelsForCardView = false;
+                this.qfState.workingForm.meta.useLabelsForCardView = false;
             this.saveState();
         },
         buildForm() {
@@ -140,7 +164,7 @@
             var workingJSON = this.qfState.workingForm.formJSON;
             workingJSON.push(newField);
             
-            var addForm = document.getElementById('addField')
+            var addForm = document.getElementById('addField');
             addForm.reset();
 
             var workingHTML = this.getFormHTMLFromJSON(workingJSON,'preview');
@@ -178,23 +202,10 @@
                 }
                 formJSONItem.name = formJSONItem.name.replace(' ', '');
                 return formJSONItem;
-            },
-        qfState: {
-            interface: { currentSection: 'home'},
-            projectCurrent: -1,
-            projects: [],
-            systemTemplates: [],
-            userTemplates: [],
-            editFieldJSON: [  {'name': 'name','type': 'text','columns': '12','options': [  ''],'placeholder': '','required': 'no','label': 'name'  },  {'type': 'select','columns': '6','name': 'type','label': 'type','placeholder': '','options': [  'text',  'date',  'select',  'radio',  'textarea',  'switch',  'array',  'empty']  },  {'type': 'select','columns': '6','name': 'columns','label': 'columns','placeholder': '','options': [  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '10',  '11',  '12']  },  {'name': 'options','type': 'array','columns': '12','options': '','placeholder': '','required': 'y','label': 'options'  },  {'name': 'placeholder','type': 'text','columns': '12','options': '','placeholder': 'use for select or radio fields','required': '','label': 'placeholder'  },  {'name': 'required','type': 'select','columns': '12','options': [  'yes',  ' no'],'placeholder': '','required': 'y','label': 'required'  }],
-            workingForm: { metaInfo: { gridFields: '', useLabelsForCardView: true}, formJSON: [], formHTML: 'Form will be shown here.' },
-            modalData: { title: '', dataObject: 'default', dataRecord: {index: -1, data: []}, Form: { formJSON: [], formHTML: ''}}
         },
         clearEverything() {
-            this.qfState.workingForm.formJSON = [];
-            this.qfState.workingForm.formHTML = 'Form will be shown here.';
-            this.qfState.workingForm.metaInfo.title = '';
-            this.qfState.workingForm.metaInfo.gridFields = '';
-            this.qfState.workingForm.metaInfo.useLabelsForCardView = true;
+            this.qfState.workingForm = {...this.tableTemplate};
+            
             this.qfState.projectCurrent = -1;
             this.qfState.projects = [];
 
@@ -205,16 +216,11 @@
             this.showNavTab('nav-design-design-tab');
         },
         clearCurrentForm() {
-            this.qfState.workingForm.formJSON = [];
-            this.qfState.workingForm.formHTML = 'Form will be shown here.';
-            this.qfState.workingForm.metaInfo.title = '';
-            this.qfState.workingForm.metaInfo.gridFields = '';
-            this.qfState.workingForm.metaInfo.useLabelsForCardView = true;
+            this.qfState.workingForm = {...this.tableTemplate};
             this.saveState();
 
             this.showNavTab('nav-design-design-tab');
         },
-        projectTemplate: { MetaData: [], Form: { formJSON: {}, formHTML: '' }, Data: [], Template: '' },
         buildTextField(inField, inValue='') {
             var newField = '';
 
@@ -441,7 +447,7 @@
                 }
                 if (theForm.Fields[j].type == 'array') {
                     var item = document.getElementById(theForm.Fields[j].name);
-                    formDataRow[theForm.Fields[j].name] = item.value.trim().split(',')
+                    formDataRow[theForm.Fields[j].name] = item.value.trim().split(',');
                 }
             }
             if (this.qfState.projectCurrent > -1) {
@@ -460,10 +466,12 @@
 
             if (this.qfState.modalData.dataRecord.index == -1) {
                 if (this.qfState.modalData.dataObject == 'default') {
-                    this.qfState.projects[this.qfState.projectCurrent].Data.push(modalRecord);
+                    modalRecord.id = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].meta.nextDataID;
+                    this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].meta.nextDataID++;
+                    this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].data.push(modalRecord);
                 }
             } else {
-                this.qfState.projects[this.qfState.projectCurrent].Data[this.qfState.modalData.dataRecord.index] = modalRecord;
+                this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].data[this.qfState.modalData.dataRecord.index] = modalRecord;
             }
 
             this.qfState.modalData.Form.formHTML = '';
@@ -482,6 +490,9 @@
             if (inType == 'array') {
                 var item = document.getElementById(inName);
                 retValue = item.value.trim().split(',')
+                for (j=0; j<retValue.length; j++) {
+                    retValue[j]=retValue[j].trim(); 
+                }
             }
             return retValue;
         },
@@ -505,16 +516,14 @@
             window.localStorage.setItem('currQFState', JSON.stringify(this.qfState));
         },
         saveCurrentForm() {
-            var newObject = { MetaData: {}, Form: {MetaInfo: {}, formJSON: {}, formHTML: ''}, Data: [], Template: '' };
+            // var newObject = { MetaData: {}, Form: {MetaInfo: {}, formJSON: {}, formHTML: ''}, Data: [], Template: '' };
 
-            var newMeta = {};
-            newMeta.title = document.getElementById('saveTitle').value;
-            newMeta.code = document.getElementById('saveCode').value;
-            newMeta.tags = document.getElementById('saveTags').value.trim().split(',');
-            newMeta.description = document.getElementById('saveDesc').value;
+            var newObject = {...this.projectTemplate};
+            newObject.meta.name = document.getElementById('saveTitle').value;
+            newObject.meta.description = document.getElementById('saveDesc').value;
+            newObject.meta.currentTable = 0;
 
-            newObject.MetaData = newMeta;
-            newObject.Form = this.qfState.workingForm;
+            newObject.tables.push({...this.qfState.workingForm});
 
             var saveType = document.getElementById('saveType');
             var objectType = saveType.options[saveType.selectedIndex].text;
@@ -533,6 +542,9 @@
             const toast = new bootstrap.Toast(toastLiveExample);
             toast.show();
 
+        },
+        getCurrentProjectTable() {
+            return this.qfState.projects[this.qfState.projectCurrent].meta.currentTable;
         },
         getCurrentProject() {
             if (this.qfState.projectCurrent == -1) {
@@ -592,7 +604,7 @@
             myModal.show();
             this.saveState();
         },
-                switchProject(inProject) {
+        switchProject(inProject) {
             this.qfState.projectCurrent = inProject;
             this.saveState();
             this.showNavTab('nav-data-project-tab');
@@ -646,7 +658,7 @@
         },
         getGoodDisplayName(inData, inIndex) {
             var retValue = '';
-            retValue = this.qfState.projects[this.qfState.projectCurrent].Form.metaInfo.gridFields;
+            retValue = this.qfState.projects[this.qfState.projectCurrent].tables[0].meta.gridFields;
             Object.keys(inData).forEach(function(key) {
                 var searchKey = '{{' + key + '}}';
                 retValue = retValue.replace(searchKey, inData[key]);
@@ -670,15 +682,6 @@
                 }
             }
             this.addNavSectionActive(this.qfState.interface.currentSection);
-
-            // this.qfState.editFieldJSON = this.qfState.workingForm.formJSON;
-            // this.saveState();
-
-            // test code for setting up the modal, can be deleted.
-            // var workingJSON = this.getFormJSONFromInput(this.formDescription3);
-            // var workingHTML = this.getFormHTMLFromJSON(workingJSON,'uniqueID');
-            // this.qfState.modalData.Form.formJSON = workingJSON;
-            // this.qfState.modalData.Form.formHTML = workingHTML;
         }
     }">
 
@@ -912,10 +915,12 @@
                             <div>
                                 <h5>Current Project</h5>
 
-                                <div x-text=qfState.projects[qfState.projectCurrent].MetaData.title></div>
-                                <div x-text=qfState.projects[qfState.projectCurrent].MetaData.description></div>
+                                <div x-text=qfState.projects[qfState.projectCurrent].meta.name></div>
+                                <div x-text=qfState.projects[qfState.projectCurrent].meta.description></div>
                                 <div>
-                                    <span x-text=qfState.projects[qfState.projectCurrent].Data.length></span> records.
+                                    <span
+                                        x-text=qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].data.length></span>
+                                    records.
                                 </div>
 
                                 <p>&nbsp;</p>
@@ -926,7 +931,7 @@
                             <div>
                                 <template x-for="(project, index) in qfState.projects">
                                     <div>
-                                        <a href="#" x-text="project.MetaData.title" @click="switchProject(index)"></a>
+                                        <a href="#" x-text="project.meta.name" @click="switchProject(index)"></a>
                                     </div>
                                 </template>
                             </div>
@@ -941,12 +946,13 @@
                         <h5>Table Meta Information</h5>
                         <form id="metaform" class="row g-3">
                             <div class="col-md-12"><label for="gridfields" class="form-label">grid
-                                    list template</label><input x-model="qfState.workingForm.metaInfo.gridFields"
+                                    list template</label><input
+                                    x-model="qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].meta.gridFields"
                                     type="text" class="form-control" id="gridfields" value=""
                                     placeholder="e.g. {{title}} - {{published date}}"></div>
                             <div class="col-md-12"><label for="uselabels for cards view" class="form-label">use labels
                                     for cards
-                                    view</label><select x-model="qfState.workingForm.metaInfo.useLabelsForCardView"
+                                    view</label><select x-model="qfState.workingForm.meta.useLabelsForCardView"
                                     class="form-select" id="uselabelsforcardsview">
                                     <option disabled value="">Choose One...</option>
                                     <option selected>true</option>
@@ -962,7 +968,7 @@
                             <div align="right">
                                 <!-- inTitle, inJSON, inResolveFunction, inIndex = -1, inData = undefined-->
                                 <button
-                                    @click="showModal('Add Record', qfState.projects[qfState.projectCurrent].Form.formJSON, 'this.modalSaveDataRecord', -1)"
+                                    @click="showModal('Add Record', qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].formJSON, 'this.modalSaveDataRecord', -1)"
                                     type="button" class="btn btn-primary">
                                     Add Record
                                 </button>
@@ -972,10 +978,11 @@
                         <div>
                             <template x-if="qfState.projectCurrent != -1">
                                 <div>
-                                    <template x-for="(record, index) in qfState.projects[qfState.projectCurrent].Data">
+                                    <template
+                                        x-for="(record, index) in qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].data">
                                         <div>
                                             <a href="#"
-                                                @click="showModal('Edit Record', qfState.projects[qfState.projectCurrent].Form.formJSON, 'this.modalSaveDataRecord', index, record)"
+                                                @click="showModal('Edit Record', qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].formJSON, 'this.modalSaveDataRecord', index, record)"
                                                 x-text="getGoodDisplayName(record, index)"></a>
                                         </div>
                                     </template>
@@ -991,7 +998,7 @@
                             <template x-if="qfState.projectCurrent != -1">
                                 <div>
                                     <template id="dataTemplateCardView"
-                                        x-for="(record, index) in qfState.projects[qfState.projectCurrent].Data">
+                                        x-for="(record, index) in qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].data">
                                         <div class="card col-sm-6">
                                             <div @click="showItem(index)" class="card-body"
                                                 x-html="getItemCardView(record,index)">
