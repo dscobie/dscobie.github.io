@@ -98,13 +98,14 @@
     <div x-init="" x-data="{ 
         formPre: '<form id=&quot;previewForm&quot; class=&quot;row g-3&quot;>',
         formPost: '</form>',
-        formTextTemplate: '<div class=&quot;col-md-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><input type=&quot;[[type]]&quot; class=&quot;form-control&quot; id=&quot;[[name2]]&quot; value=&quot;[[value]]&quot; placeholder=&quot;[[placeholder]]&quot;></div>',
-        formDateTemplate: '<div class=&quot;col-md-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><input type=&quot;[[type]]&quot; class=&quot;form-control&quot; id=&quot;[[name2]]&quot; value=&quot;[[value]]&quot; placeholder=&quot;[[placeholder]]&quot;></div>',
-        formTextAreaTemplate: '<div class=&quot;col-md-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><textarea class=&quot;form-control&quot; id=&quot;[[name2]]&quot; placeholder=&quot;[[placeholder]]&quot;>[[value]]</textarea></div>',
-        formEmptyTemplate: '<div class=&quot;col-md-[[size]]&quot;></div>',
-        formSelectTemplate: '<div class=&quot;col-md-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><select class=&quot;form-select&quot; id=&quot;[[name2]]&quot;><option disabled value=&quot;&quot;>Choose One...</option>[[options]]</select></div>',
+        formHiddenTemplate: '<input type=&quot;hidden&quot; id=&quot;[[name2]]&quot; value=&quot;[[value]]&quot;>',
+        formTextTemplate: '<div class=&quot;col-sm-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><input type=&quot;[[type]]&quot; class=&quot;form-control&quot; id=&quot;[[name2]]&quot; value=&quot;[[value]]&quot; placeholder=&quot;[[placeholder]]&quot;></div>',
+        formDateTemplate: '<div class=&quot;col-sm-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><input type=&quot;[[type]]&quot; class=&quot;form-control&quot; id=&quot;[[name2]]&quot; value=&quot;[[value]]&quot; placeholder=&quot;[[placeholder]]&quot;></div>',
+        formTextAreaTemplate: '<div class=&quot;col-sm-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><textarea class=&quot;form-control&quot; id=&quot;[[name2]]&quot; placeholder=&quot;[[placeholder]]&quot;>[[value]]</textarea></div>',
+        formEmptyTemplate: '<div class=&quot;col-sm-[[size]]&quot;></div>',
+        formSelectTemplate: '<div class=&quot;col-sm-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><select class=&quot;form-select&quot; id=&quot;[[name2]]&quot;><option disabled value=&quot;&quot;>Choose One...</option>[[options]]</select></div>',
         formRadioTemplate: '<div class=&quot;form-check&quot;><input class=&quot;form-check-input&quot; type=&quot;[[type]]&quot; name=&quot;[[name]]&quot; id=&quot;[[namevalue]]&quot; [[checked]]><label class=&quot;form-check-label&quot; for=&quot;[[namevalue2]]&quot;>[[value]]</label></div>',
-        formSwitchTemplate: '<div class=&quot;form-check form-switch col-md-[[size]]&quot;><input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; id=&quot;[[name]]&quot; [[checked]]><label class=&quot;form-check-label&quot; for=&quot;[[name2]]&quot;>[[label]]</label></div>',
+        formSwitchTemplate: '<div class=&quot;form-check form-switch col-sm-[[size]]&quot;><input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; id=&quot;[[name]]&quot; [[checked]]><label class=&quot;form-check-label&quot; for=&quot;[[name2]]&quot;>[[label]]</label></div>',
         formFields: ['type','columns','name','label','placeholder','options'], 
 
         projectTemplate: { id: 0, meta: {name: '', description: '', nextTableID: 1, currentTable: 1}, tables: [], enumerators: [] },
@@ -117,7 +118,7 @@
             projects: [],
             systemTemplates: [],
             userTemplates: [],
-            editFieldJSON: [  {'name': 'name','type': 'text','columns': '12','options': [  ''],'placeholder': '','required': 'no','label': 'name'  },  {'type': 'select','columns': '6','name': 'type','label': 'type','placeholder': '','options': [  'text',  'date',  'select',  'radio',  'textarea',  'switch',  'array',  'empty']  },  {'type': 'select','columns': '6','name': 'columns','label': 'columns','placeholder': '','options': [  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '10',  '11',  '12']  },  {'name': 'options','type': 'array','columns': '12','options': '','placeholder': '','required': 'y','label': 'options'  },  {'name': 'placeholder','type': 'text','columns': '12','options': '','placeholder': 'use for select or radio fields','required': '','label': 'placeholder'  },  {'name': 'required','type': 'select','columns': '12','options': [  'yes',  ' no'],'placeholder': '','required': 'y','label': 'required'  }],
+            editFieldJSON: [  {'name': 'name','type': 'text','columns': '12','options': [''],'placeholder': '','required': 'no','label': 'name'  },  {'type': 'select','columns': '6','name': 'type','label': 'type','placeholder': '','options': [  'text',  'date',  'select',  'radio',  'textarea',  'switch',  'array',  'empty']  },  {'type': 'select','columns': '6','name': 'columns','label': 'columns','placeholder': '','options': [  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '10',  '11',  '12']  },  {'name': 'options','type': 'array','columns': '12','options': '','placeholder': '','required': 'y','label': 'options'  },  {'name': 'placeholder','type': 'text','columns': '12','options': '','placeholder': 'use for select or radio fields','required': '','label': 'placeholder'  },  {'name': 'required','type': 'select','columns': '12','options': [  'yes',  ' no'],'placeholder': '','required': 'y','label': 'required'  }],
             workingForm: { id: 0, meta: { name: '', description: '', nextFieldID: 1, nextDataID: 1, gridFields: '', useLabelsForCardView: true}, formJSON: [], formHTML: 'Form will be shown here.', data: []},
             modalData: { title: '', dataObject: 'default', dataRecord: {index: -1, data: []}, Form: { formJSON: [], formHTML: ''}}
         },
@@ -174,7 +175,7 @@
         
             this.saveState();
 
-            this.showNavTab('nav-design-preview-tab');
+            // this.showNavTab('nav-design-preview-tab');
         },
         parseField(inField) {
                 var formJSONItem = {};
@@ -221,6 +222,9 @@
 
             this.showNavTab('nav-design-design-tab');
         },
+        buildHiddenField(inField, inValue='') {
+
+        },
         buildTextField(inField, inValue='') {
             var newField = '';
 
@@ -247,6 +251,14 @@
                 newField = newField.replace('[[placeholder]]', inField.placeholder);
             else
                 newField = newField.replace('[[placeholder]]', '');
+            return newField;
+        },
+        buildHiddenField(inName, inValue = '') {
+            var newField = this.formHiddenTemplate;
+
+            newField = newField.replace('[[name]]', inName);
+            newField = newField.replace('[[name2]]', inName);
+            newField = newField.replace('[[value]]', inValue);
             return newField;
         },
         buildTextAreaField(inField, inValue = '') {
@@ -321,7 +333,6 @@
                 radiosList = radiosList.replace('[[name]]', inField.name);
                 radiosList = radiosList.replace('[[namevalue]]', namevalue);                
                 radiosList = radiosList.replace('[[namevalue2]]', namevalue);   
-                console.log(inField.options[j] + ';' + inValue);
                 if (inField.options[j] === inValue) {
                     radiosList = radiosList.replace('[[checked]]', 'checked');
                 } else {
@@ -385,6 +396,7 @@
 
             for (var j=0; j< formJSON.length; j++) {
                 formJSONItem = formJSON[j];
+                console.log(formJSONItem);
                 fieldValue = '{{' + formJSONItem.name + '}}';
                 fieldColumns = formJSONItem.columns;
                 
@@ -454,7 +466,6 @@
                 this.qfState.projects[this.qfState.projectCurrent].Data.push(formDataRow);
             }
             this.saveState();
-            console.log(this.qfState.projects[this.qfState.projectCurrent]);
         },
         getModalFormSave() {
             var resolveFunction = this.qfState.modalData.resolveFunction;
@@ -466,7 +477,9 @@
 
             if (this.qfState.modalData.dataRecord.index == -1) {
                 if (this.qfState.modalData.dataObject == 'default') {
-                    modalRecord.id = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].meta.nextDataID;
+                    // modalRecord.id = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].meta.nextDataID;
+                    modalRecord.qfid = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].meta.nextDataID;
+
                     this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].meta.nextDataID++;
                     this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].data.push(modalRecord);
                 }
@@ -482,6 +495,12 @@
             var retValue = '';
             if (inType == 'text' || inType == 'date' || inType == 'textarea') {
                 retValue = document.getElementById(inName).value;
+            }
+            if (inType == 'radio') {
+                console.log(inName);
+                var item = document.getElementsByName(inName);
+                console.log(inName + ' has ' + item.length + ' elements.');
+                
             }
             if (inType == 'select') {
                 var item = document.getElementById(inName);
@@ -516,8 +535,6 @@
             window.localStorage.setItem('currQFState', JSON.stringify(this.qfState));
         },
         saveCurrentForm() {
-            // var newObject = { MetaData: {}, Form: {MetaInfo: {}, formJSON: {}, formHTML: ''}, Data: [], Template: '' };
-
             var newObject = {...this.projectTemplate};
             newObject.meta.name = document.getElementById('saveTitle').value;
             newObject.meta.description = document.getElementById('saveDesc').value;
@@ -527,8 +544,7 @@
 
             var saveType = document.getElementById('saveType');
             var objectType = saveType.options[saveType.selectedIndex].text;
-            console.log(objectType);
-
+            
             if (objectType == 'project') {
                 this.qfState.projects.push(newObject);
                 this.qfState.projectCurrent = this.qfState.projects.length-1;
@@ -536,8 +552,8 @@
             if (objectType == 'data widget') {
                 this.qfState.systemTemplates.push(newObject);
             }
-
             this.saveState();
+
             const toastLiveExample = document.getElementById('liveToast');
             const toast = new bootstrap.Toast(toastLiveExample);
             toast.show();
@@ -641,11 +657,13 @@
 
             var retValue = '';
             Object.keys(inData).forEach(function(key) {
-                var addField = fieldTemplate;
-                addField = addField.replace('{{data}}', inData[key]);
-                addField = addField.replace('{{size}}', '6');
-                addField = addField.replace('{{index}}', inIndex);
-                retValue += addField;
+                if (key != 'qfid') {
+                    var addField = fieldTemplate;
+                    addField = addField.replace('{{data}}', inData[key]);
+                    addField = addField.replace('{{size}}', '12');
+                    addField = addField.replace('{{index}}', inIndex);
+                    retValue += addField;
+                }
             })
             if (retValue === '') 
                 retValue = 'Show Record ' + inIndex;
@@ -654,7 +672,6 @@
                 var nothing = 1;
             }
             return retValue;
-
         },
         getGoodDisplayName(inData, inIndex) {
             var retValue = '';
@@ -944,22 +961,25 @@
                         aria-labelledby="nav-data-meta-tab">
                         <p>&nbsp;</p>
                         <h5>Table Meta Information</h5>
-                        <form id="metaform" class="row g-3">
-                            <div class="col-md-12"><label for="gridfields" class="form-label">grid
-                                    list template</label><input
-                                    x-model="qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].meta.gridFields"
-                                    type="text" class="form-control" id="gridfields" value=""
-                                    placeholder="e.g. {{title}} - {{published date}}"></div>
-                            <div class="col-md-12"><label for="uselabels for cards view" class="form-label">use labels
-                                    for cards
-                                    view</label><select x-model="qfState.workingForm.meta.useLabelsForCardView"
-                                    class="form-select" id="uselabelsforcardsview">
-                                    <option disabled value="">Choose One...</option>
-                                    <option selected>true</option>
-                                    <option>false</option>
-                                </select></div>
-                            <div class="col-md-12"><button @click='saveMetaInfo'>Save</button></div>
-                        </form>
+                        <template x-if="qfState.projectCurrent != -1">
+                            <form id="metaform" class="row g-3">
+                                <div class="col-md-12"><label for="gridfields" class="form-label">grid
+                                        list template</label><input
+                                        x-model="qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].meta.gridFields"
+                                        type="text" class="form-control" id="gridfields" value=""
+                                        placeholder="e.g. {{title}} - {{published date}}"></div>
+                                <div class="col-md-12"><label for="uselabels for cards view" class="form-label">use
+                                        labels
+                                        for cards
+                                        view</label><select x-model="qfState.workingForm.meta.useLabelsForCardView"
+                                        class="form-select" id="uselabelsforcardsview">
+                                        <option disabled value="">Choose One...</option>
+                                        <option selected>true</option>
+                                        <option>false</option>
+                                    </select></div>
+                                <div class="col-md-12"><button @click='saveMetaInfo'>Save</button></div>
+                            </form>
+                        </template>
                     </div>
 
                     <div class="tab-pane fade" id="nav-data-data" role="tabpanel" aria-labelledby="nav-data-data">
