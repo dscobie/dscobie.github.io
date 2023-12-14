@@ -7,11 +7,17 @@
     <title>Quickly Formed</title>
 
     <link href="./includes/bootstrap5.2.min.css"" rel=" stylesheet">
-    <script src='./includes/alpine.js' defer></script>
     <script src="./includes/bootstrap.bundle5.2.min.js"></script>
+
+    <script src='./js/qfHTMLForms.js' defer></script>
+    <script src='./js/qfModal.js' defer></script>
+    <script src='./js/qfState.js' defer></script>
+
+    <script src='./includes/alpine.js' defer></script>
+
     <meta name="theme-color" content="#712cf9">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 
     <style>
         body {
@@ -95,964 +101,479 @@
 </head>
 
 <body>
-    <div x-init="" x-data="{ 
-        formPre: '<form id=&quot;previewForm&quot; class=&quot;row g-3&quot;>',
-        formPost: '</form>',
-        formHiddenTemplate: '<input type=&quot;hidden&quot; id=&quot;[[name2]]&quot; value=&quot;[[value]]&quot;>',
-        formTextTemplate: '<div class=&quot;col-sm-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><input type=&quot;[[type]]&quot; class=&quot;form-control&quot; id=&quot;[[name2]]&quot; value=&quot;[[value]]&quot; placeholder=&quot;[[placeholder]]&quot;></div>',
-        formDateTemplate: '<div class=&quot;col-sm-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><input type=&quot;[[type]]&quot; class=&quot;form-control&quot; id=&quot;[[name2]]&quot; value=&quot;[[value]]&quot; placeholder=&quot;[[placeholder]]&quot;></div>',
-        formTextAreaTemplate: '<div class=&quot;col-sm-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><textarea class=&quot;form-control&quot; id=&quot;[[name2]]&quot; placeholder=&quot;[[placeholder]]&quot;>[[value]]</textarea></div>',
-        formEmptyTemplate: '<div class=&quot;col-sm-[[size]]&quot;></div>',
-        formSelectTemplate: '<div class=&quot;col-sm-[[size]]&quot;><label for=&quot;[[name]]&quot; class=&quot;form-label&quot;>[[label]]</label><select class=&quot;form-select&quot; id=&quot;[[name2]]&quot;><option disabled value=&quot;&quot;>Choose One...</option>[[options]]</select></div>',
-        formRadioTemplate: '<div class=&quot;form-check&quot;><input class=&quot;form-check-input&quot; type=&quot;[[type]]&quot; name=&quot;[[name]]&quot; id=&quot;[[namevalue]]&quot; [[checked]]><label class=&quot;form-check-label&quot; for=&quot;[[namevalue2]]&quot;>[[value]]</label></div>',
-        formSwitchTemplate: '<div class=&quot;form-check form-switch col-sm-[[size]]&quot;><input class=&quot;form-check-input&quot; type=&quot;checkbox&quot; role=&quot;switch&quot; id=&quot;[[name]]&quot; [[checked]]><label class=&quot;form-check-label&quot; for=&quot;[[name2]]&quot;>[[label]]</label></div>',
-        formFields: ['type','columns','name','label','placeholder','options'], 
+    <div x-data="qfState">
+        <div x-data="qfHTMLForms">
+            <div x-data="qfModal">
 
-        projectTemplate: { id: 0, meta: {name: '', description: '', nextTableID: 1, currentTable: 1}, tables: [], enumerators: [] },
-        tableTemplate: { id: 0, meta: {name: '', description: '', nextFieldID: 1, nextDataID: 1, gridFields: '', useLabelsForCardView: true}, formJSON: [], formHTML: 'Form will be shown here.', data: [], template: '' },
-        fieldTemplate: { id: 0, type: '', columns: 0, name: '', label: '', placeholder: '', options: '', required: 'no'},
-
-        qfState: {
-            interface: { currentSection: 'home'},
-            projectCurrent: -1,
-            projects: [],
-            systemTemplates: [],
-            userTemplates: [],
-            editFieldJSON: [  {'name': 'name','type': 'text','columns': '12','options': [''],'placeholder': '','required': 'no','label': 'name'  },  {'type': 'select','columns': '6','name': 'type','label': 'type','placeholder': '','options': [  'text',  'date',  'select',  'radio',  'textarea',  'switch',  'array',  'empty']  },  {'type': 'select','columns': '6','name': 'columns','label': 'columns','placeholder': '','options': [  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '10',  '11',  '12']  },  {'name': 'options','type': 'array','columns': '12','options': '','placeholder': '','required': 'y','label': 'options'  },  {'name': 'placeholder','type': 'text','columns': '12','options': '','placeholder': 'use for select or radio fields','required': '','label': 'placeholder'  },  {'name': 'required','type': 'select','columns': '12','options': [  'yes',  ' no'],'placeholder': '','required': 'y','label': 'required'  }],
-            workingForm: { id: 0, meta: { name: '', description: '', nextFieldID: 1, nextDataID: 1, gridFields: '', useLabelsForCardView: true}, formJSON: [], formHTML: 'Form will be shown here.', data: []},
-            modalData: { title: '', dataObject: 'default', dataRecord: {index: -1, data: []}, Form: { formJSON: [], formHTML: ''}}
-        },
-        
-        addField() {
-            var newField = {...this.fieldTemplate};
-            var addForm = document.getElementById('addField').elements;
-
-            newField.type = addForm.type.value;
-            newField.columns = addForm.columns.value;
-            newField.label = addForm.name.value;
-            newField.name = addForm.name.value.replace(' ','');;
-            newField.placeholder = '';
-            newField.options = addForm.options.value;
-            newField.required = 'no';
-            
-            var tableField = this.parseField(newField);
-            tableField.id = this.getWorkingFormNextID();
-
-            return tableField;
-        },
-        getWorkingFormNextID() {
-            var nextID = this.qfState.workingForm.meta.nextFieldID;
-            this.qfState.workingForm.meta.nextFieldID++;
-
-            return nextID;
-        },
-        saveMetaInfo() {
-            this.saveState();
-        },
-        saveMetaInfoOld() {
-            var addForm = document.getElementById('metaform').elements;
-
-            this.qfState.workingForm.meta.gridFields = addForm.gridFields.value;
-            if (addForm.uselabelsforcardsview.value === 'true')
-                this.qfState.workingForm.meta.useLabelsForCardView = true;
-            else
-                this.qfState.workingForm.meta.useLabelsForCardView = false;
-            this.saveState();
-        },
-        buildForm() {
-            var newField = this.addField();
-
-            var workingJSON = this.qfState.workingForm.formJSON;
-            workingJSON.push(newField);
-            
-            var addForm = document.getElementById('addField');
-            addForm.reset();
-
-            var workingHTML = this.getFormHTMLFromJSON(workingJSON,'preview');
-        
-            this.qfState.workingForm.formJSON = workingJSON;
-            this.qfState.workingForm.formHTML = workingHTML;
-        
-            this.saveState();
-
-            // this.showNavTab('nav-design-preview-tab');
-        },
-        parseField(inField) {
-                var formJSONItem = {};
-                
-                for (var i = 0; i < this.formFields.length; i++) { 
-                    
-                    // check if it's the options field...if so split options into array
-                    if (this.formFields[i]==='options' ) 
-                    { 
-                        formJSONItem[this.formFields[i]]=[]; 
-                        if (inField.options != undefined) {
-                        formJSONItem[this.formFields[i]]=inField.options.trim().split(',');
-                        for (j=0; j<formJSONItem[this.formFields[i]].length; j++) {
-                            formJSONItem[this.formFields[i]][j] = formJSONItem[this.formFields[i]][j].trim();
-                        }
-                    }        
-                    } else {
-                        // if the field is not defined, set it to empty in the JSON
-                        if (inField[this.formFields[i]] === undefined) {
-                            formJSONItem[this.formFields[i]] = '';
-                        } else {
-                            formJSONItem[this.formFields[i]] = inField[this.formFields[i]].trim();
-                        }
-                    }
-                }
-                formJSONItem.name = formJSONItem.name.replace(' ', '');
-                return formJSONItem;
-        },
-        clearEverything() {
-            this.qfState.workingForm = {...this.tableTemplate};
-            
-            this.qfState.projectCurrent = -1;
-            this.qfState.projects = [];
-
-            this.saveState();
-
-            window.localStorage.setItem('currQFState', null);
-        
-            this.showNavTab('nav-design-design-tab');
-        },
-        clearCurrentForm() {
-            this.qfState.workingForm = {...this.tableTemplate};
-            this.saveState();
-
-            this.showNavTab('nav-design-design-tab');
-        },
-        buildHiddenField(inField, inValue='') {
-
-        },
-        buildTextField(inField, inValue='') {
-            var newField = '';
-
-            if (inField.type == 'date') {
-                newField = this.formDateTemplate;
-                if (inValue == '')
-                    newField = newField.replace('[[value]]', new Date().toISOString().slice(0, 10));
-                else
-                    newField = newField.replace('[[value]]', inValue);
-
-            } else {
-                newField = this.formTextTemplate;
-            }
-            newField = newField.replace('[[type]]', inField.type);
-            newField = newField.replace('[[size]]', inField.columns);
-            newField = newField.replace('[[name]]', inField.name);
-            newField = newField.replace('[[name2]]', inField.name);
-            newField = newField.replace('[[value]]', inValue);
-            if (inField.label)
-                newField = newField.replace('[[label]]', inField.label);
-            else
-                newField = newField.replace('[[label]]', '');
-            if (inField.placeholder)
-                newField = newField.replace('[[placeholder]]', inField.placeholder);
-            else
-                newField = newField.replace('[[placeholder]]', '');
-            return newField;
-        },
-        buildHiddenField(inName, inValue = '') {
-            var newField = this.formHiddenTemplate;
-
-            newField = newField.replace('[[name]]', inName);
-            newField = newField.replace('[[name2]]', inName);
-            newField = newField.replace('[[value]]', inValue);
-            return newField;
-        },
-        buildTextAreaField(inField, inValue = '') {
-            var newField = this.formTextAreaTemplate;
-            // newField = newField.replace('[[type]]', inField.type);
-            if (inField.label)
-                newField = newField.replace('[[label]]', inField.label);
-            else
-                newField = newField.replace('[[label]]', '');
-            newField = newField.replace('[[size]]', inField.columns);
-            newField = newField.replace('[[name]]', inField.name);
-            newField = newField.replace('[[name2]]', inField.name);
-            newField = newField.replace('[[value]]', inValue);
-            if (inField.placeholder)
-                newField = newField.replace('[[placeholder]]', inField.placeholder);
-            else
-                newField = newField.replace('[[placeholder]]', '');
-            return newField;
-        },
-        buildSwitchField(inField, inValue = '') {
-            var newField = this.formSwitchTemplate;
-            if (inField.label)
-                newField = newField.replace('[[label]]', inField.label);
-            else
-                newField = newField.replace('[[label]]', '');
-            newField = newField.replace('[[size]]', inField.columns);
-            newField = newField.replace('[[name]]', inField.name);
-            newField = newField.replace('[[name2]]', inField[2]);
-            if (inField.placeholder)
-                newField = newField.replace('[[placeholder]]', inField.placeholder);
-            else
-                newField = newField.replace('[[placeholder]]', '');
-            return newField;
-        },
-        buildEmptyField(inField) {
-            var newField = this.formEmptyTemplate;
-            return newField;
-        },
-        buildSelectField(inField, inValue = '') {
-            var newField = this.formSelectTemplate;
-            if (inField.label)
-                newField = newField.replace('[[label]]', inField.label);
-            else
-                newField = newField.replace('[[label]]', '');
-            newField = newField.replace('[[size]]', inField.columns);
-            newField = newField.replace('[[name]]', inField.name);
-            newField = newField.replace('[[name2]]', inField.name);
-            var optionsList = '';
-            for (var j = 0; j < inField.options.length; j++) {
-                if (inField.options[j] === inValue) {
-                    optionsList += '<option selected>';
-                } else {
-                    optionsList += '<option>';    
-                }
-                optionsList += inField.options[j] + '</option>';
-            }
-            newField = newField.replace('[[options]]', optionsList);
-
-            return newField;
-        },
-        buildRadioField(inField, inValue = '') {
-            var radioPre = '<div class=&quot;col-md-[[size]]&quot;><label for=&quot;[[name2]]&quot; class=&quot;form-label&quot;>[[label]]</label>';
-            var radioPost = '</div>'
-            var newField = radioPre;
-
-            var radiosList = '';
-            for (var j = 0; j < inField.options.length; j++) {
-                var namevalue = inField.name + inField.options[j];
-                radiosList += this.formRadioTemplate;
-                radiosList = radiosList.replace('[[type]]', inField.type);
-                radiosList = radiosList.replace('[[value]]', inField.options[j]);
-                radiosList = radiosList.replace('[[name]]', inField.name);
-                radiosList = radiosList.replace('[[namevalue]]', namevalue);                
-                radiosList = radiosList.replace('[[namevalue2]]', namevalue);   
-                if (inField.options[j] === inValue) {
-                    radiosList = radiosList.replace('[[checked]]', 'checked');
-                } else {
-                    radiosList = radiosList.replace('[[checked]]', '');
-                }
-            }
-            newField += radiosList
-            newField += radioPost;
-            newField = newField.replace('[[name2]]', inField.name);
-            newField = newField.replace('[[size]]', inField.columns);
-            newField = newField.replace('[[label]]', inField.label);
-            return newField;
-            },
-        setLocalStorageJSON(inVariable, inData) {
-            window.localStorage.setItem(inVariable, JSON.stringify(inData));
-        },
-        getCustomForm(formJSONItem) {
-            var outFields = [];
-            let template = this.qfState.systemTemplates.find(el => el.MetaData.code === formJSONItem.name);
-            if (template != null) {
-                outFields = template.Form.formJSON;
-            }
-            return outFields;
-        },
-        buildFieldHTML(formJSONItem, inValue) {
-            var newFIeld = '';
-            var fieldType = formJSONItem['type'];
-            if (fieldType == 'text' || fieldType == 'email' || fieldType == 'password' || fieldType == 'file'  || fieldType == 'date' || fieldType == 'array') {
-                newField = this.buildTextField(formJSONItem, inValue);
-            }
-            if (fieldType == 'textarea') {
-                newField = this.buildTextAreaField(formJSONItem, inValue);
-            }
-            if (fieldType == 'empty') {
-                newField = this.buildEmptyField(formJSONItem, inValue);
-            }
-            if (fieldType == 'select') {
-                newField = this.buildSelectField(formJSONItem, inValue);
-            }
-            if (fieldType == 'switch') {
-                newField = this.buildSwitchField(formJSONItem, inValue);
-            }
-            if (fieldType == 'radio' || fieldType == 'checkbox') {
-                newField = this.buildRadioField(formJSONItem, inValue);
-            }
-            return newField;
-        },
-        getFilledTemplateFromData(inData, inTemplate) {
-            var retValue = inTemplate;
-            Object.keys(inData).forEach(function(key) {
-                var searchKey = '{{' + key + '}}';
-                retValue = retValue.replace(searchKey, inData[key]);
-            })
-            return retValue;
-        },
-        getCardTemplateFromJSON(formJSON) {
-            var fieldTemplate = '<div class=&quot;col-md-{{size}}&quot;>{{data}}</div>'
-            var fieldValue = '';
-            var fieldColumns = 0;
-            var result = '';
-
-            for (var j=0; j< formJSON.length; j++) {
-                formJSONItem = formJSON[j];
-                console.log(formJSONItem);
-                fieldValue = '{{' + formJSONItem.name + '}}';
-                fieldColumns = formJSONItem.columns;
-                
-                var newField = fieldTemplate;
-                newField = newField.replace('{{size}}', fieldColumns);
-                newField = newField.replace('{{data}}', fieldValue);
-                
-                result += newField;
-            }
-            result = '<div class=&quot;row text-left mb-3&quot;>' + result + '</div>';
-            return result;
-        },
-        getFormHTMLFromJSON(formJSON, unique, inData) {
-            var formPre = '<form id=&quot;' + unique + '&quot; class=&quot;row g-3&quot;>';
-            var formPost = '</form>';
-            var formHTML = '';
-            formHTML += formPre;
-            var fieldValue = undefined;
-            var formJSONItem = {};
-            for (var j = 0; j < formJSON.length; j++) {
-                fieldValue = undefined;
-                formJSONItem = formJSON[j];
-
-                var newField = '';
-                var fieldType = formJSONItem.type;
-
-                if (fieldType == 'custom') {
-                    customFields = this.getCustomForm(formJSONItem);
-                    for (k=0; k < customFields.length; k++) {
-                        if (inData != undefined) {
-                            fieldValue = inData[customFields[k].name];
-                        }
-                        newField = this.buildFieldHTML(customFields[k], fieldValue);
-                        formHTML += newField;
-                }
-                } else {
-                    if (inData != undefined) {
-                        fieldValue = inData[formJSONItem.name];
-                    }
-                    newField = this.buildFieldHTML(formJSONItem, fieldValue);
-                    formHTML += newField;
-                }
-                formJSONItem = {};
-            }
-
-            formHTML += formPost;
-            return formHTML;
-        },
-        getFormValue() {
-            var formDataRow = {};
-
-            theForm = this.qfState.workingForm.formJSON;
-            for (var j = 0; j < theForm.Fields.length; j++) {
-                if (theForm.Fields[j].type == 'text' || theForm.Fields[j].type == 'date' || theForm.Fields[j].type == 'textarea') {
-                    formDataRow[theForm.Fields[j].name] = document.getElementById(theForm.Fields[j].name).value;
-                }
-                if (theForm.Fields[j].type == 'select') {
-                    var item = document.getElementById(theForm.Fields[j].name);
-                    formDataRow[theForm.Fields[j].name] = item.options[item.selectedIndex].text;
-                }
-                if (theForm.Fields[j].type == 'array') {
-                    var item = document.getElementById(theForm.Fields[j].name);
-                    formDataRow[theForm.Fields[j].name] = item.value.trim().split(',');
-                }
-            }
-            if (this.qfState.projectCurrent > -1) {
-                this.qfState.projects[this.qfState.projectCurrent].Data.push(formDataRow);
-            }
-            this.saveState();
-        },
-        getModalFormSave() {
-            var resolveFunction = this.qfState.modalData.resolveFunction;
-            eval(resolveFunction + '()');
-        },
-        modalSaveDataRecord() {
-            // modalData: { title: '', dataObject: 'default', dataRecord: {index: -1, data: []}, Form: { formJSON: [], formHTML: ''}}
-            var modalRecord = this.getModalFormData();
-
-            if (this.qfState.modalData.dataRecord.index == -1) {
-                if (this.qfState.modalData.dataObject == 'default') {
-                    // modalRecord.id = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].meta.nextDataID;
-                    modalRecord.qfid = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].meta.nextDataID;
-
-                    this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].meta.nextDataID++;
-                    this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].data.push(modalRecord);
-                }
-            } else {
-                this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTable()].data[this.qfState.modalData.dataRecord.index] = modalRecord;
-            }
-
-            this.qfState.modalData.Form.formHTML = '';
-            
-            this.saveState();
-        },
-        getHTMLFromFieldValue(inName, inType) {
-            var retValue = '';
-            if (inType == 'text' || inType == 'date' || inType == 'textarea') {
-                retValue = document.getElementById(inName).value;
-            }
-            if (inType == 'radio') {
-                console.log(inName);
-                var item = document.getElementsByName(inName);
-                console.log(inName + ' has ' + item.length + ' elements.');
-                
-            }
-            if (inType == 'select') {
-                var item = document.getElementById(inName);
-                retValue  = item.options[item.selectedIndex].text;
-            }
-            if (inType == 'array') {
-                var item = document.getElementById(inName);
-                retValue = item.value.trim().split(',')
-                for (j=0; j<retValue.length; j++) {
-                    retValue[j]=retValue[j].trim(); 
-                }
-            }
-            return retValue;
-        },
-        getModalFormData() {
-            var formDataRow = {};
-
-            theForm = this.qfState.modalData.Form.formJSON;
-            for (var j = 0; j < theForm.length; j++) {
-                if (theForm[j].type != 'custom') {
-                    formDataRow[theForm[j].name] = this.getHTMLFromFieldValue(theForm[j].name, theForm[j].type);
-                } else {
-                    customFields = this.getCustomForm(theForm[j]);
-                    for (k=0; k < customFields.length; k++) {
-                        formDataRow[customFields[k].name] = this.getHTMLFromFieldValue(customFields[k].name, customFields[k].type);
-                    }
-                }
-            }
-            return formDataRow;            
-        },
-        saveState() {
-            window.localStorage.setItem('currQFState', JSON.stringify(this.qfState));
-        },
-        saveCurrentForm() {
-            var newObject = {...this.projectTemplate};
-            newObject.meta.name = document.getElementById('saveTitle').value;
-            newObject.meta.description = document.getElementById('saveDesc').value;
-            newObject.meta.currentTable = 0;
-
-            newObject.tables.push({...this.qfState.workingForm});
-
-            var saveType = document.getElementById('saveType');
-            var objectType = saveType.options[saveType.selectedIndex].text;
-            
-            if (objectType == 'project') {
-                this.qfState.projects.push(newObject);
-                this.qfState.projectCurrent = this.qfState.projects.length-1;
-            }
-            if (objectType == 'data widget') {
-                this.qfState.systemTemplates.push(newObject);
-            }
-            this.saveState();
-
-            const toastLiveExample = document.getElementById('liveToast');
-            const toast = new bootstrap.Toast(toastLiveExample);
-            toast.show();
-
-        },
-        getCurrentProjectTable() {
-            return this.qfState.projects[this.qfState.projectCurrent].meta.currentTable;
-        },
-        getCurrentProject() {
-            if (this.qfState.projectCurrent == -1) {
-                return null;
-            } else {
-                return this.qfState.project[this.qfState.projectCurrent];
-            }
-        },
-        showNavTab(inTab) {
-            var triggerEl = document.getElementById(inTab);     
-            var tabTrigger = new bootstrap.Tab(triggerEl);
-            tabTrigger.show();
-        },
-        addNavSectionActive(section) {
-            var navItem = document.getElementById('nav-link-'+section);
-            navItem.classList.add('active');
-        },
-        removeNavSectionActive(section) {
-            var navItem = document.getElementById('nav-link-'+section);
-            navItem.classList.remove('active');
-        },
-        switchSection(inSection) {
-            this.removeNavSectionActive(this.qfState.interface.currentSection);
-
-            this.qfState.interface.currentSection = inSection;
-            this.addNavSectionActive(this.qfState.interface.currentSection);
-
-            this.saveState();
-        },
-        modalFormSaveFieldEdit() {
-       
-            var formData = this.getModalFormData();
-            formData.label = formData.name;
-            formData.name = formData.name.replace(' ', '');
-
-            this.qfState.workingForm.formJSON[this.qfState.modalData.dataRecord.index] = formData;
-            
-            this.qfState.workingForm.formHTML = this.getFormHTMLFromJSON(this.qfState.workingForm.formJSON,'editfield');
-       
-            this.saveState();
-        },
-        showModal(inTitle, inJSON, inResolveFunction, inIndex = -1, inData = undefined) {
-            this.qfState.modalData.title = inTitle;
-            this.qfState.modalData.resolveFunction = inResolveFunction;
-            this.qfState.modalData.modalObject = 'default';
-            if (inData == undefined) {
-                this.qfState.modalData.dataRecord.index = -1;
-                this.qfState.modalData.dataRecord.data = {};
-            } else {
-                this.qfState.modalData.dataRecord.index = inIndex;
-                this.qfState.modalData.dataRecord.data = inData;            
-            }
-            this.qfState.modalData.Form.formJSON = inJSON;
-            this.qfState.modalData.Form.formHTML = this.getFormHTMLFromJSON(inJSON, '', inData);
-
-            var myModal = new bootstrap.Modal(document.getElementById('dataModal'));
-            myModal.show();
-            this.saveState();
-        },
-        switchProject(inProject) {
-            this.qfState.projectCurrent = inProject;
-            this.saveState();
-            this.showNavTab('nav-data-project-tab');
-        },
-        showItem(inItem) {
-            var templateDetail = document.querySelector('#dataTemplateDetail');
-            var templateList = document.querySelector('#dataTemplateList');
-            if (inItem === -1) {
-                templateList.style.display = '';
-                templateDetail.style.display = 'none';
-            } else {
-                templateList.style.display = 'none';
-                templateDetail.style.display = '';
-
-                var templateList = document.querySelector('#dataTemplateDetail');
-                templateList.hide;
-                var showTemplate = this.getCardTemplateFromJSON(this.qfState.projects[this.qfState.projectCurrent].Form.formJSON);
-                var showData = this.qfState.projects[this.qfState.projectCurrent].Data[inItem];
-                console.log(showTemplate);
-                var result = this.getFilledTemplateFromData(showData, showTemplate);
-
-                var cardDetail = document.querySelector('#cardDetail');
-                cardDetail.innerHTML = result;
-            }
-
-            // var template = document.querySelector('#dataTemplateDetail').innerHTML;
-            // var clone = template;
-            // clone = clone.replace('{{data}}', result);
-
-            return '';
-        },
-        getItemCardView(inData, inIndex) {
-            var fieldTemplate = '<div class=&quot;col-md-{{size}}&quot;>{{data}}</div>';
-
-            var retValue = '';
-            Object.keys(inData).forEach(function(key) {
-                if (key != 'qfid') {
-                    var addField = fieldTemplate;
-                    addField = addField.replace('{{data}}', inData[key]);
-                    addField = addField.replace('{{size}}', '12');
-                    addField = addField.replace('{{index}}', inIndex);
-                    retValue += addField;
-                }
-            })
-            if (retValue === '') 
-                retValue = 'Show Record ' + inIndex;
-            else {
-                //retValue = '<div class=&quot;container text-center&quot;><div class=&quot;row&quot;>' + retValue + '</div></div>'
-                var nothing = 1;
-            }
-            return retValue;
-        },
-        getGoodDisplayName(inData, inIndex) {
-            var retValue = '';
-            retValue = this.qfState.projects[this.qfState.projectCurrent].tables[0].meta.gridFields;
-            Object.keys(inData).forEach(function(key) {
-                var searchKey = '{{' + key + '}}';
-                retValue = retValue.replace(searchKey, inData[key]);
-            })
-            if (retValue === '') retValue = 'Show Record ' + inIndex;
-            return retValue;
-        },
-        init() {
-            if (JSON.parse(window.localStorage.getItem('currQFState')) != null) {
-                this.qfState = JSON.parse(window.localStorage.getItem('currQFState'));
-                if (this.qfState.projectCurrent > -1) {
-                    // this.qfState.interface = { currentSection: 'design'};
-                    // this.qfState.modalData = { title: '', dataObject: 'default', dataRecord: {index: -1, data: []}, Form: { formJSON: [], formHTML: ''}};
-                    // CAREFUL!!! this.qfState.projects[this.qfState.projectCurrent].Data = [];
-
-                    // var tempFields = this.qfState.projects[this.qfState.projectCurrent].Form.formJSON.Fields;
-                    //this.qfState.projects[this.qfState.projectCurrent].Form.formJSON = tempFields;
-
-                    //this.saveState();
-                    //this.showBlogView();
-                }
-            }
-            this.addNavSectionActive(this.qfState.interface.currentSection);
-        }
-    }">
-
-        <!-- Modal -->
-        <div class="modal fade" id="dataModal" tabindex="-1" aria-labelledby="dataModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen ">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="dataModalLabel" x-html="qfState.modalData.title""></h5>
-              <button type=" button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="modalData" x-html="qfState.modalData.Form.formHTML"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button @click="getModalFormSave" type="button" class="btn btn-primary"
-                            data-bs-dismiss="modal">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Modal-->
-
-        <div align="center">
-
-            <!-- Main Navigation Bar -->
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="#">[QF]</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarCollapse" aria-controls="navbarTogglerDemo01" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" id="nav-link-home"
-                                    @click="switchSection('home')" href="#">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" aria-current="page" id="nav-link-design"
-                                    @click="switchSection('design')">Design</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" aria-current="page" id="nav-link-data"
-                                    @click="switchSection('data')">Data</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <!-- End Main Navigation Bar -->
-
-            <!-- Home Section -->
-            <div id="home-container" x-show="qfState.interface.currentSection=='home'"
-                style="margin:0,auto;text-align:left;width:90%">
-                <h2>Welcome to Quickly Formed</h2>
-                <p>Build your data models, populate them with your data, view them in your templates. All in your own
-                    browser.</p>
-                <p>It's your data, we don't see it in any way. We don't use it in any way. Seriously we don't even know
-                    what you are doing!</p>
-            </div>
-            <!-- End Home Section -->
-
-            <!-- Design Section -->
-            <div id="design-container" x-show="qfState.interface.currentSection=='design'"
-                style="margin:0,auto;text-align:left;width:90%">
-
-                <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"
-                        data-bs-config='{"delay":30000}'>
-                        <div class="toast-body">
-                            System template has been created.
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                <!-- Modal -->
+                <div class="modal fade" id="dataModal" tabindex="-1" aria-labelledby="dataModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen ">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="dataModalLabel" x-html="modalData.title""></h5>
+                                <button type=" button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="modalData" x-html="modalData.Form.formHTML"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button @click="getModalFormSave" type="button" class="btn btn-primary"
+                                    data-bs-dismiss="modal">Save changes</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!-- End Modal-->
 
-                <nav>
-                    <div class="nav nav-tabs" id="nav-design-tab" role="tablist">
-                        <button class="nav-link active" id="nav-design-design-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-design-design" type="button" role="tab"
-                            aria-controls="nav-design-design" aria-selected="true">Fields</button>
-                        <button class="nav-link" id="nav-design-preview-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-design-preview" type="button" role="tab"
-                            aria-controls="nav-design-preview" aria-selected="true">Preview</button>
-                        <button class="nav-link" id="nav-design-save-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-design-save" type="button" role="tab" aria-controls="nav-design-save"
-                            aria-selected="true">Save</button>
-                        <button class="nav-link" id="nav-design-clear-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-design-clear" type="button" role="tab" aria-controls="nav-design-clear"
-                            aria-selected="true">Clear</button>
-                    </div>
-                </nav>
+                <div align="center">
 
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-design-design" role="tabpanel"
-                        aria-labelledby="nav-design-design-tab">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">name</th>
-                                    <th scope="col">type</th>
-                                    <th scope="col">columns</th>
-                                    <th class="d-none d-lg-table-cell" scope="col">options</th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <template x-for="(field, index) in qfState.workingForm.formJSON">
-                                    <tr>
-                                        <td x-text="field.label"></td>
-                                        <td x-text="field.type"></td>
-                                        <td x-text="field.columns"></td>
-                                        <td class="d-none d-lg-table-cell" x-text="field.options"></td>
-                                        <td><i @click="showModal('Edit Field', qfState.editFieldJSON, 'this.modalFormSaveFieldEdit', index, field)"
-                                                class="bi-pencil-square"></i></td>
-                                        <td><i @click="alert(index)" class="bi-trash"></i></td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
+                    <!-- Main Navigation Bar -->
+                    <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-dark">
+                        <div class="container-fluid">
+                            <!--
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarCollapse" aria-controls="navbarTogglerDemo01"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            -->
 
-                        <p>&nbsp;</p>
-                        <h5>Add New Field</h5>
-                        <form id="addField" class="row g-3">
-                            <div class="col-sm-4"><label for="name" class="form-label">name</label><input type="text"
-                                    class="form-control" id="name" value="" placeholder=""></div>
-                            <div class="col-sm-2"><label for="type" class="form-label">type</label><select
-                                    class="form-select" id="type">
-                                    <option disabled value="">Choose One...</option>
-                                    <option>text</option>
-                                    <option>date</option>
-                                    <option>select</option>
-                                    <option>radio</option>
-                                    <option>textarea</option>
-                                    <option>switch</option>
-                                    <option>array</option>
-                                    <option>empty</option>
-                                </select></div>
-                            <div class="col-sm-2"><label for="columns" class="form-label">size</label><select
-                                    class="form-select" id="columns">
-                                    <option disabled value="">Choose One...</option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
-                                </select></div>
-                            <div class="col-sm-4"><label for="options" class="form-label">options</label><input
-                                    type="text" class="form-control" id="options" value=""
-                                    placeholder="use for select or radio"></div>
-                            <div class="col-md-12"><button @click='buildForm'>Add</button></div>
-                        </form>
-                    </div>
+                            <div class="navbar-brand">
+                                <a style="color: #fff;" @click="switchProject(-1)" href="#"><i class="bi bi-house"
+                                        style="font-size: 1.7rem;"></i></a>
+                                &nbsp;&nbsp;
+                                <a href="#" style="color: #fff;" @click="switchProject(getCurrentProjectID())">
+                                    <span x-text="getCurrentProjectName()"></span></a>
+                                <span x-show="isProjectTableSelected()">--> <span
+                                        x-text="getCurrentProjectTableName()"></span></span>
+                            </div>
 
-                    <div class="tab-pane fade show" id="nav-design-preview" role="tabpanel"
-                        aria-labelledby="nav-design-preview-tab">
-                        <div id="formPreview" x-html="qfState.workingForm.formHTML"></div>
-                    </div>
-                    <div class="tab-pane fade show" id="nav-design-save" role="tabpanel"
-                        aria-labelledby="nav-design-save-tab">
-                        <form id="preview" class="row g-3">
-                            <div class="col-md-12"><label for="saveType" class="form-label">save as</label><select
-                                    class="form-select" id="saveType">
-                                    <option selected disabled value="">Choose One...</option>
-                                    <option>project</option>
-                                    <option>data widget</option>
-                                </select></div>
-                            <div class="col-md-6"><label for="saveTitle" class="form-label">title</label><input
-                                    type="text" class="form-control" id="saveTitle" placeholder=""></div>
-                            <div class="col-md-6"><label for="saveCode" class="form-label">code</label><input
-                                    type="text" class="form-control" id="saveCode" placeholder=""></div>
-                            <div class="col-md-6"><label for="saveTags" class="form-label">tags</label><input
-                                    type="array" class="form-control" id="saveTags" placeholder=""></div>
-                            <div class="col-md-12"><label for="saveDesc" class="form-label">description</label><textarea
-                                    class="form-control" id="saveDesc" placeholder=""></textarea></div>
-                        </form>
-                        <button @click='saveCurrentForm'>Save</button>
-                    </div>
-                    <div class="tab-pane fade show" id="nav-design-clear" role="tabpanel"
-                        aria-labelledby="nav-clear-preview-tab">
-                        <p>&nbsp;</p>
-                        <p>Clicking the button below will clear all of the design for this form. You will be starting
-                            over with a new form.</p>
-                        <button @click='clearCurrentForm'>Clear</button>
-                        <p>&nbsp;</p>
-                        To clear all data and all projects, aka, start all over again, click the button below:
-                        <button @click='clearEverything'>Clear All Data</button>
-                    </div>
-
-                </div>
-
-            </div>
-            <!-- Design Section -->
-
-            <!-- Data Section -->
-            <div id="data-container" x-show="qfState.interface.currentSection=='data'"
-                style="margin:0,auto;text-align:left;width:90%">
-                <div class="tab-content" id="nav-data-tabContent">
-                    <nav>
-                        <div class="nav nav-tabs" id="nav-tab-data" role="tablist">
-                            <button class="nav-link active" id="nav-data-project-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-data-project" type="button" role="tab"
-                                aria-controls="nav-data-project" aria-selected="true">Project</button>
-                            <button class="nav-link" id="nav-data-meta-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-data-meta" type="button" role="tab" aria-controls="nav-data-meta"
-                                aria-selected="true">Meta</button>
-                            <button class="nav-link" id="nav-data-data-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-data-data" type="button" role="tab" aria-controls="nav-data-data"
-                                aria-selected="true">Data</button>
-                            <button class="nav-link" id="nav-data-view-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-data-view" type="button" role="tab" aria-controls="nav-data-view"
-                                aria-selected="true">View</button>
+                            <!--            
+                            <div class="collapse navbar-collapse" id="navbarCollapse">
+                                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                                    <li class="nav-item">
+                                        <a class="nav-link" aria-current="page" id="nav-link-home"
+                                            @click="switchSection('home')" href="#"><i class="bi bi-house" style="font-size: 1.7rem;"></i></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" aria-current="page" id="nav-link-projects"
+                                            @click="switchSection('projects')" href="#">projects</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" aria-current="page" id="nav-link-design"
+                                            @click="switchSection('design')">Design</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            -->
                         </div>
                     </nav>
-                    <div class="tab-pane fade show" id="nav-data-project" role="tabpanel"
-                        aria-labelledby="nav-data-project">
-                        <br />
-                        <template x-if="qfState.projectCurrent != -1">
-                            <div>
-                                <h5>Current Project</h5>
+                    <!-- End Main Navigation Bar -->
 
-                                <div x-text=qfState.projects[qfState.projectCurrent].meta.name></div>
-                                <div x-text=qfState.projects[qfState.projectCurrent].meta.description></div>
-                                <div>
-                                    <span
-                                        x-text=qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].data.length></span>
-                                    records.
-                                </div>
+                    <!-- Home Section -->
+                    <div id="home-container" x-show="getInterfaceSection()=='home'"
+                        style="margin:0,auto;text-align:left;width:90%">
+                        <h5>Projects</h5>
+                        <style>
+                            h5 {
+                                text-decoration: none;
+                                color: #333;
+                                font-weight: bold;
+                            }
 
-                                <p>&nbsp;</p>
-                            </div>
-                        </template>
-                        <h5>Switch Current Project</h5>
-                        <template x-if="qfState.projectCurrent != -1">
-                            <div>
-                                <template x-for="(project, index) in qfState.projects">
-                                    <div>
-                                        <a href="#" x-text="project.meta.name" @click="switchProject(index)"></a>
+                            a {
+                                color: #333;
+                                text-decoration: none;
+                            }
+
+                            a:hover {
+                                color: #333;
+                                ;
+                                text-decoration: underline;
+                            }
+
+                            .subtext {
+                                color: #999;
+                                font-size: 13px;
+                                font-weight: bold;
+                                text-decoration: none;
+                            }
+
+                            .project h5 {
+                                color: #800;
+                                font-weight: bold;
+                                text-decoration: none;
+                            }
+
+                            .project h5 a:hover {
+                                text-decoration: none;
+                            }
+                        </style>
+                        <div>
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                                <template x-for="(project, index) in getProjects()">
+                                    <div class="col">
+                                        <a href="#" class="project card" @click="switchProject(index)">
+                                            <div class="card-body">
+                                                <h5 x-text="project.meta.name"></h5>
+                                                <div x-text="project.meta.description"></div>
+                                                <div class="subtext" x-text="getProjectTotalDataCounts(index)"></div>
+
+                                            </div>
+                                        </a>
                                     </div>
                                 </template>
-                            </div>
-                        </template>
-                        <template x-if="qfState.projectCurrent == -1">
-                            <div>No projects are currently defined.</div>
-                        </template>
-                    </div>
-                    <div class="tab-pane fade show" id="nav-data-meta" role="tabpanel"
-                        aria-labelledby="nav-data-meta-tab">
-                        <p>&nbsp;</p>
-                        <h5>Table Meta Information</h5>
-                        <template x-if="qfState.projectCurrent != -1">
-                            <form id="metaform" class="row g-3">
-                                <div class="col-md-12"><label for="gridfields" class="form-label">grid
-                                        list template</label><input
-                                        x-model="qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].meta.gridFields"
-                                        type="text" class="form-control" id="gridfields" value=""
-                                        placeholder="e.g. {{title}} - {{published date}}"></div>
-                                <div class="col-md-12"><label for="uselabels for cards view" class="form-label">use
-                                        labels
-                                        for cards
-                                        view</label><select x-model="qfState.workingForm.meta.useLabelsForCardView"
-                                        class="form-select" id="uselabelsforcardsview">
-                                        <option disabled value="">Choose One...</option>
-                                        <option selected>true</option>
-                                        <option>false</option>
-                                    </select></div>
-                                <div class="col-md-12"><button @click='saveMetaInfo'>Save</button></div>
-                            </form>
-                        </template>
-                    </div>
-
-                    <div class="tab-pane fade" id="nav-data-data" role="tabpanel" aria-labelledby="nav-data-data">
-                        <!-- Button trigger modal -->
-                        <template x-if="qfState.projectCurrent != -1">
-                            <div align="right">
-                                <!-- inTitle, inJSON, inResolveFunction, inIndex = -1, inData = undefined-->
-                                <button
-                                    @click="showModal('Add Record', qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].formJSON, 'this.modalSaveDataRecord', -1)"
-                                    type="button" class="btn btn-primary">
-                                    Add Record
-                                </button>
-                            </div>
-                        </template>
-
-                        <div>
-                            <template x-if="qfState.projectCurrent != -1">
-                                <div>
-                                    <template
-                                        x-for="(record, index) in qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].data">
-                                        <div>
-                                            <a href="#"
-                                                @click="showModal('Edit Record', qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].formJSON, 'this.modalSaveDataRecord', index, record)"
-                                                x-text="getGoodDisplayName(record, index)"></a>
+                                <div class="col">
+                                    <a href="#"
+                                        @click="showModal('Create Project', editProjectCreateJSON, 'this.modalFormCreateProject')"
+                                        class="project card">
+                                        <div class="card-body">
+                                            <h5>+ Add Project</h5>
                                         </div>
-                                    </template>
+                                    </a>
                                 </div>
-                            </template>
 
+                            </div>
                         </div>
                     </div>
+                    <!-- End Home Section -->
 
-                    <div class="tab-pane fade" id="nav-data-view" role="tabpanel" aria-labelledby="nav-data-view">
+                    <!-- Project Section -->
+                    <div id="projects-container" x-show="getInterfaceSection()=='projects'"
+                        style="margin:0,auto;text-align:left;width:90%">
 
-                        <div class="row" id="dataTemplateList">
-                            <template x-if="qfState.projectCurrent != -1">
-                                <div>
-                                    <template id="dataTemplateCardView"
-                                        x-for="(record, index) in qfState.projects[qfState.projectCurrent].tables[getCurrentProjectTable()].data">
-                                        <div class="card col-sm-6">
-                                            <div @click="showItem(index)" class="card-body"
-                                                x-html="getItemCardView(record,index)">
+                        <!-- Project Details -->
+                        <template x-if="isProjectSelected() && !isProjectTableSelected()">
+                            <div>
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-project-tab" role="tablist"
+                                        style="margin-bottom:15px;">
+                                        <button class="nav-link active" id="nav-project-forms-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-project-forms" type="button" role="tab"
+                                            aria-controls="nav-project-forms" aria-selected="true">Forms</button>
+                                        <button class="nav-link" id="nav-project-enumerators-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-project-enumerators" type="button" role="tab"
+                                            aria-controls="nav-project-enumerators"
+                                            aria-selected="true">Enumerators</button>
+                                        <button class="nav-link" id="nav-project-meta-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-project-meta" type="button" role="tab"
+                                            aria-controls="nav-project-meta" aria-selected="true">Meta</button>
+                                    </div>
+                                </nav>
+
+                                <div class="tab-content" id="nav-tabProjectContent">
+                                    <div class="tab-pane fade show active" id="nav-project-forms" role="tabpanel"
+                                        aria-labelledby="nav-project-forms">
+
+                                        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                                            <template x-for="(form, index) in getCurrentProjectTables()">
+                                                <div class="col">
+                                                    <a href="#" @click="projectSwitchTable(index)" class="project card">
+                                                        <div class="card-body">
+                                                            <h5 x-text="form.meta.name"></h5>
+                                                            <div x-text="form.meta.description"></div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </template>
+                                            <div class="col">
+                                                <a href="#"
+                                                    @click="showModal('Create Form', editProjectTableCreateJSON, 'this.modalFormCreateProjectForm')"
+                                                    class="project card">
+                                                    <div class="card-body">
+                                                        <h5>+ Add Form</h5>
+                                                    </div>
+                                                </a>
                                             </div>
                                         </div>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
+                                    </div>
 
-                        <div class="row" style="display: none" id="dataTemplateDetail">
-                            <span class="row">
-                                <div class="card col-md-12"><a href="#" @click="showItem(-1)"
-                                        class="btn btn-light">Return
-                                        to
-                                        List</a>
-                                </div>
-                                <div id="cardDetail"></div>
+                                    <div class="tab-pane fade" id="nav-project-enumerators" role="tabpanel"
+                                        aria-labelledby="nav-project-enumerators-tab">
+                                        [[Enumerators]]
+                                    </div>
 
-                                <div class="card col-md-12"><a href="#" @click="showItem(-1)"
-                                        class="btn btn-light">Return
-                                        to
-                                        List</a>
+                                    <div class="tab-pane fade" id="nav-project-meta" role="tabpanel"
+                                        aria-labelledby="nav-project-meta-tab">
+                                        <h5>Project Settings</h5>
+                                        <template x-if="isProjectSelected()">
+                                            <form id="projectmetaform" class="row g-3">
+                                                <div class="col-md-12"><label for="projectname" class="form-label">
+                                                        project name</label><input
+                                                        :value="getCurrentProjectName()"
+                                                        type="text"
+                                                        class="form-control" id="projectname" value="" placeholder="">
+                                                </div>
+                                                <div class="col-md-12"><label for="projectdesc" class="form-label">
+                                                        description</label><input
+                                                        :value="getCurrentProjectDescription()" type="text"
+                                                        class="form-control" id="projectdesc" value="" placeholder="">
+                                                </div>
+                                                <div class="col-md-12"><button @click="saveProjectMetaInfo">Save</button></div>
+                                            </form>
+                                        </template>
+                                    </div>
                                 </div>
-                        </div>
+                            </div>
+                        </template>
+                        <!-- End Project Details -->
+
+                        <!-- Project Form Details -->
+                        <template x-if="isProjectSelected() && isProjectTableSelected()">
+                            <div>
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-table-tab" role="tablist">
+                                        <button class="nav-link active" id="nav-table-design-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-table-design" type="button" role="tab"
+                                            aria-controls="nav-table-design" aria-selected="true">Design</button>
+                                        <button class="nav-link" id="nav-table-preview-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-table-preview" type="button" role="tab"
+                                            aria-controls="nav-table-preview" aria-selected="true">Preview</button>
+                                        <button class="nav-link" id="nav-table-data-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-table-data" type="button" role="tab"
+                                            aria-controls="nav-table-data" aria-selected="true">Data</button>
+                                        <button class="nav-link" id="nav-table-view-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-table-view" type="button" role="tab"
+                                            aria-controls="nav-table-view" aria-selected="true">View</button>
+                                        <button class="nav-link" id="nav-table-meta-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-table-meta" type="button" role="tab"
+                                            aria-controls="nav-table-meta" aria-selected="true">Meta</button>
+                                    </div>
+                                </nav>
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-table-design" role="tabpanel"
+                                        aria-labelledby="nav-table-design-tab">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">name</th>
+                                                    <th scope="col">type</th>
+                                                    <th scope="col">columns</th>
+                                                    <th class="d-none d-lg-table-cell" scope="col">options</th>
+                                                    <th scope="col"></th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template x-show="isProjectTableSelected()" x-for="(field, index) in getCurrentProjectTableJSON">
+                                                    <tr>
+                                                        <td x-text="field.label"></td>
+                                                        <td x-text="field.type"></td>
+                                                        <td x-text="field.columns"></td>
+                                                        <td class="d-none d-lg-table-cell" x-text="field.options"></td>
+                                                        <td><i @click="showModal('Edit Field', editFieldJSON, 'this.modalFormSaveFieldEdit', index, field)"
+                                                                class="bi-pencil-square"></i></td>
+                                                        <td><i @click="alert(index)" class="bi-trash"></i></td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
+
+                                        <p>&nbsp;</p>
+                                        <h5>Add New Field</h5>
+                                        <form id="addField" class="row g-3">
+                                            <div class="col-sm-4"><label for="name"
+                                                    class="form-label">name</label><input type="text"
+                                                    class="form-control" id="name" value="" placeholder="">
+                                            </div>
+                                            <div class="col-sm-2"><label for="type"
+                                                    class="form-label">type</label><select class="form-select"
+                                                    id="type">
+                                                    <option disabled value="">Choose One...</option>
+                                                    <option>text</option>
+                                                    <option>date</option>
+                                                    <option>select</option>
+                                                    <option>radio</option>
+                                                    <option>textarea</option>
+                                                    <option>switch</option>
+                                                    <option>array</option>
+                                                    <option>empty</option>
+                                                </select></div>
+                                            <div class="col-sm-2"><label for="columns"
+                                                    class="form-label">size</label><select class="form-select"
+                                                    id="columns">
+                                                    <option disabled value="">Choose One...</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                    <option>11</option>
+                                                    <option>12</option>
+                                                </select></div>
+                                            <div class="col-sm-4"><label for="options"
+                                                    class="form-label">options</label><input type="text"
+                                                    class="form-control" id="options" value=""
+                                                    placeholder="use for select or radio"></div>
+                                            <div class="col-md-12"><button @click="tableAddField">Add</button></div>
+                                        </form>
+                                    </div>
+
+                                    <div class="tab-pane fade show" id="nav-table-preview" role="tabpanel"
+                                        aria-labelledby="nav-table-preview-tab">
+                                        <div id="formPreview" x-html="getCurrentProjectTableFormHTML"></div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="nav-table-data" role="tabpanel"
+                                        aria-labelledby="nav-table-data">
+                                        <!-- Button trigger modal -->
+                                        <div align="right">
+                                            <!-- inTitle, inJSON, inResolveFunction, inIndex = -1, inData = undefined-->
+                                            <button
+                                                @click="showModal('Add Record', getCurrentProjectTableJSON(), 'this.modalSaveDataRecord', -1)"
+                                                type="button" class="btn btn-primary">
+                                                Add Record
+                                            </button>
+                                        </div>
+
+                                        <div>
+                                            <template x-if="isProjectTableSelected()">
+                                                <ul class="list-group">
+                                                    <template x-show="isProjectTableSelected()" x-for="(record, index) in getCurrentProjectTableData()">
+                                                        <li
+                                                            class="list-group-item d-flex justify-content-between align-items-start">
+                                                            <a href="#"
+                                                                @click="showModal('Edit Record', getCurrentProjectTableJSON(), 'this.modalSaveDataRecord', index, record)"
+                                                                x-text="getGoodDisplayName(record, index)"></a>
+                                                            <a href="#"><i @click="deleteDataRecord(index)"
+                                                                    class="bi-trash"></i></a>
+                                                        </li>
+                                                    </template>
+                                                </ul>
+                                            </template>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="nav-table-view" role="tabpanel"
+                                        aria-labelledby="nav-table-view">
+
+                                        <div class="row" id="dataTemplateList">
+                                            <template x-if="isProjectTableSelected()">
+                                                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                                                    <template x-show="isProjectTableSelected()" id="dataTemplateCardView"
+                                                        x-for="(record, index) in getCurrentProjectTableData()">
+                                                        <div class="col">
+                                                            <div class="card">
+                                                                <div @click="showItem(index)" class="card-body"
+                                                                    x-html="getItemCardView(record,index)">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <div class="row" style="display: none" id="dataTemplateDetail">
+                                            <span class="row">
+                                                <div class="card col-md-12"><a href="#" @click="showItem(-1)"
+                                                        class="btn btn-light">Return to List</a>
+                                                </div>
+
+                                                <div id="cardDetail"></div>
+
+                                                <div class="card col-md-12"><a href="#" @click="showItem(-1)"
+                                                        class="btn btn-light">Return to List</a>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade show" id="nav-table-meta" role="tabpanel"
+                                        aria-labelledby="nav-table-meta-tab">
+                                        <p>&nbsp;</p>
+                                        <h5>Table Meta Information</h5>
+                                        <template x-if="isProjectTableSelected()">
+                                            <form id="formmetaform" class="row g-3">
+                                                <div class="col-md-12"><label for="formname" class="form-label">
+                                                        table name</label><input
+                                                        :value="getCurrentProjectTableName()"
+                                                        type="text" class="form-control" id="formname"
+                                                        placeholder=""></div>
+                                                <div class="col-md-12"><label for="formdesc" class="form-label">
+                                                        description</label><input
+                                                        :value="getCurrentProjectTableDesc()"
+                                                        type="text" class="form-control" id="formdesc"
+                                                        placeholder=""></div>
+                                                <div class="col-md-12"><label for="formgridfields" class="form-label">grid
+                                                        list template</label><input
+                                                        :value="getCurrentProjectTableGridFields()"
+                                                        type="text" class="form-control" id="formgridfields"
+                                                        placeholder="e.g. {{title}} - {{published date}}"></div>
+                                                <div class="col-md-12"><label for="formuselabels"
+                                                        class="form-label">use
+                                                        labels
+                                                        for cards
+                                                        view</label><select
+                                                        class="form-select" id="formuselabels">
+                                                        <option disabled value="">Choose One...</option>
+                                                        <option selected>true</option>
+                                                        <option>false</option>
+                                                    </select></div>
+                                                <div class="col-md-12"><button @click="saveFormMetaInfo">Save</button></div>
+                                            </form>
+                                        </template>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </template>
+                        <!-- End Project Form Details -->
+
                     </div>
+                    <!-- End Project Section-->
+
+                    <!-- Design Section -->
+                    <div id="design-container" x-show="getInterfaceSection()=='design'"
+                        style="margin:0,auto;text-align:left;width:90%">
+
+                        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+                                data-bs-config='{"delay":30000}'>
+                                <div class="toast-body">
+                                    System template has been created.
+                                    <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-design-tab" role="tablist">
+                                <button class="nav-link" id="nav-design-clear-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-design-clear" type="button" role="tab"
+                                    aria-controls="nav-design-clear" aria-selected="true">Clear</button>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+
+                            <div class="tab-pane fade show" id="nav-design-clear" role="tabpanel"
+                                aria-labelledby="nav-clear-preview-tab">
+                                <p>&nbsp;</p>
+                                To clear all data and all projects, aka, start all over again, click the button below:
+                                <button @click="clearEverything">Clear All Data</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- Design Section -->
 
                 </div>
 
             </div>
+            <!-- End Data Section -->
+
         </div>
     </div>
-    <!-- End Data Section -->
-
     </div>
 
 </body>
