@@ -1,21 +1,26 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('qfState', () => ({
-        formFields: ['type', 'columns', 'name', 'label', 'placeholder', 'options'],
-
+        formFields: ['type', 'columns', 'name', 'label', 'placeholder', 'required', 'options', 'relation', 'description'],
+        fieldTypes: ['text', 'number', 'date', 'textarea', 'file', 'url', 'select', 'radio', 'switch', 'array', 'empty', 'relation'],
         projectTemplate: { id: 0, currentTableID: -1, meta: { name: '', description: '', nextTableID: 0 }, tables: [], enumerators: [] },
         formTemplate: { id: 0, meta: { name: '', description: '', nextFieldID: 0, nextDataID: 0, gridFields: '', useLabelsForCardView: true }, formJSON: [], formHTML: 'Form will be shown here.', data: [], template: '' },
-        fieldTemplate: { id: 0, type: '', columns: 0, name: '', label: '', placeholder: '', options: '', required: 'no' },
+        fieldTemplate: { id: 0, type: '', columns: 0, name: '', label: '', placeholder: '', options: '', required: 'no', relation: {} },
 
-        editFieldJSON: [{ 'name': 'name', 'type': 'text', 'columns': '12', 'options': [''], 'placeholder': '', 'required': 'no', 'label': 'name' }, { 'type': 'select', 'columns': '6', 'name': 'type', 'label': 'type', 'placeholder': '', 'options': ['text', 'date', 'select', 'radio', 'textarea', 'switch', 'array', 'empty'] }, { 'type': 'select', 'columns': '6', 'name': 'columns', 'label': 'columns', 'placeholder': '', 'options': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] }, { 'name': 'options', 'type': 'array', 'columns': '12', 'options': '', 'placeholder': '', 'required': 'y', 'label': 'options' }, { 'name': 'placeholder', 'type': 'text', 'columns': '12', 'options': '', 'placeholder': 'use for select or radio fields', 'required': '', 'label': 'placeholder' }, { 'name': 'required', 'type': 'select', 'columns': '12', 'options': ['yes', ' no'], 'placeholder': '', 'required': 'y', 'label': 'required' }],
+        editFieldJSON: [{ 'name': 'label', 'type': 'text', 'columns': '12', 'options': [''], 'placeholder': '', 'required': 'no', 'label': 'name' }, { 'name': 'description', 'type': 'text', 'columns': '12', 'options': [''], 'placeholder': '', 'required': 'no', 'label': 'description' }, { 'type': 'select', 'columns': '6', 'name': 'type', 'label': 'type', 'placeholder': '', 'options': ['text', 'date', 'select', 'radio', 'textarea', 'switch', 'array', 'empty'] }, { 'type': 'select', 'columns': '6', 'name': 'columns', 'label': 'columns', 'placeholder': '', 'options': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] }, { 'name': 'options', 'type': 'array', 'columns': '12', 'options': '', 'placeholder': '', 'required': 'y', 'label': 'options' }, { 'name': 'placeholder', 'type': 'text', 'columns': '6', 'options': '', 'placeholder': 'use for select or radio fields', 'required': '', 'label': 'placeholder' }, { 'name': 'required', 'type': 'select', 'columns': '6', 'options': ['yes', 'no'], 'placeholder': '', 'required': 'yes', 'label': 'required' }],
         editProjectCreateJSON: [{ 'name': 'projectname', 'type': 'text', 'columns': '6', 'options': [''], 'placeholder': '', 'required': 'yes', 'label': 'project name' }, { 'name': 'projectdesc', 'type': 'text', 'columns': '6', 'options': [''], 'placeholder': '', 'required': 'yes', 'label': 'project desc' }, { 'name': 'tablename', 'type': 'text', 'columns': '6', 'options': [''], 'placeholder': '', 'required': 'yes', 'label': 'form name' }, { 'name': 'tabledesc', 'type': 'text', 'columns': '6', 'options': [''], 'placeholder': '', 'required': 'yes', 'label': 'form desc' }],
-        editProjectTableCreateJSON: [{ 'name': 'tablename', 'type': 'text', 'columns': '6', 'options': [''], 'placeholder': '', 'required': 'yes', 'label': 'form name' }, { 'name': 'tabledesc', 'type': 'text', 'columns': '6', 'options': [''], 'placeholder': '', 'required': 'yes', 'label': 'form desc' }],
+        editProjectTableCreateJSON: [{ 'name': 'tablename', 'type': 'text', 'columns': '6', 'options': [''], 'placeholder': '', 'required': 'yes', 'label': 'form name' }, { 'name': 'tabledesc', 'type': 'text', 'columns': '6', 'options': [''], 'placeholder': '', 'required': 'yes', 'label': 'form desc' }, { 'name': 'file', 'type': 'file', 'columns': '12', 'options': [''], 'placeholder': '', 'required': 'yes', 'label': 'start with existing JSON file' },  { 'type': 'textarea', 'columns': '12', 'name': 'orpastefilebelow', 'label': 'or paste JSON file below', 'placeholder': '', 'required': 'no', 'options': ['' ], 'relation': {}, 'description': '', 'id': 3  }],
+        editFileUploadJSON: [{ 'type': 'select', 'columns': '12', 'name': 'DataType', 'label': 'Data Type', 'placeholder': '', 'required': 'no', 'options': ['JSON','CSV' ], 'relation': {}, 'description': '', 'id': 0  },  { 'type': 'select', 'columns': '12', 'name': 'Whatshouldbedone', 'label': 'What should be done?', 'placeholder': '', 'required': 'no', 'options': ['Replace structure and data','Replace data','Append data' ], 'relation': {}, 'description': '', 'id': 1  },  { 'type': 'file', 'columns': '12', 'name': 'file', 'label': 'File', 'placeholder': '', 'required': 'no', 'options': ['' ], 'relation': {}, 'description': '', 'id': 2  },  { 'type': 'textarea', 'columns': '12', 'name': 'orpastefilebelow', 'label': 'or paste file below', 'placeholder': '', 'required': 'no', 'options': ['' ], 'relation': {}, 'description': '', 'id': 3  }],
 
         qfState: {
-            interface: { currentSection: 'home' },
+            interface: { currentSection: 'home', currentViewRecord: 0, currentDataListPage: 0, dataListShow: 25 },
             projectCurrent: -1,
-            tableCurrent: -1,
+            s: -1,
             projects: [],
             systemTemplates: [],
+
+            linkTableSelected: "",
+            fieldType: 'text',
+
             workingForm: { id: 0, meta: { name: '', description: '', nextFieldID: 1, nextDataID: 1, gridFields: '', useLabelsForCardView: true }, formJSON: [], formHTML: 'Form will be shown here.', data: [] },
             modalData: { title: '', dataObject: 'default', dataRecord: { index: -1, data: [] }, Form: { formJSON: [], formHTML: '' } }
         },
@@ -31,6 +36,9 @@ document.addEventListener('alpine:init', () => {
 
             // generate the new form HTML preview with the new field
             var tableHTML = this.getFormHTMLFromJSON(tableJSON, 'preview');
+
+            // add field to any existing data records
+            this.addFieldToFormData(newField.name);
 
             // update the working form HTML and JSON fields with the new data
             this.setCurrentProjectTableFormHTML(tableHTML);
@@ -63,10 +71,46 @@ document.addEventListener('alpine:init', () => {
             newField.options = addForm.options.value;
             newField.required = 'no';
 
+            if (newField.type === 'relation') {
+                var relationLink = {};
+                relationLink.table = addForm.linktable.value;
+                relationLink.field = addForm.linktablefield.value;
+                relationLink.type = addForm.linktype.value;
+
+                relationLink.data = [];
+                newField.relation = relationLink;
+            }
+
             var tableField = this.parseField(newField);
             tableField.id = this.getCurrentTableNextID();
 
             return tableField;
+        },
+        downloadCurrentProjectDataJSON() {
+            var downloadTableName = this.getCurrentProjectTableName().replace(' ','_') + '.json';
+            
+            this.downloadJSONFile(this.getCurrentProjectTableData(), downloadTableName)
+        },
+        downloadJSONFile(data, filename){
+            // Creating a blob object from non-blob data using the Blob constructor
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            // Create a new anchor element
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename || 'download';
+            a.click();
+            a.remove();
+        },
+        getCSVFromJSON(inJSON) {
+            const items = inJSON;
+            const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
+            const header = Object.keys(items[0])
+            const csv = [
+              header.join(','), // header row first
+              ...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+            ].join('\r\n')
+            console.log(csv);
         },
         getCurrentTableNextID() {
             var currentTable = this.getCurrentProjectTable();
@@ -95,23 +139,26 @@ document.addEventListener('alpine:init', () => {
                     if (inField[this.formFields[i]] === undefined) {
                         formJSONItem[this.formFields[i]] = '';
                     } else {
-                        formJSONItem[this.formFields[i]] = inField[this.formFields[i]].trim();
+                        formJSONItem[this.formFields[i]] = inField[this.formFields[i]];
+                        if (this.formFields[i] != 'relation')
+                            formJSONItem[this.formFields[i]] = inField[this.formFields[i]].trim();
                     }
                 }
             }
             formJSONItem.name = formJSONItem.name.replace(' ', '');
+
             return formJSONItem;
         },
         getHTMLFromFieldValue(inName, inType) {
             var retValue = '';
-            if (inType == 'text' || inType == 'date' || inType == 'textarea') {
+            if (inType == 'text' || inType == 'date' || inType == 'textarea' || inType == 'number' || inType == 'url') {
                 retValue = document.getElementById(inName).value;
             }
+            if (inType == 'file') {
+                retValue = document.getElementById(inName);
+            }
             if (inType == 'radio') {
-                console.log(inName);
                 var item = document.getElementsByName(inName);
-                console.log(inName + ' has ' + item.length + ' elements.');
-
             }
             if (inType == 'select') {
                 var item = document.getElementById(inName);
@@ -123,6 +170,10 @@ document.addEventListener('alpine:init', () => {
                 for (j = 0; j < retValue.length; j++) {
                     retValue[j] = retValue[j].trim();
                 }
+            }
+            if (inType == 'relation') {
+                var item = document.getElementById(inName);
+                retValue = item.options[item.selectedIndex].value;
             }
             return retValue;
         },
@@ -156,6 +207,38 @@ document.addEventListener('alpine:init', () => {
             toast.show();
 
         },
+        deleteFormField(inIndex) {
+            var thisTable = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTableID()];
+            var thisField = thisTable.formJSON[inIndex];
+            var thisFieldName = thisField.name;
+            var answer = confirm('Do you wish to delete ' + thisField.label + '?');
+            if (answer) {
+                this.deleteFieldFromFormDefinition(inIndex);
+                this.deleteFieldFromFormData(thisFieldName);
+                this.rebuildFormHTML();
+                this.saveState();
+            }
+        },
+        rebuildFormHTML() {
+            var thisTable = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTableID()];
+            var thisTableDef = thisTable.formJSON;
+
+            var newHTML = this.getFormHTMLFromJSON(thisTableDef, 'formpreview');
+            thisTable.formHTML = newHTML;
+        },
+        deleteFieldFromFormDefinition(inIndex) {
+            var thisTableDef = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTableID()].formJSON;
+
+            thisTableDef.splice(inIndex, 1);
+        },
+        addFieldToFormData(inName) {
+            var thisTableData = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTableID()].data;
+            thisTableData.forEach(item => { item[inName] = ''; });
+        },
+        deleteFieldFromFormData(inName) {
+            var thisTableData = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTableID()].data;
+            thisTableData.forEach(item => { delete item[inName]; });
+        },
         deleteDataRecord(inIndex) {
             var thisTable = this.qfState.projects[this.qfState.projectCurrent].tables[this.getCurrentProjectTableID()].data;
             var answer = confirm('Delete ' + thisTable[inIndex].title + '?');
@@ -165,7 +248,7 @@ document.addEventListener('alpine:init', () => {
             }
         },
         switchProject(inProject) {
-            
+
             if (this.isProjectSelected()) {
                 var project = this.getCurrentProject();
                 project.currentTableID = -1;
@@ -178,12 +261,18 @@ document.addEventListener('alpine:init', () => {
                 this.switchSection('home');
             else
                 this.switchSection('projects');
-
         },
         projectSwitchTable(inTable) {
             var table = this.getCurrentProjectTable(inTable);
             var project = this.getCurrentProject();
             project.currentTableID = inTable;
+
+            this.qfState.linkTableSelected = "";
+            this.qfState.interface.currentViewRecord = 1;
+            this.qfState.interface.currentDataListPage = 1;
+
+            // this.getCSVFromJSON(this.getCurrentProjectTableData());
+            // this.downloadJSONFile(this.getCurrentProjectTableData(), "dmsdownload.json")
 
             this.saveState();
         },
@@ -294,17 +383,71 @@ document.addEventListener('alpine:init', () => {
 
             return '';
         },
-        getItemCardView(inData, inIndex) {
-            var fieldTemplate = '<div class=&quot;col-md-{{size}}&quot;>{{data}}</div>';
+        getItemCardView(inIndex) {
+            var fieldTemplate = '<div class="col-sm-{{size}}"><span style="color:#ccc; font-size:smaller;">{{label}}</span><br/>{{data}}</div>';
+        
+            var fieldValue = '';
+            var fieldColumns = 0;
+            var result = '';
+
+            if (this.getCurrentProjectTableID() != -1) {
+                var dataList = this.getCurrentProjectTableData();
+                var dataRow = dataList[inIndex];
+                
+                var formJSON = this.getCurrentProjectTableFormJSON();
+
+                for (var j = 0; j < formJSON.length; j++) {
+                    var formJSONItem = formJSON[j];
+
+                    // don't show the system generated ID field on the card
+                    if (formJSONItem.name != 'qfid') {
+                        fieldColumns = formJSONItem.columns;
+
+                        // if it's a relation field, you need to lookup the value in the relation data definition
+                        if (formJSONItem.type != 'relation') {
+                            fieldValue = dataRow[formJSONItem.name];
+                        } else {
+                            var fieldName = this.getCurrentProject().tables[parseInt(formJSONItem.relation.table)].formJSON[formJSONItem.relation.field].name;
+                            fieldValue = dataRow[formJSONItem.name][0][fieldName];
+                        }
+
+                        var newField = fieldTemplate;
+                        newField = newField.replace('{{label}}', formJSONItem.label.toUpperCase());
+                        newField = newField.replace('{{size}}', fieldColumns);
+                        newField = newField.replace('{{data}}', fieldValue);
+
+                        result += newField;
+                    }
+                }
+                result = '<div class="row text-left g-3 mb-3">' + result + '</div>';
+            }
+            return result;
+        },
+        getItemCardViewOld(inData, inIndex) {
+            var fieldTemplate = '<div class="col-md-{{size}}">{{data}}</div>';
 
             var retValue = '';
             Object.keys(inData).forEach(function (key) {
-                if (key != 'qfid') {
+                if (key != 'qfid' && key != 'relation') {
                     var addField = fieldTemplate;
                     addField = addField.replace('{{data}}', inData[key]);
                     addField = addField.replace('{{size}}', '12');
                     addField = addField.replace('{{index}}', inIndex);
                     retValue += addField;
+                }
+                if (key == 'relation') {
+                    var relationData = inData.relation;
+                    var relationText = 'No data selected.'
+                    console.log(relationData);
+                    if (relationData.length > 0) {
+
+                    }
+                    var addField = fieldTemplate;
+                    addField = addField.replace('{{data}}', relationText);
+                    addField = addField.replace('{{size}}', '12');
+                    addField = addField.replace('{{index}}', inIndex);
+                    retValue += addField;
+
                 }
             })
             if (retValue === '')
@@ -318,14 +461,39 @@ document.addEventListener('alpine:init', () => {
         getGoodDisplayName(inData, inIndex) {
             var retValue = '';
             if (this.isProjectTableSelected()) {
-            retValue = this.qfState.projects[this.qfState.projectCurrent].tables[0].meta.gridFields;
-            Object.keys(inData).forEach(function (key) {
-                var searchKey = '{{' + key + '}}';
-                retValue = retValue.replace(searchKey, inData[key]);
-            })
-        }
+                retValue = this.getCurrentProjectTable().meta.gridFields;
+
+                Object.keys(inData).forEach(function (key) {
+                    var searchKey = '{{' + key + '}}';
+                    retValue = retValue.replace(searchKey, inData[key]);
+                })
+            }
             if (retValue === '') retValue = 'Show Record ' + inIndex;
             return retValue;
+        },
+        updateCurrentDataListPage(inVal) {
+            if (inVal == -1) {
+                if (this.qfState.interface.currentDataListPage > 1) {
+                    this.qfState.interface.currentDataListPage--;
+                }
+            }
+            if (inVal == 1) {
+                if (this.qfState.interface.currentDataListPage < this.getDataListPageCount()) {
+                    this.qfState.interface.currentDataListPage++;
+                }
+            }
+        },
+        updateViewRecord(inVal) {
+            if (inVal == -1) {
+                if (this.qfState.interface.currentViewRecord > 1) {
+                    this.qfState.interface.currentViewRecord--;
+                }
+            }
+            if (inVal == 1) {
+                if (this.qfState.interface.currentViewRecord < this.getCurrentProjectTableData().length) {
+                    this.qfState.interface.currentViewRecord++;
+                }
+            }
         },
         init() {
             // when starting the site, check to see if there is a previous instance in localstorage.
@@ -340,26 +508,32 @@ document.addEventListener('alpine:init', () => {
             // var cProject = this.getCurrentProject();
 
             // cProject.currentTableID = 0;
-            // this.saveState();
 
-            //                    this.addNavSectionActive(this.qfState.interface.currentSection);
+            this.qfState.interface.currentDataListPage = 1;
+            this.saveState();
+
+            //this.addNavSectionActive(this.qfState.interface.currentSection);
         },
 
         // BEGIN GETTERS
         // Various "getters" for the interface, projects, and tables
 
-        isProjectTableSelected() { 
+        getDataListPageCount() {
+            var count = Math.ceil(this.getCurrentProjectTableData().length / this.qfState.interface.dataListShow);
+            return count;
+        },
+        isProjectTableSelected() {
             var retValue = true;
             if (this.getCurrentProjectID() == -1) { retValue = false };
             if (this.getCurrentProjectTableID() == -1) { retValue = false };
-            return retValue; 
+            return retValue;
         },
-        isProjectSelected() { 
+        isProjectSelected() {
             var retValue = true;
-            if (this.getCurrentProjectID() == -1) { 
-                retValue = false 
+            if (this.getCurrentProjectID() == -1) {
+                retValue = false
             };
-            return retValue; 
+            return retValue;
         },
         getInterfaceSection() {
             return this.qfState.interface.currentSection;
@@ -390,16 +564,29 @@ document.addEventListener('alpine:init', () => {
                 return '';
         },
         getCurrentProjectTableID() {
-            if (this.isProjectSelected()) 
+            if (this.isProjectSelected())
                 return this.getCurrentProject().currentTableID;
-            else 
+            else
                 return -1;
         },
         getCurrentProjectTables() {
-            if (this.isProjectSelected()) 
+            if (this.isProjectSelected())
                 return this.getCurrentProject().tables;
             else
                 return [];
+        },
+        getCurrentProjectTablesNotSelected() {
+            if (this.isProjectSelected())
+                return this.getCurrentProject().tables.filter((table) => table.id != this.getCurrentProjectTableID());
+            else
+                return [];
+        },
+        getCurrentLinkTableFields() {
+            if (this.qfState.linkTableSelected) {
+                return this.getCurrentProject().tables[this.qfState.linkTableSelected].formJSON;
+            } else {
+                return [];
+            }
         },
         getCurrentProjectTable() {
             if (this.isProjectSelected())
@@ -407,8 +594,14 @@ document.addEventListener('alpine:init', () => {
             else
                 return [];
         },
+        setCurrentProjectTableData(inData) {
+            if (this.isProjectTableSelected())
+                this.getCurrentProjectTable().data = inData;
+            else
+                return false;
+        },
         getCurrentProjectTableData() {
-            if (this.isProjectTableSelected()) 
+            if (this.isProjectTableSelected())
                 return this.getCurrentProjectTable().data;
             else
                 return [];
@@ -443,6 +636,10 @@ document.addEventListener('alpine:init', () => {
         getCurrentProjectTableJSON() {
             var table = this.getCurrentProjectTable();
             return table.formJSON;
+        },
+        setCurrentProjectTableJSON(inJSON) {
+            var table = this.getCurrentProjectTable();
+            table.formJSON = inJSON;
         },
         getProjectTotalDataCounts(index) {
             var count = this.qfState.projects[index].tables.length
