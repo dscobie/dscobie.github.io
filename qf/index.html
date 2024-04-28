@@ -302,17 +302,17 @@
                                         <template x-if="isProjectSelected()">
                                             <form id="projectmetaform" class="row g-3">
                                                 <div class="col-md-12"><label for="projectname" class="form-label">
-                                                        project name</label><input
-                                                        :value="getCurrentProjectName()"
-                                                        type="text"
-                                                        class="form-control" id="projectname" value="" placeholder="">
+                                                        project name</label><input :value="getCurrentProjectName()"
+                                                        type="text" class="form-control" id="projectname" value=""
+                                                        placeholder="">
                                                 </div>
                                                 <div class="col-md-12"><label for="projectdesc" class="form-label">
                                                         description</label><input
                                                         :value="getCurrentProjectDescription()" type="text"
                                                         class="form-control" id="projectdesc" value="" placeholder="">
                                                 </div>
-                                                <div class="col-md-12"><button @click="saveProjectMetaInfo">Save</button></div>
+                                                <div class="col-md-12"><button
+                                                        @click="saveProjectMetaInfo">Save</button></div>
                                             </form>
                                         </template>
                                     </div>
@@ -329,9 +329,6 @@
                                         <button class="nav-link active" id="nav-table-design-tab" data-bs-toggle="tab"
                                             data-bs-target="#nav-table-design" type="button" role="tab"
                                             aria-controls="nav-table-design" aria-selected="true">Design</button>
-                                        <button class="nav-link" id="nav-table-preview-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-table-preview" type="button" role="tab"
-                                            aria-controls="nav-table-preview" aria-selected="true">Preview</button>
                                         <button class="nav-link" id="nav-table-data-tab" data-bs-toggle="tab"
                                             data-bs-target="#nav-table-data" type="button" role="tab"
                                             aria-controls="nav-table-data" aria-selected="true">Data</button>
@@ -346,6 +343,15 @@
                                 <div class="tab-content" id="nav-tabContent">
                                     <div class="tab-pane fade show active" id="nav-table-design" role="tabpanel"
                                         aria-labelledby="nav-table-design-tab">
+                                        <div align="right">
+                                            <button
+                                                @click="showModal('Form Preview', getCurrentProjectTableJSON(), 'this.modalPreviewForm', -1)"
+                                                type="button" class="btn btn-primary" data-toggle="tooltip"
+                                                data-placement="left" title="Preview Form">
+                                                <i class="bi bi-grid-3x3"></i>
+                                            </button>
+                                        </div>
+
                                         <table class="table table-striped">
                                             <thead>
                                                 <tr>
@@ -358,7 +364,8 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <template x-show="isProjectTableSelected()" x-for="(field, index) in getCurrentProjectTableJSON">
+                                                <template x-show="isProjectTableSelected()"
+                                                    x-for="(field, index) in getCurrentProjectTableJSON">
                                                     <tr>
                                                         <td x-text="field.label"></td>
                                                         <td x-text="field.type"></td>
@@ -366,7 +373,8 @@
                                                         <td class="d-none d-lg-table-cell" x-text="field.options"></td>
                                                         <td><i @click="showModal('Edit Field', editFieldJSON, 'this.modalFormSaveFieldEdit', index, field)"
                                                                 class="bi-pencil-square"></i></td>
-                                                        <td><i @click="alert(index)" class="bi-trash"></i></td>
+                                                        <td><i @click="deleteFormField(index)" class="bi-trash"></i>
+                                                        </td>
                                                     </tr>
                                                 </template>
                                             </tbody>
@@ -380,17 +388,11 @@
                                                     class="form-control" id="name" value="" placeholder="">
                                             </div>
                                             <div class="col-sm-2"><label for="type"
-                                                    class="form-label">type</label><select class="form-select"
-                                                    id="type">
-                                                    <option disabled value="">Choose One...</option>
-                                                    <option>text</option>
-                                                    <option>date</option>
-                                                    <option>select</option>
-                                                    <option>radio</option>
-                                                    <option>textarea</option>
-                                                    <option>switch</option>
-                                                    <option>array</option>
-                                                    <option>empty</option>
+                                                    class="form-label">type</label><select class="form-select" id="type"
+                                                    x-model="qfState.fieldType">
+                                                    <template x-for="(type) in fieldTypes">
+                                                        <option :value="type" x-text="type"></option>
+                                                    </template>
                                                 </select></div>
                                             <div class="col-sm-2"><label for="columns"
                                                     class="form-label">size</label><select class="form-select"
@@ -409,35 +411,84 @@
                                                     <option>11</option>
                                                     <option>12</option>
                                                 </select></div>
+
                                             <div class="col-sm-4"><label for="options"
                                                     class="form-label">options</label><input type="text"
                                                     class="form-control" id="options" value=""
                                                     placeholder="use for select or radio"></div>
+
+                                            <div x-show="qfState.fieldType === 'relation'" class="col-sm-4"><label
+                                                    for="linktables" class="form-label">link
+                                                    table</label><select class="form-select" id="linktable"
+                                                    x-model="qfState.linkTableSelected">
+                                                    <option value="">Select a Link Table</option>
+                                                    <template
+                                                        x-for="(table, index) in getCurrentProjectTablesNotSelected()">
+                                                        <option :value="table.id" x-text="table.meta.name"></option>
+                                                    </template>
+                                                </select></div>
+                                            <div x-show="qfState.fieldType === 'relation' && qfState.linkTableSelected"
+                                                class="col-sm-4"><label for="linktablefields" class="form-label">link
+                                                    field</label><select class="form-select" id="linktablefield">
+                                                    <template x-for="(field, index) in getCurrentLinkTableFields()">
+                                                        <option :value="index" x-text="field.label"></option>
+                                                    </template>
+                                                </select></div>
+                                            <div x-show="qfState.fieldType === 'relation' && qfState.linkTableSelected"
+                                                class="col-sm-4"><label for="linktablefields" class="form-label">link
+                                                    type</label><select class="form-select" id="linktype">
+                                                    <option value="onetoone">one to one</option>
+                                                    <option value="onetomany">one to many</option>
+                                                </select></div>
+
                                             <div class="col-md-12"><button @click="tableAddField">Add</button></div>
                                         </form>
-                                    </div>
-
-                                    <div class="tab-pane fade show" id="nav-table-preview" role="tabpanel"
-                                        aria-labelledby="nav-table-preview-tab">
-                                        <div id="formPreview" x-html="getCurrentProjectTableFormHTML"></div>
                                     </div>
 
                                     <div class="tab-pane fade" id="nav-table-data" role="tabpanel"
                                         aria-labelledby="nav-table-data">
                                         <!-- Button trigger modal -->
                                         <div align="right">
-                                            <!-- inTitle, inJSON, inResolveFunction, inIndex = -1, inData = undefined-->
                                             <button
                                                 @click="showModal('Add Record', getCurrentProjectTableJSON(), 'this.modalSaveDataRecord', -1)"
-                                                type="button" class="btn btn-primary">
-                                                Add Record
+                                                type="button" class="btn btn-primary" data-toggle="tooltip"
+                                                data-placement="left" title="Add Record">
+                                                <i class="bi bi-plus-circle"></i>
+                                            </button>
+                                            <button
+                                                @click="showModal('Upload File', editFileUploadJSON, 'this.modalUploadFile', -1)"
+                                                type="button" class="btn btn-primary" data-toggle="tooltip"
+                                                data-placement="left" title="Upload File">
+                                                <i class="bi bi-upload"></i>
+                                            </button>
+                                            <button
+                                                @click="downloadCurrentProjectDataJSON()"
+                                                type="button" class="btn btn-primary" data-toggle="tooltip"
+                                                data-placement="left" title="Download JSON">
+                                                <i class="bi bi-download"></i>
                                             </button>
                                         </div>
 
+                                        <div align="center" x-show="getDataListPageCount() > 1">
+                                            <button @click="updateCurrentDataListPage(-1)" type="button"
+                                                class="btn btn-primary" data-toggle="tooltip"
+                                                data-placement="left" title="Previous Page">
+                                                <i class="bi bi-arrow-left-circle"></i>
+                                            </button>
+
+                                            Page <span x-html="qfState.interface.currentDataListPage"></span> of
+                                            <span x-html="getDataListPageCount()"></span>
+
+                                            <button @click="updateCurrentDataListPage(1)" type="button"
+                                                class="btn btn-primary" data-toggle="tooltip"
+                                                data-placement="left" title="Next Page">
+                                                <i class="bi bi-arrow-right-circle"></i></button>
+                                        </div>
                                         <div>
                                             <template x-if="isProjectTableSelected()">
                                                 <ul class="list-group">
-                                                    <template x-show="isProjectTableSelected()" x-for="(record, index) in getCurrentProjectTableData()">
+                                                    <template x-show="isProjectTableSelected()"
+                                                        x-for="(record, index) in getCurrentProjectTableData()">
                                                         <li
                                                             class="list-group-item d-flex justify-content-between align-items-start">
                                                             <a href="#"
@@ -456,34 +507,33 @@
                                     <div class="tab-pane fade" id="nav-table-view" role="tabpanel"
                                         aria-labelledby="nav-table-view">
 
-                                        <div class="row" id="dataTemplateList">
+                                        <div class="row" id="dataTemplateList" data-bs-theme="dark">
                                             <template x-if="isProjectTableSelected()">
-                                                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
-                                                    <template x-show="isProjectTableSelected()" id="dataTemplateCardView"
-                                                        x-for="(record, index) in getCurrentProjectTableData()">
-                                                        <div class="col">
-                                                            <div class="card">
-                                                                <div @click="showItem(index)" class="card-body"
-                                                                    x-html="getItemCardView(record,index)">
-                                                                </div>
-                                                            </div>
+                                                <div>
+                                                    <div align="center">
+                                                        <button @click="updateViewRecord(-1)" type="button"
+                                                            class="btn btn-primary" data-toggle="tooltip"
+                                                            data-placement="left" title="Previous Record">
+                                                            <i class="bi bi-arrow-left-circle"></i>
+                                                        </button>
+
+                                                        <span x-html="qfState.interface.currentViewRecord"></span> of
+                                                        <span x-html="getCurrentProjectTableData().length"></span>
+                                                        records
+
+                                                        <button @click="updateViewRecord(1)" type="button"
+                                                            class="btn btn-primary" data-toggle="tooltip"
+                                                            data-placement="left" title="Next Record">
+                                                            <i class="bi bi-arrow-right-circle"></i>
+                                                            </button>
+                                                    </div>
+                                                    <div class="card">
+                                                        <div class="card-body"
+                                                            x-html="getItemCardView(qfState.interface.currentViewRecord-1)">
                                                         </div>
-                                                    </template>
+                                                    </div>
                                                 </div>
                                             </template>
-                                        </div>
-
-                                        <div class="row" style="display: none" id="dataTemplateDetail">
-                                            <span class="row">
-                                                <div class="card col-md-12"><a href="#" @click="showItem(-1)"
-                                                        class="btn btn-light">Return to List</a>
-                                                </div>
-
-                                                <div id="cardDetail"></div>
-
-                                                <div class="card col-md-12"><a href="#" @click="showItem(-1)"
-                                                        class="btn btn-light">Return to List</a>
-                                                </div>
                                         </div>
                                     </div>
 
@@ -494,31 +544,29 @@
                                         <template x-if="isProjectTableSelected()">
                                             <form id="formmetaform" class="row g-3">
                                                 <div class="col-md-12"><label for="formname" class="form-label">
-                                                        table name</label><input
-                                                        :value="getCurrentProjectTableName()"
-                                                        type="text" class="form-control" id="formname"
-                                                        placeholder=""></div>
+                                                        table name</label><input :value="getCurrentProjectTableName()"
+                                                        type="text" class="form-control" id="formname" placeholder="">
+                                                </div>
                                                 <div class="col-md-12"><label for="formdesc" class="form-label">
-                                                        description</label><input
-                                                        :value="getCurrentProjectTableDesc()"
-                                                        type="text" class="form-control" id="formdesc"
-                                                        placeholder=""></div>
-                                                <div class="col-md-12"><label for="formgridfields" class="form-label">grid
+                                                        description</label><input :value="getCurrentProjectTableDesc()"
+                                                        type="text" class="form-control" id="formdesc" placeholder="">
+                                                </div>
+                                                <div class="col-md-12"><label for="formgridfields"
+                                                        class="form-label">grid
                                                         list template</label><input
-                                                        :value="getCurrentProjectTableGridFields()"
-                                                        type="text" class="form-control" id="formgridfields"
+                                                        :value="getCurrentProjectTableGridFields()" type="text"
+                                                        class="form-control" id="formgridfields"
                                                         placeholder="e.g. {{title}} - {{published date}}"></div>
-                                                <div class="col-md-12"><label for="formuselabels"
-                                                        class="form-label">use
+                                                <div class="col-md-12"><label for="formuselabels" class="form-label">use
                                                         labels
                                                         for cards
-                                                        view</label><select
-                                                        class="form-select" id="formuselabels">
+                                                        view</label><select class="form-select" id="formuselabels">
                                                         <option disabled value="">Choose One...</option>
                                                         <option selected>true</option>
                                                         <option>false</option>
                                                     </select></div>
-                                                <div class="col-md-12"><button @click="saveFormMetaInfo">Save</button></div>
+                                                <div class="col-md-12"><button @click="saveFormMetaInfo">Save</button>
+                                                </div>
                                             </form>
                                         </template>
                                     </div>
